@@ -1,0 +1,967 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #1a1a1a;
+    --gold: #c8a96e;
+    --gold2: #e8c98e;
+    --cream: #f0e8d8;
+    --red: #8b1a1a;
+    --red2: #c42b2b;
+    --muted: #555;
+    --muted2: #888;
+    --border: rgba(200,169,110,0.15);
+    --border2: rgba(200,169,110,0.3);
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-serif: 'Cormorant Garamond', Georgia, serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: var(--font-serif);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 2.5rem;
+    border-bottom: 0.5px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    cursor: pointer;
+  }
+  .logo span { color: var(--cream); }
+  nav ul { display: flex; gap: 2rem; list-style: none; }
+  nav ul li {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  nav ul li:hover, nav ul li.active { color: var(--gold); }
+  .nav-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    border: 0.5px solid var(--border2);
+    padding: 0.3rem 0.8rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav-tag:hover { background: var(--gold); color: var(--bg); }
+
+  /* VIEWS */
+  .view { display: none; animation: fadeIn 0.4s ease; }
+  .view.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* HOME */
+  .hero {
+    position: relative; overflow: hidden;
+    padding: 5rem 2.5rem 4rem;
+    min-height: 70vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 40%, #0a0a12 100%);
+  }
+  .hero-lines {
+    position: absolute; inset: 0; opacity: 0.06;
+    background-image: repeating-linear-gradient(0deg, var(--gold) 0, var(--gold) 1px, transparent 1px, transparent 60px),
+                      repeating-linear-gradient(90deg, var(--gold) 0, var(--gold) 1px, transparent 1px, transparent 60px);
+  }
+  .hero-number {
+    font-family: var(--font-display);
+    font-size: clamp(6rem, 20vw, 14rem);
+    color: transparent;
+    -webkit-text-stroke: 0.5px rgba(200,169,110,0.15);
+    position: absolute; right: -1rem; top: 50%; transform: translateY(-50%);
+    line-height: 1; pointer-events: none; user-select: none;
+  }
+  .hero-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    position: relative; z-index: 1;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    letter-spacing: 0.06em;
+    line-height: 0.9;
+    color: var(--cream);
+    position: relative; z-index: 1;
+    max-width: 700px;
+  }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+  .hero-sub {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--muted2);
+    font-style: italic;
+    margin-top: 1.5rem;
+    max-width: 480px;
+    position: relative; z-index: 1;
+    line-height: 1.6;
+  }
+  .hero-actions { display: flex; gap: 1rem; margin-top: 2.5rem; position: relative; z-index: 1; }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    padding: 0.85rem 2.2rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold2); transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted2);
+    border: 0.5px solid var(--border2);
+    padding: 0.85rem 2.2rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { color: var(--cream); border-color: var(--gold); }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex; align-items: center; gap: 1.5rem;
+    padding: 3rem 2.5rem 1.5rem;
+  }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .section-line { flex: 1; height: 0.5px; background: var(--border); }
+  .section-num {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--muted);
+  }
+
+  /* SCENE GRID */
+  .scene-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    margin: 0 2.5rem;
+  }
+  .scene-card {
+    background: var(--bg);
+    cursor: pointer;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+  .scene-card:hover { background: var(--bg2); }
+  .scene-thumb {
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+  }
+  .scene-thumb-inner {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .scene-number {
+    font-family: var(--font-display);
+    font-size: 6rem;
+    color: transparent;
+    -webkit-text-stroke: 0.5px rgba(200,169,110,0.2);
+    position: absolute; bottom: -1rem; right: 0.5rem;
+  }
+  .scene-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 60%);
+  }
+  .scene-ratio {
+    position: absolute; top: 0.8rem; left: 0.8rem;
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    border: 0.5px solid var(--border2);
+    padding: 0.2rem 0.5rem;
+    background: rgba(10,10,10,0.8);
+  }
+  .scene-info { padding: 1rem 1.2rem 1.2rem; }
+  .scene-director {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .scene-title {
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    color: var(--cream);
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+    line-height: 1.2;
+  }
+  .scene-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 0.25rem 0.6rem;
+    border: 0.5px solid var(--border);
+    color: var(--muted2);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .tag:hover, .tag.active { border-color: var(--gold); color: var(--gold); background: rgba(200,169,110,0.05); }
+  .tag.red-tag { border-color: rgba(139,26,26,0.4); color: #e06060; }
+  .tag.red-tag:hover { background: rgba(139,26,26,0.1); }
+
+  /* TAG FILTERS */
+  .tag-filter-bar {
+    padding: 1.5rem 2.5rem;
+    display: flex; gap: 0.6rem; flex-wrap: wrap;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .filter-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    align-self: center;
+    margin-right: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  /* SCENE DETAIL */
+  .scene-detail { padding: 0 2.5rem 4rem; }
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted2);
+    cursor: pointer;
+    margin: 2rem 0;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    background: none; border: none;
+  }
+  .back-btn:hover { color: var(--gold); }
+  .detail-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+    align-items: start;
+  }
+  .detail-frame {
+    aspect-ratio: 2.39/1;
+    background: var(--bg3);
+    border: 0.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .frame-label {
+    font-family: var(--font-display);
+    font-size: 5rem;
+    color: transparent;
+    -webkit-text-stroke: 0.5px rgba(200,169,110,0.12);
+    user-select: none;
+  }
+  .detail-meta { padding-top: 0.5rem; }
+  .detail-film {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+  .detail-title {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    letter-spacing: 0.05em;
+    color: var(--cream);
+    line-height: 0.95;
+    margin-bottom: 1.2rem;
+  }
+  .detail-year {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+  }
+  .detail-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0; }
+  .detail-intro {
+    font-family: var(--font-serif);
+    font-size: 1rem;
+    color: var(--muted2);
+    line-height: 1.7;
+    font-style: italic;
+    margin-top: 1.2rem;
+    padding-top: 1.2rem;
+    border-top: 0.5px solid var(--border);
+  }
+  .anatomy-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 2rem;
+  }
+  .anatomy-section {
+    background: var(--bg);
+    padding: 2rem;
+  }
+  .anatomy-label {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .anatomy-text {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    color: var(--muted2);
+    line-height: 1.75;
+  }
+  .anatomy-text strong { color: var(--cream); font-weight: 600; }
+
+  /* DIRECTORS */
+  .directors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    margin: 0 2.5rem;
+  }
+  .director-card {
+    background: var(--bg);
+    padding: 2rem 1.5rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    position: relative;
+  }
+  .director-card:hover { background: var(--bg2); }
+  .director-initial {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    color: transparent;
+    -webkit-text-stroke: 0.5px rgba(200,169,110,0.2);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .director-name {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--cream);
+    margin-bottom: 0.3rem;
+  }
+  .director-origin {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .director-obsessions { display: flex; flex-direction: column; gap: 0.4rem; }
+  .obsession-pill {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    padding: 0.3rem 0.7rem;
+    border-left: 2px solid var(--gold);
+    color: var(--muted2);
+    background: rgba(200,169,110,0.03);
+    text-transform: uppercase;
+  }
+  .director-count {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--muted);
+  }
+
+  /* VISUAL MAP */
+  .tag-map {
+    padding: 2rem 2.5rem;
+  }
+  .tag-map-intro {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--muted2);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    max-width: 600px;
+  }
+  .obsession-cluster {
+    margin-bottom: 2.5rem;
+    border: 0.5px solid var(--border);
+  }
+  .cluster-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 0.5px solid var(--border);
+    background: var(--bg2);
+    cursor: pointer;
+  }
+  .cluster-name {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .cluster-count {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--muted);
+  }
+  .cluster-scenes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--border);
+  }
+  .cluster-scene {
+    background: var(--bg);
+    padding: 1rem 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .cluster-scene:hover { background: var(--bg2); }
+  .cluster-scene-film {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+  .cluster-scene-name {
+    font-family: var(--font-serif);
+    font-size: 0.9rem;
+    color: var(--cream);
+  }
+
+  /* FOOTER */
+  footer {
+    margin-top: 5rem;
+    padding: 2rem 2.5rem;
+    border-top: 0.5px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  footer p {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .film-strip {
+    display: flex; gap: 0.3rem;
+  }
+  .strip-frame {
+    width: 16px; height: 12px;
+    border: 0.5px solid var(--border);
+    background: var(--bg3);
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); }
+
+  /* COLOR ACCENTS per director */
+  .bg-kubrick { background: linear-gradient(135deg, #0a0a14 0%, #141420 100%); }
+  .bg-lynch { background: linear-gradient(135deg, #0a0a0a 0%, #12080a 100%); }
+  .bg-cronenberg { background: linear-gradient(135deg, #0a0f0a 0%, #0a140a 100%); }
+  .bg-park { background: linear-gradient(135deg, #140a0a 0%, #1a0808 100%); }
+  .bg-scorsese { background: linear-gradient(135deg, #0a0808 0%, #1a1008 100%); }
+</style>
+</head>
+<body>
+<h2 class="sr-only">CineMap — Mappa delle ossessioni del cinema d'autore</h2>
+
+<nav>
+  <div class="logo" onclick="showView('home')">CINE<span>MAP</span></div>
+  <ul>
+    <li class="active" id="nav-home" onclick="navigate('home')">Scene</li>
+    <li id="nav-directors" onclick="navigate('directors')">Registi</li>
+    <li id="nav-map" onclick="navigate('map')">Mappa Visiva</li>
+  </ul>
+  <div class="nav-tag" onclick="sendPrompt('Suggerisci nuove scene da aggiungere a CineMap nel database')">+ Aggiungi scena ↗</div>
+</nav>
+
+<!-- HOME VIEW -->
+<div class="view active" id="view-home">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-number">01</div>
+    <div class="hero-tag">Frame d'Autore — Cinema come linguaggio</div>
+    <h1>L'anatomia<br>del <em>fotogramma</em></h1>
+    <p class="hero-sub">Non la trama. Non il voto in stelline. La scena come unità di senso: regia, simbologia, ossessione.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="navigate('home')">Esplora le scene</button>
+      <button class="btn-ghost" onclick="navigate('map')">Mappa visiva →</button>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <span class="section-label">Ossessioni visive</span>
+    <div class="section-line"></div>
+    <span class="section-num">Filtra per tag</span>
+  </div>
+
+  <div class="tag-filter-bar">
+    <span class="filter-label">↳</span>
+    <span class="tag active" onclick="filterByTag(null, this)">Tutte le scene</span>
+    <span class="tag" onclick="filterByTag('simmetria', this)">#Simmetria</span>
+    <span class="tag" onclick="filterByTag('soggettiva', this)">#Soggettiva</span>
+    <span class="tag" onclick="filterByTag('body-horror', this)">#BodyHorror</span>
+    <span class="tag" onclick="filterByTag('sogno', this)">#Sogno</span>
+    <span class="tag" onclick="filterByTag('piano-sequenza', this)">#PianoSequenza</span>
+    <span class="tag" onclick="filterByTag('luce-urbana', this)">#LuceUrbana</span>
+    <span class="tag" onclick="filterByTag('colore-rosso', this)">#ColoreRosso</span>
+    <span class="tag" onclick="filterByTag('montaggio', this)">#Montaggio</span>
+  </div>
+
+  <div class="scene-grid" id="scene-grid"></div>
+
+  <div class="section-header" style="margin-top: 2rem;">
+    <span class="section-label">Questa settimana</span>
+    <div class="section-line"></div>
+    <span class="section-num">Focus</span>
+  </div>
+  <div style="padding: 0 2.5rem 3rem;">
+    <div style="border: 0.5px solid var(--border); padding: 2.5rem; display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: center;">
+      <div>
+        <div style="font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; margin-bottom: 1rem;">Focus della settimana</div>
+        <div style="font-family: var(--font-display); font-size: 2.5rem; letter-spacing: 0.05em; color: var(--cream); line-height: 0.95; margin-bottom: 1rem;">IL ROSSO<br>IN SCORSESE</div>
+        <div style="font-family: var(--font-serif); font-size: 0.9rem; color: var(--muted2); font-style: italic; line-height: 1.6;">Come Martin Scorsese usa il rosso non come colore ma come stato emotivo — dalla violenza di Taxi Driver alla passione di Goodfellas.</div>
+        <button class="btn-ghost" style="margin-top: 1.5rem;" onclick="navigate('map')">Esplora il pattern →</button>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border);">
+        <div style="background: var(--bg2); padding: 1.2rem; border-left: 2px solid #8b1a1a;">
+          <div style="font-family: var(--font-mono); font-size: 0.55rem; color: #e06060; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem;">Taxi Driver (1976)</div>
+          <div style="font-family: var(--font-serif); font-size: 0.85rem; color: var(--muted2); line-height: 1.6;">I neon rossi che tingono le strade notturne come emanazione della psiche di Travis.</div>
+        </div>
+        <div style="background: var(--bg2); padding: 1.2rem; border-left: 2px solid #8b1a1a;">
+          <div style="font-family: var(--font-mono); font-size: 0.55rem; color: #e06060; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem;">Goodfellas (1990)</div>
+          <div style="font-family: var(--font-serif); font-size: 0.85rem; color: var(--muted2); line-height: 1.6;">Il rosso dei club e dei ristoranti come lusso che maschera il sangue della violenza mafiosa.</div>
+        </div>
+        <div style="background: var(--bg2); padding: 1.2rem; border-left: 2px solid #8b1a1a;">
+          <div style="font-family: var(--font-mono); font-size: 0.55rem; color: #e06060; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem;">Raging Bull (1980)</div>
+          <div style="font-family: var(--font-serif); font-size: 0.85rem; color: var(--muted2); line-height: 1.6;">Assente nel B&N — ma la sua mancanza diventa ancora più eloquente.</div>
+        </div>
+        <div style="background: var(--bg2); padding: 1.2rem; border-left: 2px solid #8b1a1a;">
+          <div style="font-family: var(--font-mono); font-size: 0.55rem; color: #e06060; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.5rem;">The Departed (2006)</div>
+          <div style="font-family: var(--font-serif); font-size: 0.85rem; color: var(--muted2); line-height: 1.6;">Il rosso come segnale di morte imminente, disseminato nel frame come una firma.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCENE DETAIL VIEW -->
+<div class="view" id="view-scene">
+  <div class="scene-detail" id="scene-detail-content"></div>
+</div>
+
+<!-- DIRECTORS VIEW -->
+<div class="view" id="view-directors">
+  <div class="hero" style="min-height: 35vh; padding: 3rem 2.5rem 2.5rem;">
+    <div class="hero-bg"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-number" style="font-size: 8rem;">05</div>
+    <div class="hero-tag">Auteurs mappati nel database</div>
+    <h1 style="font-size: 3.5rem;">I <em>Registi</em></h1>
+  </div>
+  <div class="section-header">
+    <span class="section-label">Auteurs</span>
+    <div class="section-line"></div>
+    <span class="section-num">5 registi — 5 scene</span>
+  </div>
+  <div class="directors-grid" id="directors-grid"></div>
+</div>
+
+<!-- VISUAL MAP VIEW -->
+<div class="view" id="view-map">
+  <div class="hero" style="min-height: 35vh; padding: 3rem 2.5rem 2.5rem;">
+    <div class="hero-bg"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-number" style="font-size: 7rem;">∞</div>
+    <div class="hero-tag">Tag visivi — Ossessioni connesse</div>
+    <h1 style="font-size: 3.5rem;">Mappa delle<br><em>Ossessioni</em></h1>
+  </div>
+  <div class="section-header">
+    <span class="section-label">Pattern visivi</span>
+    <div class="section-line"></div>
+    <span class="section-num">Cluster per tema</span>
+  </div>
+  <div class="tag-map">
+    <p class="tag-map-intro">Ogni regista torna sulle stesse ossessioni visive: non scelte, ma necessità. Esplora i pattern che attraversano film e filmografie diverse.</p>
+    <div id="map-content"></div>
+  </div>
+</div>
+
+<footer>
+  <p>CineMap — Frame d'Autore © 2024</p>
+  <div class="film-strip">
+    <div class="strip-frame"></div><div class="strip-frame"></div><div class="strip-frame"></div>
+    <div class="strip-frame"></div><div class="strip-frame"></div><div class="strip-frame"></div>
+    <div class="strip-frame"></div><div class="strip-frame"></div>
+  </div>
+  <p>Beta — 5 scene in archivio</p>
+</footer>
+
+<script>
+const SCENES = [
+  {
+    id: 1,
+    film: "Videodrome",
+    year: 1983,
+    director: "David Cronenberg",
+    directorId: "cronenberg",
+    scene: "Il bacio con la televisione",
+    ratio: "1.85:1",
+    tags: ["body-horror", "colore-rosso", "surrealismo"],
+    tagLabels: ["#BodyHorror", "#ColoreRosso", "#Surrealismo"],
+    accentClass: "bg-cronenberg",
+    accentColor: "#4a7a4a",
+    intro: "La scena in cui Max Renn bacia lo schermo televisivo — il cui volto di Nicki Brand pulsa come carne viva — è il manifesto visivo del \"New Flesh\" di Cronenberg. La televisione non è più un medium: è un organismo.",
+    anatomy: {
+      regia: "Cronenberg usa un obiettivo macro per trasformare le trame dello schermo in pelle. Il campo è strettissimo, claustrofobico. Non c'è prospettiva di fuga.",
+      sceneggiatura: "Il dialogo è eliminato. La scena funziona in silenzio assoluto, lasciando che il corpo parli al posto delle parole. È il trionfo dell'immagine sulla narrazione.",
+      simbologia: "Lo schermo che diventa carne rappresenta la tesi centrale del film: i media non riflettono la realtà, la <strong>producono</strong>. Max non guarda la TV — la assorbe e viene assorbito.",
+      produzione: "La protesi dello schermo fu costruita da Rick Baker con lattice e meccanismi pneumatici che simulavano la respirazione. Ci vollero tre settimane di test per sincronizzare il respiro al ritmo del montaggio."
+    }
+  },
+  {
+    id: 2,
+    film: "Shining",
+    year: 1980,
+    director: "Stanley Kubrick",
+    directorId: "kubrick",
+    scene: "La sequenza del bagno (Stanza 237)",
+    ratio: "1.33:1",
+    tags: ["simmetria", "colore-rosso", "soggettiva"],
+    tagLabels: ["#Simmetria", "#ColoreRosso", "#Soggettiva"],
+    accentClass: "bg-kubrick",
+    accentColor: "#4a4a8a",
+    intro: "La stanza 237 è probabilmente la scena di rivelazione più geometricamente precisa della storia del cinema horror. Kubrick la costruisce come una trappola simmetrica — ogni inquadratura è un asse di specchio da cui non si può fuggire.",
+    anatomy: {
+      regia: "Kubrick usa uno zoom lentissimo — quasi impercettibile — che comprime lo spazio psicologicamente prima ancora che accada qualcosa. La simmetria perfetta del corridoio è deliberata: il mondo di Jack è un mondo senza uscite casuali.",
+      sceneggiatura: "King aveva scritto una scena esplicita. Kubrick la trasforma in qualcosa di più angosciante: la bellezza prima dell'orrore. La narrativa scompare nel puro potere visivo.",
+      simbologia: "Il rosso della vasca e del bagno non è colore: è premonizione. Kubrick dissemina rosso in ogni scena chiave del film come un codice subliminale che il conscio ignora ma il subconscio elabora.",
+      produzione: "L'hotel Overlook fu costruito interamente negli studi di Elstree, Londra. La stanza 237 fu progettata con piastrelle calcolate centimetro per centimetro per garantire la perfezione geometrica nelle riprese con steadicam."
+    }
+  },
+  {
+    id: 3,
+    film: "Mulholland Drive",
+    year: 2001,
+    director: "David Lynch",
+    directorId: "lynch",
+    scene: "Il prologo onirico — Il Jitterbug",
+    ratio: "1.85:1",
+    tags: ["sogno", "montaggio", "surrealismo"],
+    tagLabels: ["#Sogno", "#Montaggio", "#Surrealismo"],
+    accentClass: "bg-lynch",
+    accentColor: "#8a4a6a",
+    intro: "La sequenza iniziale — corpi che ballano il jitterbug sovraimpressionati su uno sfondo scarlatto, poi il volo verso i cuscini bianchi — costruisce in 90 secondi l'intera grammatica onirica del film. Non è un'apertura: è una promessa di smarrimento.",
+    anatomy: {
+      regia: "Lynch usa la doppia esposizione — una tecnica dell'era del muto — per materializzare visivamente il concetto di sogno dentro il sogno. Le figure danzanti sono fantasmi di qualcosa che non è ancora accaduto.",
+      sceneggiatura: "Non esiste dialogo. Lynch costruisce emozione attraverso musica, ritmo e colore. La sceneggiatura per questa scena era praticamente un vuoto — Lynch la improvvisò quasi interamente in fase di montaggio.",
+      simbologia: "Il rosso del fondale è l'inconscio che affiora. Il bianco dei cuscini è la cancellazione, l'oblio. La sequenza stabilisce la dialettica colore-sogno che struttura tutto il film.",
+      produzione: "Le riprese del jitterbug furono girate separatamente dalle riprese principali, in un studio diverso, con ballerini dello show biz degli anni '50 che Lynch aveva contattato personalmente. L'effetto di sovraimpressione fu ottenuto otticamente, non in post-produzione."
+    }
+  },
+  {
+    id: 4,
+    film: "Oldboy",
+    year: 2003,
+    director: "Park Chan-wook",
+    directorId: "park",
+    scene: "Il piano sequenza del corridoio",
+    ratio: "2.35:1",
+    tags: ["piano-sequenza", "coreografia", "colore-rosso"],
+    tagLabels: ["#PianoSequenza", "#Coreografia", "#ColoreRosso"],
+    accentClass: "bg-park",
+    accentColor: "#8a3a3a",
+    intro: "Oh Dae-su da solo contro una ventina di uomini, in un corridoio stretto, senza stacchi di montaggio. Park Chan-wook rifiuta l'estetica dell'azione hollywoodiana per mostrare la violenza nella sua natura reale: esaustiva, goffa, brutale.",
+    anatomy: {
+      regia: "La macchina da presa rimane in posizione fissa a inquadratura laterale per tutta la scena — una scelta anti-spettacolare che trasforma il combattimento in una performance teatrale. Nessun taglio, nessuna scorciatoia.",
+      sceneggiatura: "Park aveva originariamente scritto questa come una sequenza normale, con stacchi di montaggio. Decise di girarla in piano sequenza durante le prove, quando capì che il montaggio avrebbe falsificato la verità fisica dello scontro.",
+      simbologia: "L'esaurimento progressivo del protagonista — che si trascina letteralmente sul pavimento nella parte finale — è il vero soggetto della scena. Non il trionfo dell'eroe: la sopravvivenza del corpo.",
+      produzione: "La scena richiese tre giorni di riprese e 17 take completi. L'attore Choi Min-sik si allenò per tre settimane con le comparse per sincronizzare ogni caduta, ogni collisione, ogni recupero. Nessun stuntman."
+    }
+  },
+  {
+    id: 5,
+    film: "Taxi Driver",
+    year: 1976,
+    director: "Martin Scorsese",
+    directorId: "scorsese",
+    scene: "L'incipit — New York notturna",
+    ratio: "1.85:1",
+    tags: ["luce-urbana", "soggettiva", "colore-rosso"],
+    tagLabels: ["#LuceUrbana", "#Soggettiva", "#ColoreRosso"],
+    accentClass: "bg-scorsese",
+    accentColor: "#8a5a1a",
+    intro: "Il taxi emerge dal vapore come dall'inferno. Gli occhi di Travis nel retrovisore. I neon rossi che scivolano sul vetro. Scorsese costruisce in due minuti l'intera cosmologia del film: una città che è uno stato mentale, e un uomo che non sa distinguersi da essa.",
+    anatomy: {
+      regia: "Scorsese usa il punto di vista soggettivo — l'occhio della macchina è l'occhio di Travis — per stabilire immediatamente che tutto quello che vedremo è filtrato dalla sua percezione distorta. New York non è la New York reale.",
+      sceneggiatura: "Paul Schrader scrisse la sceneggiatura in dieci giorni di isolamento, dopo una crisi personale. La voce narrante del diario di Travis — «Someday a real rain will come» — fu scritta quasi in stato alterato.",
+      simbologia: "Il vapore che sale dai tombini è una scelta cromatica precisa: Scorsese e il DP Michael Chapman lo tinsero di rosso con gel sui lampioni. La città letteralmente sanguina.",
+      produzione: "Le riprese notturne di New York furono girate in condizioni estreme — luglio 1975, ondata di calore record. L'equipaggio lavorava dalle 22 alle 6 di mattina. De Niro rimase in personaggio per tutta la produzione, guidando davvero un taxi nei giorni liberi."
+    }
+  }
+];
+
+const DIRECTORS = [
+  { id: "cronenberg", name: "David Cronenberg", origin: "Canada, 1943", obsessions: ["New Flesh", "Body Horror", "Media come organismo", "Metamorfosi"] },
+  { id: "kubrick", name: "Stanley Kubrick", origin: "USA, 1928 — UK", obsessions: ["Simmetria assiale", "Prospettiva centrale", "Steadicam", "Psicosi dello spazio"] },
+  { id: "lynch", name: "David Lynch", origin: "USA, 1946", obsessions: ["Sogno dentro il sogno", "Industrial sublime", "Rosso e velluto", "Rottura narrativa"] },
+  { id: "park", name: "Park Chan-wook", origin: "Corea del Sud, 1963", obsessions: ["Vendetta come struttura", "Violenza coreografata", "Simmetria narrativa", "Shock estetico"] },
+  { id: "scorsese", name: "Martin Scorsese", origin: "USA, 1942", obsessions: ["Luce urbana notturna", "Soggettiva come psiche", "Rosso come stato emotivo", "Mascolinità tossica"] }
+];
+
+const TAG_CLUSTERS = [
+  {
+    name: "#Simmetria",
+    key: "simmetria",
+    scenes: [2],
+    description: "La simmetria come specchio della psiche — Kubrick la usa per creare trappole visive senza via d'uscita."
+  },
+  {
+    name: "#ColoreRosso",
+    key: "colore-rosso",
+    scenes: [1, 2, 4, 5],
+    description: "Il rosso come ossessione ricorrente: sangue, passione, premonizione. Attraversa Cronenberg, Kubrick, Park e Scorsese in modi radicalmente diversi."
+  },
+  {
+    name: "#Soggettiva",
+    key: "soggettiva",
+    scenes: [2, 5],
+    description: "La macchina da presa come mente malata — quando il punto di vista non è neutro ma è la distorsione stessa."
+  },
+  {
+    name: "#BodyHorror",
+    key: "body-horror",
+    scenes: [1],
+    description: "Il corpo come territorio di colonizzazione — Cronenberg e la carne che diventa tecnologia, medium, malattia."
+  },
+  {
+    name: "#Sogno",
+    key: "sogno",
+    scenes: [3],
+    description: "Lynch e l'architettura del sogno: non rappresentazione dell'inconscio ma sua materializzazione diretta nel film."
+  },
+  {
+    name: "#PianoSequenza",
+    key: "piano-sequenza",
+    scenes: [4],
+    description: "Il rifiuto del montaggio come scelta etica — Park Chan-wook usa il piano sequenza per restituire verità fisica all'azione."
+  }
+];
+
+let currentFilter = null;
+
+function renderSceneGrid(filter) {
+  const grid = document.getElementById('scene-grid');
+  const scenes = filter ? SCENES.filter(s => s.tags.includes(filter)) : SCENES;
+  grid.innerHTML = scenes.map((s, i) => `
+    <div class="scene-card" onclick="showScene(${s.id})">
+      <div class="scene-thumb ${s.accentClass}">
+        <div class="scene-thumb-inner">
+          <div class="frame-label">${String(i+1).padStart(2,'0')}</div>
+        </div>
+        <div class="scene-overlay"></div>
+        <div class="scene-ratio">${s.ratio}</div>
+        <div class="scene-number">${String(i+1).padStart(2,'0')}</div>
+      </div>
+      <div class="scene-info">
+        <div class="scene-director">${s.director.toUpperCase()} · ${s.year}</div>
+        <div class="scene-title">${s.film} — ${s.scene}</div>
+        <div class="scene-tags">
+          ${s.tagLabels.map(t => `<span class="tag">${t}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderDirectors() {
+  const grid = document.getElementById('directors-grid');
+  grid.innerHTML = DIRECTORS.map(d => {
+    const count = SCENES.filter(s => s.directorId === d.id).length;
+    return `
+    <div class="director-card" onclick="showDirectorScenes('${d.id}')">
+      <div class="director-count">${count} scene</div>
+      <div class="director-initial">${d.name.charAt(0)}</div>
+      <div class="director-name">${d.name}</div>
+      <div class="director-origin">${d.origin}</div>
+      <div class="director-obsessions">
+        ${d.obsessions.slice(0,3).map(o => `<div class="obsession-pill">${o}</div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderMap() {
+  const content = document.getElementById('map-content');
+  content.innerHTML = TAG_CLUSTERS.map(cluster => {
+    const clusterScenes = SCENES.filter(s => cluster.scenes.includes(s.id));
+    return `
+    <div class="obsession-cluster">
+      <div class="cluster-header">
+        <span class="cluster-name">${cluster.name}</span>
+        <span class="cluster-count">${clusterScenes.length} scene correlate</span>
+      </div>
+      <div style="padding: 1rem 1.5rem; background: var(--bg); border-bottom: 0.5px solid var(--border);">
+        <p style="font-family: var(--font-serif); font-style: italic; font-size: 0.9rem; color: var(--muted2); line-height: 1.6;">${cluster.description}</p>
+      </div>
+      <div class="cluster-scenes">
+        ${clusterScenes.map(s => `
+        <div class="cluster-scene" onclick="showScene(${s.id})">
+          <div class="cluster-scene-film">${s.director.split(' ').pop()} · ${s.year}</div>
+          <div class="cluster-scene-name">${s.film}</div>
+          <div style="font-family: var(--font-serif); font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem; font-style: italic;">${s.scene}</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showScene(id) {
+  const s = SCENES.find(sc => sc.id === id);
+  if (!s) return;
+  const content = document.getElementById('scene-detail-content');
+  content.innerHTML = `
+    <button class="back-btn" onclick="navigate('home')">← Torna alle scene</button>
+    <div class="detail-header">
+      <div class="detail-frame ${s.accentClass}">
+        <div class="frame-label">${String(s.id).padStart(2,'0')}</div>
+      </div>
+      <div class="detail-meta">
+        <div class="detail-film">${s.director.toUpperCase()} · ${s.year}</div>
+        <div class="detail-title">${s.film}</div>
+        <div class="detail-year">${s.scene} — Formato ${s.ratio}</div>
+        <div class="detail-tags">
+          ${s.tagLabels.map(t => `<span class="tag active">${t}</span>`).join('')}
+        </div>
+        <p class="detail-intro">${s.intro}</p>
+      </div>
+    </div>
+    <div style="font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.8rem; border-bottom: 0.5px solid var(--border);">Anatomia della scena</div>
+    <div class="anatomy-grid">
+      <div class="anatomy-section">
+        <div class="anatomy-label">01 — Regia</div>
+        <div class="anatomy-text">${s.anatomy.regia}</div>
+      </div>
+      <div class="anatomy-section">
+        <div class="anatomy-label">02 — Sceneggiatura</div>
+        <div class="anatomy-text">${s.anatomy.sceneggiatura}</div>
+      </div>
+      <div class="anatomy-section">
+        <div class="anatomy-label">03 — Simbologia</div>
+        <div class="anatomy-text">${s.anatomy.simbologia}</div>
+      </div>
+      <div class="anatomy-section">
+        <div class="anatomy-label">04 — Curiosità produttiva</div>
+        <div class="anatomy-text">${s.anatomy.produzione}</div>
+      </div>
+    </div>
+    <div style="margin-top: 2rem; padding: 1.5rem; border: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+      <div>
+        <div style="font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em; color: var(--gold); text-transform: uppercase; margin-bottom: 0.5rem;">Altre scene di ${s.director.split(' ').pop()}</div>
+        <div style="font-family: var(--font-serif); font-size: 0.9rem; color: var(--muted2); font-style: italic;">Esplora l'intera filmografia e i pattern visivi del regista</div>
+      </div>
+      <button class="btn-ghost" onclick="showDirectorScenes('${s.directorId}')">Vai al regista →</button>
+    </div>
+  `;
+  showView('scene');
+}
+
+function showDirectorScenes(directorId) {
+  const dir = DIRECTORS.find(d => d.id === directorId);
+  const scenes = SCENES.filter(s => s.directorId === directorId);
+  navigate('home');
+  setTimeout(() => filterByTag(null, document.querySelector('.tag-filter-bar .tag')), 100);
+}
+
+function filterByTag(tag, el) {
+  currentFilter = tag;
+  document.querySelectorAll('.tag-filter-bar .tag').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderSceneGrid(tag);
+}
+
+function navigate(view) {
+  document.querySelectorAll('nav ul li').forEach(li => li.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + view);
+  if (navEl) navEl.classList.add('active');
+  showView(view);
+}
+
+function showView(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const target = document.getElementById('view-' + view);
+  if (target) target.classList.add('active');
+}
+
+renderSceneGrid();
+renderDirectors();
+renderMap();
+</script>
+</body>
+</html>
