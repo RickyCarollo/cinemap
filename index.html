@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CineMap — Frame d'Autore</title>
+<!-- Google Analytics — sostituisci G-XXXXXXXXXX con il tuo ID -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Bebas+Neue&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
@@ -11,273 +14,218 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#080808;--bg2:#0f0f0f;--bg3:#181818;--bg4:#222;
-  --gold:#c8a96e;--gold2:#e8c98e;--gold3:rgba(200,169,110,0.12);
-  --cream:#f0e8d8;--red:#8b1a1a;
+  --gold:#c8a96e;--gold2:#e8c98e;
+  --cream:#f0e8d8;
   --muted:#4a4a4a;--muted2:#777;--muted3:#aaa;
-  --border:rgba(200,169,110,0.12);--border2:rgba(200,169,110,0.28);--border3:rgba(200,169,110,0.5);
-  --fd:'Bebas Neue',sans-serif;
-  --fs:'Cormorant Garamond',Georgia,serif;
-  --fm:'DM Mono',monospace;
-  --ease:cubic-bezier(0.16,1,0.3,1);
-  --ease2:cubic-bezier(0.25,0.46,0.45,0.94);
+  --border:rgba(200,169,110,0.12);--border2:rgba(200,169,110,0.28);
+  --fd:'Bebas Neue',sans-serif;--fs:'Cormorant Garamond',Georgia,serif;--fm:'DM Mono',monospace;
+  --ease:cubic-bezier(0.16,1,0.3,1);--ease2:cubic-bezier(0.25,0.46,0.45,0.94);
 }
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--cream);font-family:var(--fs);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-
-/* ─── SCROLLBAR ─── */
-::-webkit-scrollbar{width:2px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--border2)}
-
-/* ─── CURSOR ─── */
-.cursor{width:8px;height:8px;background:var(--gold);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,width 0.3s,height 0.3s,opacity 0.3s;mix-blend-mode:difference}
-.cursor-ring{width:32px;height:32px;border:1px solid rgba(200,169,110,0.5);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform 0.15s var(--ease2),width 0.3s,height 0.3s,opacity 0.3s}
-
-/* ─── NAV ─── */
-nav{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 2.8rem;border-bottom:0.5px solid var(--border);position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(8,8,8,0.92);backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px)}
-.logo{font-family:var(--fd);font-size:1.65rem;letter-spacing:0.14em;color:var(--gold);cursor:pointer;transition:opacity 0.3s;user-select:none}
+::-webkit-scrollbar{width:2px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2)}
+.cursor{width:8px;height:8px;background:var(--gold);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s;mix-blend-mode:difference}
+.cursor-ring{width:32px;height:32px;border:1px solid rgba(200,169,110,.5);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
+nav{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 2.8rem;border-bottom:.5px solid var(--border);position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(8,8,8,.94);backdrop-filter:blur(24px)}
+.logo{font-family:var(--fd);font-size:1.65rem;letter-spacing:.14em;color:var(--gold);cursor:pointer}
 .logo span{color:var(--cream)}
 nav ul{display:flex;gap:2.2rem;list-style:none}
-nav ul li{font-family:var(--fm);font-size:0.66rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted2);cursor:pointer;transition:color 0.3s;position:relative;padding-bottom:4px}
-nav ul li::after{content:'';position:absolute;bottom:0;left:0;width:0;height:0.5px;background:var(--gold);transition:width 0.4s var(--ease)}
-nav ul li:hover{color:var(--gold)}
-nav ul li.active{color:var(--gold)}
+nav ul li{font-family:var(--fm);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);cursor:pointer;transition:color .3s;position:relative;padding-bottom:4px}
+nav ul li::after{content:'';position:absolute;bottom:0;left:0;width:0;height:.5px;background:var(--gold);transition:width .4s var(--ease)}
+nav ul li:hover,nav ul li.active{color:var(--gold)}
 nav ul li.active::after,nav ul li:hover::after{width:100%}
-.nav-cta{font-family:var(--fm);font-size:0.63rem;letter-spacing:0.18em;text-transform:uppercase;border:0.5px solid var(--border2);padding:0.4rem 1.1rem;color:var(--gold);cursor:pointer;background:transparent;transition:all 0.3s;position:relative;overflow:hidden}
-.nav-cta::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.35s var(--ease);z-index:0}
+.nav-cta{font-family:var(--fm);font-size:.63rem;letter-spacing:.18em;text-transform:uppercase;border:.5px solid var(--border2);padding:.4rem 1.1rem;color:var(--gold);cursor:pointer;background:transparent;transition:all .3s;position:relative;overflow:hidden}
+.nav-cta::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease);z-index:0}
 .nav-cta:hover::before{transform:scaleX(1)}
-.nav-cta span{position:relative;z-index:1;transition:color 0.35s}
+.nav-cta span{position:relative;z-index:1;transition:color .35s}
 .nav-cta:hover span{color:var(--bg)}
-
-/* ─── PAGE WRAPPER ─── */
 #app{padding-top:64px}
 .view{display:none;opacity:0;transform:translateY(12px)}
-.view.active{display:block;animation:viewIn 0.6s var(--ease) forwards}
+.view.active{display:block;animation:viewIn .6s var(--ease) forwards}
 @keyframes viewIn{to{opacity:1;transform:translateY(0)}}
-
-/* ─── HERO ─── */
 .hero{position:relative;overflow:hidden;padding:5.5rem 2.8rem 4.5rem;min-height:78vh;display:flex;flex-direction:column;justify-content:flex-end}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(139,26,26,0.06) 0%,transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(200,169,110,0.04) 0%,transparent 50%),#080808}
-.hero-grid{position:absolute;inset:0;opacity:0.04;background-image:repeating-linear-gradient(0deg,var(--gold) 0,var(--gold) 0.5px,transparent 0.5px,transparent 60px),repeating-linear-gradient(90deg,var(--gold) 0,var(--gold) 0.5px,transparent 0.5px,transparent 60px)}
-.hero-scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none}
-.hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,0.5) 100%);pointer-events:none}
-.hero-bg-num{position:absolute;right:-2rem;top:50%;transform:translateY(-50%);font-family:var(--fd);font-size:min(32vw,22rem);color:transparent;-webkit-text-stroke:0.5px rgba(200,169,110,0.07);line-height:1;user-select:none;pointer-events:none;animation:bgNumIn 1.4s var(--ease) both}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(139,26,26,.06),transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(200,169,110,.04),transparent 50%),#080808}
+.hero-grid{position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,var(--gold) 0,var(--gold) .5px,transparent .5px,transparent 60px),repeating-linear-gradient(90deg,var(--gold) 0,var(--gold) .5px,transparent .5px,transparent 60px)}
+.hero-scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);pointer-events:none}
+.hero-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,.5) 100%);pointer-events:none}
+.hero-bg-num{position:absolute;right:-2rem;top:50%;transform:translateY(-50%);font-family:var(--fd);font-size:min(32vw,22rem);color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.07);line-height:1;user-select:none;pointer-events:none;animation:bgNumIn 1.4s var(--ease) both}
 @keyframes bgNumIn{from{opacity:0;transform:translateY(-50%) translateX(80px)}to{opacity:1;transform:translateY(-50%) translateX(0)}}
-
-.hero-eyebrow{font-family:var(--fm);font-size:0.6rem;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;margin-bottom:1.4rem;position:relative;z-index:1;animation:heroEl 1s 0.1s var(--ease) both;opacity:0}
-.hero h1{font-family:var(--fd);font-size:clamp(3.5rem,9vw,7rem);letter-spacing:0.04em;line-height:0.86;color:var(--cream);position:relative;z-index:1;max-width:800px;animation:heroEl 1s 0.2s var(--ease) both;opacity:0}
+.hero-eyebrow{font-family:var(--fm);font-size:.6rem;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;margin-bottom:1.4rem;position:relative;z-index:1;animation:heroEl 1s .1s var(--ease) both;opacity:0}
+.hero h1{font-family:var(--fd);font-size:clamp(3.5rem,9vw,7rem);letter-spacing:.04em;line-height:.86;color:var(--cream);position:relative;z-index:1;max-width:800px;animation:heroEl 1s .2s var(--ease) both;opacity:0}
 .hero h1 em{color:var(--gold);font-style:normal}
-.hero-desc{font-family:var(--fs);font-size:1.1rem;color:var(--muted2);font-style:italic;margin-top:1.8rem;max-width:520px;position:relative;z-index:1;line-height:1.7;animation:heroEl 1s 0.3s var(--ease) both;opacity:0}
-.hero-row{display:flex;align-items:center;gap:1.2rem;margin-top:3rem;position:relative;z-index:1;animation:heroEl 1s 0.4s var(--ease) both;opacity:0}
+.hero-desc{font-family:var(--fs);font-size:1.1rem;color:var(--muted2);font-style:italic;margin-top:1.8rem;max-width:520px;position:relative;z-index:1;line-height:1.7;animation:heroEl 1s .3s var(--ease) both;opacity:0}
+.hero-row{display:flex;align-items:center;gap:1.2rem;margin-top:3rem;position:relative;z-index:1;animation:heroEl 1s .4s var(--ease) both;opacity:0;flex-wrap:wrap}
 .hero-divider{width:1px;height:36px;background:var(--border2)}
 .hero-stats{display:flex;gap:2.5rem}
-.hs-num{font-family:var(--fd);font-size:2.4rem;color:var(--gold);letter-spacing:0.04em;line-height:1}
-.hs-label{font-family:var(--fm);font-size:0.52rem;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;margin-top:0.15rem}
+.hs-num{font-family:var(--fd);font-size:2.4rem;color:var(--gold);letter-spacing:.04em;line-height:1}
+.hs-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;margin-top:.15rem}
 @keyframes heroEl{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
-
-/* ─── BUTTONS ─── */
-.btn-gold{background:var(--gold);color:var(--bg);border:none;padding:0.9rem 2.5rem;font-family:var(--fm);font-size:0.66rem;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;transition:all 0.35s;position:relative;overflow:hidden}
-.btn-gold::after{content:'';position:absolute;top:50%;left:50%;width:0;height:0;background:rgba(255,255,255,0.15);border-radius:50%;transform:translate(-50%,-50%);transition:width 0.5s,height 0.5s,opacity 0.5s}
-.btn-gold:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 10px 30px rgba(200,169,110,0.25)}
-.btn-gold:active::after{width:200px;height:200px;opacity:0}
-.btn-outline{background:transparent;color:var(--muted2);border:0.5px solid var(--border2);padding:0.9rem 2.5rem;font-family:var(--fm);font-size:0.66rem;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;transition:all 0.3s}
+.btn-gold{background:var(--gold);color:var(--bg);border:none;padding:.9rem 2.5rem;font-family:var(--fm);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:all .35s}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 10px 30px rgba(200,169,110,.25)}
+.btn-outline{background:transparent;color:var(--muted2);border:.5px solid var(--border2);padding:.9rem 2.5rem;font-family:var(--fm);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:all .3s}
 .btn-outline:hover{color:var(--cream);border-color:var(--gold);transform:translateY(-1px)}
-
-/* ─── SECTION HEADER ─── */
+.btn-sm{background:transparent;color:var(--gold);border:.5px solid var(--border2);padding:.5rem 1.2rem;font-family:var(--fm);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:all .3s}
+.btn-sm:hover{background:var(--gold);color:var(--bg)}
 .sec-head{display:flex;align-items:center;gap:1.8rem;padding:3.5rem 2.8rem 1.8rem}
-.sec-label{font-family:var(--fm);font-size:0.57rem;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;white-space:nowrap}
-.sec-line{flex:1;height:0.5px;background:linear-gradient(to right,var(--border2) 0%,transparent 100%)}
-.sec-count{font-family:var(--fm);font-size:0.57rem;color:var(--muted);white-space:nowrap}
-
-/* ─── TAG FILTER BAR ─── */
-.filter-bar{padding:1.2rem 2.8rem;display:flex;gap:0.5rem;flex-wrap:wrap;border-bottom:0.5px solid var(--border);position:sticky;top:64px;z-index:100;background:rgba(8,8,8,0.95);backdrop-filter:blur(12px)}
-.ftag{font-family:var(--fm);font-size:0.52rem;letter-spacing:0.13em;padding:0.32rem 0.8rem;border:0.5px solid var(--border);color:var(--muted2);cursor:pointer;transition:all 0.25s var(--ease2);text-transform:uppercase;user-select:none}
-.ftag:hover{border-color:rgba(200,169,110,0.4);color:var(--muted3)}
-.ftag.active{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,0.07)}
-
-/* ─── SCENE GRID ─── */
+.sec-label{font-family:var(--fm);font-size:.57rem;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;white-space:nowrap}
+.sec-line{flex:1;height:.5px;background:linear-gradient(to right,var(--border2),transparent)}
+.sec-count{font-family:var(--fm);font-size:.57rem;color:var(--muted);white-space:nowrap}
+.filter-bar{padding:1.2rem 2.8rem;display:flex;gap:.5rem;flex-wrap:wrap;border-bottom:.5px solid var(--border);position:sticky;top:64px;z-index:100;background:rgba(8,8,8,.95);backdrop-filter:blur(12px)}
+.ftag{font-family:var(--fm);font-size:.52rem;letter-spacing:.13em;padding:.32rem .8rem;border:.5px solid var(--border);color:var(--muted2);cursor:pointer;transition:all .25s;text-transform:uppercase;user-select:none}
+.ftag:hover{border-color:rgba(200,169,110,.4);color:var(--muted3)}
+.ftag.active{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,.07)}
 .scene-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--border);margin:0 2.8rem}
-.scene-card{background:var(--bg);cursor:pointer;overflow:hidden;transition:background 0.3s;position:relative}
+.scene-card{background:var(--bg);cursor:pointer;overflow:hidden;transition:background .3s;position:relative}
 .scene-card:hover{background:var(--bg2)}
-.scene-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,169,110,0.03),transparent);opacity:0;transition:opacity 0.4s;pointer-events:none}
-.scene-card:hover::after{opacity:1}
 .sc-thumb{height:200px;position:relative;overflow:hidden;background:var(--bg3)}
-.sc-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.55;transition:opacity 0.5s var(--ease2),transform 0.7s var(--ease);display:block}
-.scene-card:hover .sc-thumb img{opacity:0.8;transform:scale(1.07)}
+.sc-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;transition:opacity .5s var(--ease2),transform .7s var(--ease);display:block}
+.scene-card:hover .sc-thumb img{opacity:.8;transform:scale(1.07)}
 .sc-thumb-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.sc-ph-num{font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:0.5px rgba(200,169,110,0.12);line-height:1;user-select:none}
-.sc-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,1) 0%,rgba(8,8,8,0.3) 50%,transparent 100%)}
-.sc-ratio{position:absolute;top:1rem;left:1rem;font-family:var(--fm);font-size:0.5rem;letter-spacing:0.18em;color:var(--gold);border:0.5px solid rgba(200,169,110,0.35);padding:0.22rem 0.6rem;background:rgba(8,8,8,0.85);z-index:2;backdrop-filter:blur(4px)}
-.sc-year-badge{position:absolute;bottom:1rem;right:1rem;font-family:var(--fm);font-size:0.5rem;letter-spacing:0.12em;color:rgba(200,169,110,0.5);z-index:2}
-.sc-body{padding:1.2rem 1.4rem 1.5rem;position:relative;z-index:2}
-.sc-director{font-family:var(--fm);font-size:0.57rem;letter-spacing:0.24em;color:var(--gold);text-transform:uppercase;margin-bottom:0.5rem}
-.sc-title{font-family:var(--fs);font-size:1.1rem;color:var(--cream);font-weight:600;margin-bottom:0.7rem;line-height:1.18;transition:color 0.3s}
+.sc-ph-num{font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.12);line-height:1}
+.sc-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,1) 0%,rgba(8,8,8,.2) 50%,transparent 100%)}
+.sc-ratio{position:absolute;top:1rem;left:1rem;font-family:var(--fm);font-size:.5rem;letter-spacing:.18em;color:var(--gold);border:.5px solid rgba(200,169,110,.35);padding:.22rem .6rem;background:rgba(8,8,8,.85);z-index:2}
+.sc-year{position:absolute;bottom:1rem;right:1rem;font-family:var(--fm);font-size:.5rem;letter-spacing:.12em;color:rgba(200,169,110,.5);z-index:2}
+.sc-body{padding:1.2rem 1.4rem 1.5rem}
+.sc-director{font-family:var(--fm);font-size:.57rem;letter-spacing:.24em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem}
+.sc-title{font-family:var(--fs);font-size:1.1rem;color:var(--cream);font-weight:600;margin-bottom:.4rem;line-height:1.18;transition:color .3s}
 .scene-card:hover .sc-title{color:var(--gold2)}
-.sc-scene{font-family:var(--fs);font-size:0.85rem;color:var(--muted2);font-style:italic;margin-bottom:0.8rem;line-height:1.3}
-.sc-tags{display:flex;flex-wrap:wrap;gap:0.4rem}
-.tag{font-family:var(--fm);font-size:0.5rem;letter-spacing:0.13em;padding:0.25rem 0.65rem;border:0.5px solid var(--border);color:var(--muted);cursor:pointer;transition:all 0.25s;text-transform:uppercase}
-.tag:hover,.tag.active{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,0.06)}
-
-/* ─── SCENE DETAIL ─── */
+.sc-scene{font-family:var(--fs);font-size:.85rem;color:var(--muted2);font-style:italic;margin-bottom:.8rem}
+.sc-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.tag{font-family:var(--fm);font-size:.5rem;letter-spacing:.13em;padding:.25rem .65rem;border:.5px solid var(--border);color:var(--muted);cursor:pointer;transition:all .25s;text-transform:uppercase}
+.tag:hover,.tag.active{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,.06)}
 .detail-wrap{padding:0 2.8rem 6rem}
-.back-btn{display:inline-flex;align-items:center;gap:0.7rem;font-family:var(--fm);font-size:0.6rem;letter-spacing:0.22em;color:var(--muted2);cursor:pointer;margin:2.5rem 0;text-transform:uppercase;transition:all 0.3s;background:none;border:none;padding:0}
+.back-btn{display:inline-flex;align-items:center;gap:.7rem;font-family:var(--fm);font-size:.6rem;letter-spacing:.22em;color:var(--muted2);cursor:pointer;margin:2.5rem 0;text-transform:uppercase;transition:all .3s;background:none;border:none;padding:0}
 .back-btn:hover{color:var(--gold);gap:1rem}
-.detail-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:4rem;margin-bottom:3.5rem;align-items:start}
-.detail-frame{aspect-ratio:2.39/1;background:var(--bg3);border:0.5px solid var(--border);overflow:hidden;position:relative}
-.detail-frame img{width:100%;height:100%;object-fit:cover;opacity:0.9;transition:transform 0.7s var(--ease)}
+.detail-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:4rem;margin-bottom:3.5rem;align-items:start}
+.detail-frame{aspect-ratio:2.39/1;background:var(--bg3);border:.5px solid var(--border);overflow:hidden;position:relative}
+.detail-frame img{width:100%;height:100%;object-fit:cover;opacity:.9;transition:transform .7s var(--ease)}
 .detail-frame:hover img{transform:scale(1.03)}
-.detail-frame-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,0.35),transparent)}
-.det-eyebrow{font-family:var(--fm);font-size:0.57rem;letter-spacing:0.32em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem}
-.det-title{font-family:var(--fd);font-size:3.2rem;letter-spacing:0.04em;color:var(--cream);line-height:0.9;margin-bottom:0.6rem}
-.det-scene{font-family:var(--fs);font-size:1rem;color:var(--muted2);font-style:italic;margin-bottom:0.5rem}
-.det-ratio{font-family:var(--fm);font-size:0.57rem;letter-spacing:0.18em;color:var(--muted);margin-bottom:1.4rem}
-.det-tags{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.6rem}
-.det-intro{font-family:var(--fs);font-size:1.02rem;color:var(--muted2);line-height:1.82;font-style:italic;padding-top:1.4rem;border-top:0.5px solid var(--border)}
-
-/* streaming */
+.detail-frame-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,.35),transparent)}
+.det-eyebrow{font-family:var(--fm);font-size:.57rem;letter-spacing:.32em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem}
+.det-title{font-family:var(--fd);font-size:3.2rem;letter-spacing:.04em;color:var(--cream);line-height:.9;margin-bottom:.6rem}
+.det-scene{font-family:var(--fs);font-size:1rem;color:var(--muted2);font-style:italic;margin-bottom:.5rem}
+.det-ratio{font-family:var(--fm);font-size:.57rem;letter-spacing:.18em;color:var(--muted);margin-bottom:1.4rem}
+.det-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.6rem}
+.det-intro{font-family:var(--fs);font-size:1.02rem;color:var(--muted2);line-height:1.82;font-style:italic;padding-top:1.4rem;border-top:.5px solid var(--border)}
 .stream-section{margin-top:1.6rem}
-.stream-label{font-family:var(--fm);font-size:0.52rem;letter-spacing:0.24em;color:var(--muted);text-transform:uppercase;margin-bottom:0.7rem}
-.stream-links{display:flex;flex-wrap:wrap;gap:0.5rem}
-.stream-btn{font-family:var(--fm);font-size:0.52rem;letter-spacing:0.14em;padding:0.4rem 1rem;border:0.5px solid var(--border);color:var(--muted2);text-decoration:none;transition:all 0.28s;text-transform:uppercase;display:inline-flex;align-items:center;gap:0.4rem}
-.stream-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,0.06)}
-
-/* anatomy */
-.anatomy-heading{font-family:var(--fm);font-size:0.52rem;letter-spacing:0.35em;color:var(--gold);text-transform:uppercase;padding-bottom:1rem;border-bottom:0.5px solid var(--border);margin-bottom:0}
-.anatomy-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:0}
-.anatomy-cell{background:var(--bg);padding:2.4rem;transition:background 0.3s}
+.stream-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.24em;color:var(--muted);text-transform:uppercase;margin-bottom:.7rem}
+.stream-links{display:flex;flex-wrap:wrap;gap:.5rem}
+.stream-btn{font-family:var(--fm);font-size:.52rem;letter-spacing:.14em;padding:.4rem 1rem;border:.5px solid var(--border);color:var(--muted2);text-decoration:none;transition:all .28s;text-transform:uppercase}
+.stream-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,.06)}
+/* VIDEO EMBED */
+.video-section{margin:2.5rem 0;border:.5px solid var(--border);overflow:hidden}
+.video-head{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:var(--bg2);border-bottom:.5px solid var(--border)}
+.video-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase}
+.video-toggle{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(--cream);cursor:pointer;border:.5px solid var(--border2);padding:.3rem .8rem;background:transparent;transition:all .3s}
+.video-toggle:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.video-embed-wrap{display:none;padding:0;position:relative;padding-bottom:56.25%}
+.video-embed-wrap.show{display:block}
+.video-embed-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.video-note{padding:1.5rem;font-family:var(--fs);font-style:italic;font-size:.9rem;color:var(--muted2);text-align:center}
+/* ANATOMY */
+.anatomy-heading{font-family:var(--fm);font-size:.52rem;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;padding-bottom:1rem;border-bottom:.5px solid var(--border);margin-top:2.5rem}
+.anatomy-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.anatomy-cell{background:var(--bg);padding:2.4rem;transition:background .3s}
 .anatomy-cell:hover{background:var(--bg2)}
-.anatomy-num{font-family:var(--fm);font-size:0.5rem;letter-spacing:0.3em;color:var(--muted);text-transform:uppercase;margin-bottom:0.6rem}
-.anatomy-label{font-family:var(--fm);font-size:0.55rem;letter-spacing:0.28em;color:var(--gold);text-transform:uppercase;margin-bottom:1.1rem;padding-bottom:0.85rem;border-bottom:0.5px solid var(--border)}
-.anatomy-text{font-family:var(--fs);font-size:0.97rem;color:var(--muted2);line-height:1.85}
+.anatomy-num{font-family:var(--fm);font-size:.5rem;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;margin-bottom:.6rem}
+.anatomy-label{font-family:var(--fm);font-size:.55rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;margin-bottom:1.1rem;padding-bottom:.85rem;border-bottom:.5px solid var(--border)}
+.anatomy-text{font-family:var(--fs);font-size:.97rem;color:var(--muted2);line-height:1.85}
 .anatomy-text strong{color:var(--cream);font-weight:600}
-
-/* keywords */
-.kw-block{margin-top:2.5rem;border:0.5px solid var(--border);overflow:hidden}
-.kw-block-head{padding:1.1rem 1.6rem;background:var(--bg2);border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:1rem}
-.kw-block-title{font-family:var(--fm);font-size:0.52rem;letter-spacing:0.3em;color:var(--gold);text-transform:uppercase}
-.kw-block-sub{font-family:var(--fs);font-size:0.88rem;color:var(--muted);font-style:italic}
-.kw-pills{padding:1.4rem 1.6rem;display:flex;flex-wrap:wrap;gap:0.7rem}
-.kw-pill{font-family:var(--fm);font-size:0.57rem;letter-spacing:0.16em;padding:0.5rem 1.2rem;border:0.5px solid var(--border2);color:var(--gold);cursor:pointer;transition:all 0.35s var(--ease);text-transform:uppercase;position:relative;overflow:hidden}
-.kw-pill::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 0.35s var(--ease);z-index:0}
+.kw-block{margin-top:2.5rem;border:.5px solid var(--border);overflow:hidden}
+.kw-block-head{padding:1.1rem 1.6rem;background:var(--bg2);border-bottom:.5px solid var(--border);display:flex;align-items:center;gap:1rem}
+.kw-block-title{font-family:var(--fm);font-size:.52rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase}
+.kw-block-sub{font-family:var(--fs);font-size:.88rem;color:var(--muted);font-style:italic}
+.kw-pills{padding:1.4rem 1.6rem;display:flex;flex-wrap:wrap;gap:.7rem}
+.kw-pill{font-family:var(--fm);font-size:.57rem;letter-spacing:.16em;padding:.5rem 1.2rem;border:.5px solid var(--border2);color:var(--gold);cursor:pointer;transition:all .35s;text-transform:uppercase;position:relative;overflow:hidden}
+.kw-pill::before{content:'';position:absolute;inset:0;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease);z-index:0}
 .kw-pill:hover::before{transform:scaleX(1)}
-.kw-pill-text{position:relative;z-index:1;transition:color 0.35s}
+.kw-pill-text{position:relative;z-index:1;transition:color .35s}
 .kw-pill:hover .kw-pill-text{color:var(--bg)}
-
-/* director cta */
-.dir-cta-bar{margin-top:2.5rem;padding:1.8rem 2rem;border:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg2);gap:2rem}
-.dir-cta-text-label{font-family:var(--fm);font-size:0.52rem;letter-spacing:0.24em;color:var(--gold);text-transform:uppercase;margin-bottom:0.5rem}
-.dir-cta-text-sub{font-family:var(--fs);font-size:0.95rem;color:var(--muted2);font-style:italic}
-
-/* ─── DIRECTORS ─── */
+.dir-cta-bar{margin-top:2.5rem;padding:1.8rem 2rem;border:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg2);gap:2rem}
+.dir-cta-text-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.24em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem}
+.dir-cta-text-sub{font-family:var(--fs);font-size:.95rem;color:var(--muted2);font-style:italic}
 .directors-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--border);margin:0 2.8rem}
-.dir-card{background:var(--bg);cursor:pointer;transition:background 0.3s;overflow:hidden;position:relative}
+.dir-card{background:var(--bg);cursor:pointer;transition:background .3s;overflow:hidden;position:relative}
 .dir-card:hover{background:var(--bg2)}
 .dir-img-wrap{width:100%;height:180px;overflow:hidden;position:relative;background:var(--bg3)}
-.dir-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:0.55;transition:opacity 0.5s var(--ease2),transform 0.7s var(--ease);display:block}
-.dir-card:hover .dir-img{opacity:0.78;transform:scale(1.06)}
+.dir-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:.55;transition:opacity .5s,transform .7s var(--ease);display:block}
+.dir-card:hover .dir-img{opacity:.78;transform:scale(1.06)}
 .dir-img-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.dir-ph-letter{font-family:var(--fd);font-size:5.5rem;color:transparent;-webkit-text-stroke:0.5px rgba(200,169,110,0.16);line-height:1}
-.dir-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,0.75),transparent 60%)}
-.dir-scene-count{position:absolute;top:1rem;right:1rem;font-family:var(--fm);font-size:0.55rem;color:var(--gold);background:rgba(8,8,8,0.88);padding:0.22rem 0.65rem;border:0.5px solid var(--border2);backdrop-filter:blur(4px)}
+.dir-ph-letter{font-family:var(--fd);font-size:5.5rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.16);line-height:1}
+.dir-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,.75),transparent 60%)}
+.dir-scene-count{position:absolute;top:1rem;right:1rem;font-family:var(--fm);font-size:.55rem;color:var(--gold);background:rgba(8,8,8,.88);padding:.22rem .65rem;border:.5px solid var(--border2)}
 .dir-body{padding:1.4rem 1.6rem 1.8rem}
-.dir-name{font-family:var(--fs);font-size:1.22rem;font-weight:600;color:var(--cream);margin-bottom:0.25rem;transition:color 0.3s}
+.dir-name{font-family:var(--fs);font-size:1.22rem;font-weight:600;color:var(--cream);margin-bottom:.25rem;transition:color .3s}
 .dir-card:hover .dir-name{color:var(--gold)}
-.dir-origin{font-family:var(--fm);font-size:0.57rem;letter-spacing:0.16em;color:var(--muted);text-transform:uppercase;margin-bottom:1.1rem}
-.dir-obs{font-family:var(--fm);font-size:0.52rem;letter-spacing:0.13em;padding:0.32rem 0.75rem;border-left:1.5px solid var(--gold);color:var(--muted2);background:rgba(200,169,110,0.025);text-transform:uppercase;margin-bottom:0.38rem;transition:background 0.3s}
-.dir-card:hover .dir-obs{background:rgba(200,169,110,0.05)}
-
-/* ─── VISUAL MAP / GRAPH ─── */
+.dir-origin{font-family:var(--fm);font-size:.57rem;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;margin-bottom:1.1rem}
+.dir-obs{font-family:var(--fm);font-size:.52rem;letter-spacing:.13em;padding:.32rem .75rem;border-left:1.5px solid var(--gold);color:var(--muted2);background:rgba(200,169,110,.025);text-transform:uppercase;margin-bottom:.38rem}
 .graph-section{padding:0 2.8rem 5rem}
 .graph-intro{font-family:var(--fs);font-style:italic;color:var(--muted2);font-size:1.05rem;max-width:640px;line-height:1.75;margin-bottom:2.5rem}
-
-.graph-container{width:100%;height:600px;border:0.5px solid var(--border);background:var(--bg2);position:relative;overflow:hidden}
-.graph-container svg{width:100%;height:100%}
-
-/* graph legend */
-.graph-legend{display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:1.5rem;padding:1.4rem;border:0.5px solid var(--border);background:var(--bg2)}
-.gl-item{display:flex;align-items:center;gap:0.6rem}
+.graph-container{width:100%;height:600px;border:.5px solid var(--border);background:var(--bg2);position:relative;overflow:hidden}
+.graph-legend{display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:1.5rem;padding:1.4rem;border:.5px solid var(--border);background:var(--bg2)}
+.gl-item{display:flex;align-items:center;gap:.6rem}
 .gl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 .gl-dot.director{background:var(--gold)}
-.gl-dot.keyword{background:rgba(200,169,110,0.35);border:1px solid var(--gold)}
-.gl-text{font-family:var(--fm);font-size:0.52rem;letter-spacing:0.14em;color:var(--muted2);text-transform:uppercase}
-
-/* graph tooltip */
-.graph-tooltip{position:fixed;pointer-events:none;z-index:400;background:rgba(8,8,8,0.96);border:0.5px solid var(--border2);padding:0.9rem 1.1rem;max-width:220px;backdrop-filter:blur(12px);opacity:0;transition:opacity 0.2s;transform:translateY(-8px)}
-.gt-label{font-family:var(--fm);font-size:0.55rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:0.4rem}
-.gt-name{font-family:var(--fs);font-size:0.95rem;color:var(--cream);line-height:1.3;margin-bottom:0.3rem}
-.gt-sub{font-family:var(--fs);font-size:0.8rem;color:var(--muted2);font-style:italic;line-height:1.4}
-
-/* selected panel */
-.graph-panel{margin-top:2rem;border:0.5px solid var(--border);overflow:hidden;display:none}
-.graph-panel.show{display:block;animation:viewIn 0.4s var(--ease) both}
-.gp-head{padding:1.2rem 1.6rem;background:var(--bg2);border-bottom:0.5px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between}
-.gp-title{font-family:var(--fd);font-size:1.8rem;letter-spacing:0.06em;color:var(--cream)}
-.gp-sub{font-family:var(--fm);font-size:0.57rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-top:0.3rem}
-.gp-close{font-family:var(--fm);font-size:0.6rem;color:var(--muted2);cursor:pointer;border:0.5px solid var(--border);padding:0.32rem 0.75rem;background:transparent;transition:all 0.25s;flex-shrink:0;margin-top:0.2rem}
+.gl-dot.keyword{background:rgba(200,169,110,.35);border:1px solid var(--gold)}
+.gl-text{font-family:var(--fm);font-size:.52rem;letter-spacing:.14em;color:var(--muted2);text-transform:uppercase}
+.graph-tooltip{position:fixed;pointer-events:none;z-index:400;background:rgba(8,8,8,.96);border:.5px solid var(--border2);padding:.9rem 1.1rem;max-width:220px;opacity:0;transition:opacity .2s}
+.gt-label{font-family:var(--fm);font-size:.55rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:.4rem}
+.gt-name{font-family:var(--fs);font-size:.95rem;color:var(--cream);line-height:1.3;margin-bottom:.3rem}
+.gt-sub{font-family:var(--fs);font-size:.8rem;color:var(--muted2);font-style:italic;line-height:1.4}
+.graph-panel{margin-top:2rem;border:.5px solid var(--border);overflow:hidden;display:none}
+.graph-panel.show{display:block;animation:viewIn .4s var(--ease) both}
+.gp-head{padding:1.2rem 1.6rem;background:var(--bg2);border-bottom:.5px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between}
+.gp-title{font-family:var(--fd);font-size:1.8rem;letter-spacing:.06em;color:var(--cream)}
+.gp-sub{font-family:var(--fm);font-size:.57rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-top:.3rem}
+.gp-close{font-family:var(--fm);font-size:.6rem;color:var(--muted2);cursor:pointer;border:.5px solid var(--border);padding:.32rem .75rem;background:transparent;transition:all .25s;flex-shrink:0}
 .gp-close:hover{color:var(--cream);border-color:var(--muted2)}
 .gp-body{padding:1.6rem}
 .gp-desc{font-family:var(--fs);font-style:italic;font-size:1rem;color:var(--muted2);line-height:1.78;margin-bottom:1.4rem}
-.gp-connected-label{font-family:var(--fm);font-size:0.52rem;letter-spacing:0.28em;color:var(--muted);text-transform:uppercase;margin-bottom:0.8rem}
-.gp-chips{display:flex;flex-wrap:wrap;gap:0.5rem}
-.gp-chip{font-family:var(--fm);font-size:0.55rem;letter-spacing:0.15em;padding:0.38rem 0.95rem;border:0.5px solid var(--border2);color:var(--cream);text-transform:uppercase;cursor:pointer;transition:all 0.28s}
+.gp-con-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.28em;color:var(--muted);text-transform:uppercase;margin-bottom:.8rem}
+.gp-chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.gp-chip{font-family:var(--fm);font-size:.55rem;letter-spacing:.15em;padding:.38rem .95rem;border:.5px solid var(--border2);color:var(--cream);text-transform:uppercase;cursor:pointer;transition:all .28s}
 .gp-chip:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
 .gp-scenes{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1px;background:var(--border);margin-top:1.4rem}
-.gp-scene{background:var(--bg);padding:1rem 1.2rem;cursor:pointer;transition:background 0.25s}
+.gp-scene{background:var(--bg);padding:1rem 1.2rem;cursor:pointer;transition:background .25s}
 .gp-scene:hover{background:var(--bg2)}
-.gp-s-film{font-family:var(--fm);font-size:0.52rem;letter-spacing:0.16em;color:var(--gold);text-transform:uppercase;margin-bottom:0.3rem}
-.gp-s-name{font-family:var(--fs);font-size:0.92rem;color:var(--cream)}
-.gp-s-scene{font-family:var(--fs);font-size:0.78rem;color:var(--muted2);font-style:italic;margin-top:0.2rem}
-
-/* ─── MODALS ─── */
-.modal-overlay{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);pointer-events:none;transition:background 0.4s}
-.modal-overlay.open{background:rgba(0,0,0,0.92);pointer-events:all}
-.modal-box{background:var(--bg);border:0.5px solid var(--border2);width:min(660px,96vw);max-height:90vh;overflow-y:auto;transform:translateY(32px) scale(0.97);opacity:0;transition:all 0.45s var(--ease);display:flex;flex-direction:column}
+.gp-s-film{font-family:var(--fm);font-size:.52rem;letter-spacing:.16em;color:var(--gold);text-transform:uppercase;margin-bottom:.3rem}
+.gp-s-name{font-family:var(--fs);font-size:.92rem;color:var(--cream)}
+.gp-s-scene{font-family:var(--fs);font-size:.78rem;color:var(--muted2);font-style:italic;margin-top:.2rem}
+.modal-overlay{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);pointer-events:none;transition:background .4s}
+.modal-overlay.open{background:rgba(0,0,0,.92);pointer-events:all}
+.modal-box{background:var(--bg);border:.5px solid var(--border2);width:min(660px,96vw);max-height:90vh;overflow-y:auto;transform:translateY(32px) scale(.97);opacity:0;transition:all .45s var(--ease)}
 .modal-overlay.open .modal-box{transform:translateY(0) scale(1);opacity:1}
-.modal-head{display:flex;align-items:flex-start;justify-content:space-between;padding:1.5rem 1.7rem;border-bottom:0.5px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:10}
-.modal-title{font-family:var(--fd);font-size:1.9rem;letter-spacing:0.06em;color:var(--cream)}
-.modal-subtitle{font-family:var(--fm);font-size:0.57rem;letter-spacing:0.22em;color:var(--gold);text-transform:uppercase;margin-top:0.35rem}
-.modal-close{font-family:var(--fm);font-size:0.6rem;color:var(--muted2);cursor:pointer;border:0.5px solid var(--border);padding:0.35rem 0.85rem;background:transparent;transition:all 0.25s;flex-shrink:0;margin-top:0.15rem;margin-left:1.5rem}
-.modal-close:hover{color:var(--cream);border-color:var(--muted2)}
-.modal-body{padding:1.7rem;flex:1}
-
-/* form */
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;padding:1.5rem 1.7rem;border-bottom:.5px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:10}
+.modal-title{font-family:var(--fd);font-size:1.9rem;letter-spacing:.06em;color:var(--cream)}
+.modal-subtitle{font-family:var(--fm);font-size:.57rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-top:.35rem}
+.modal-close{font-family:var(--fm);font-size:.6rem;color:var(--muted2);cursor:pointer;border:.5px solid var(--border);padding:.35rem .85rem;background:transparent;transition:all .25s;flex-shrink:0;margin-top:.15rem;margin-left:1.5rem}
+.modal-close:hover{color:var(--cream)}
+.modal-body{padding:1.7rem}
 .form-grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .field{margin-bottom:1.4rem}
-.field label{display:block;font-family:var(--fm);font-size:0.57rem;letter-spacing:0.24em;color:var(--gold);text-transform:uppercase;margin-bottom:0.6rem}
-.field input,.field textarea,.field select{width:100%;background:var(--bg2);border:0.5px solid var(--border2);color:var(--cream);font-family:var(--fs);font-size:0.97rem;padding:0.78rem 1.05rem;outline:none;transition:border-color 0.28s;-webkit-appearance:none;border-radius:0;line-height:1.5}
+.field label{display:block;font-family:var(--fm);font-size:.57rem;letter-spacing:.24em;color:var(--gold);text-transform:uppercase;margin-bottom:.6rem}
+.field input,.field textarea{width:100%;background:var(--bg2);border:.5px solid var(--border2);color:var(--cream);font-family:var(--fs);font-size:.97rem;padding:.78rem 1.05rem;outline:none;transition:border-color .28s;-webkit-appearance:none;border-radius:0;line-height:1.5}
 .field input::placeholder,.field textarea::placeholder{color:var(--muted);font-style:italic}
 .field input:focus,.field textarea:focus{border-color:var(--gold)}
 .field textarea{height:95px;resize:vertical;line-height:1.65}
-.tag-sel-grid{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.4rem}
-.tsel{font-family:var(--fm);font-size:0.52rem;letter-spacing:0.13em;padding:0.32rem 0.78rem;border:0.5px solid var(--border);color:var(--muted2);cursor:pointer;transition:all 0.25s;text-transform:uppercase;user-select:none}
-.tsel.on{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,0.08)}
-.form-actions{display:flex;gap:1rem;margin-top:2rem;padding-top:1.5rem;border-top:0.5px solid var(--border)}
-.form-note{font-family:var(--fm);font-size:0.52rem;letter-spacing:0.12em;color:var(--muted);margin-top:1rem;line-height:1.65}
-.form-success{padding:1.6rem;background:rgba(200,169,110,0.06);border:0.5px solid var(--border2);text-align:center;display:none;margin-bottom:1rem}
+.tag-sel-grid{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.4rem}
+.tsel{font-family:var(--fm);font-size:.52rem;letter-spacing:.13em;padding:.32rem .78rem;border:.5px solid var(--border);color:var(--muted2);cursor:pointer;transition:all .25s;text-transform:uppercase;user-select:none}
+.tsel.on{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,.08)}
+.form-actions{display:flex;gap:1rem;margin-top:2rem;padding-top:1.5rem;border-top:.5px solid var(--border)}
+.form-note{font-family:var(--fm);font-size:.52rem;letter-spacing:.12em;color:var(--muted);margin-top:1rem;line-height:1.65}
+.form-success{padding:1.6rem;background:rgba(200,169,110,.06);border:.5px solid var(--border2);text-align:center;display:none;margin-bottom:1rem}
 .form-success.show{display:block}
 .form-success p{font-family:var(--fs);font-style:italic;color:var(--gold);font-size:1.05rem}
-
-/* ─── FOOTER ─── */
-footer{padding:2.2rem 2.8rem;border-top:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:2rem}
-footer p{font-family:var(--fm);font-size:0.55rem;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase}
-.filmstrip{display:flex;gap:0.3rem}
-.film-frame{width:18px;height:13px;border:0.5px solid var(--border);background:var(--bg3)}
+footer{padding:2.2rem 2.8rem;border-top:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+.filmstrip{display:flex;gap:.3rem}
+.film-frame{width:18px;height:13px;border:.5px solid var(--border);background:var(--bg3)}
 .film-frame:nth-child(odd){background:var(--bg2)}
-
-/* ─── LOADING SKELETON ─── */
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-.skel{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.8s infinite}
-
-/* ─── UTILITY ─── */
-.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 </style>
 </head>
 <body>
-
-<!-- Custom cursor -->
 <div class="cursor" id="cur"></div>
 <div class="cursor-ring" id="curRing"></div>
-
 <nav>
   <div class="logo" onclick="nav('home')">CINE<span>MAP</span></div>
   <ul>
@@ -287,17 +235,12 @@ footer p{font-family:var(--fm);font-size:0.55rem;letter-spacing:0.18em;color:var
   </ul>
   <button class="nav-cta" onclick="openAdd()"><span>+ Aggiungi scena</span></button>
 </nav>
-
 <div id="app">
-
-<!-- ══ HOME ══ -->
+<!-- HOME -->
 <div class="view active" id="view-home">
   <div class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-grid"></div>
-    <div class="hero-scan"></div>
-    <div class="hero-vignette"></div>
-    <div class="hero-bg-num" id="hero-bg-num">12</div>
+    <div class="hero-bg"></div><div class="hero-grid"></div><div class="hero-scan"></div><div class="hero-vignette"></div>
+    <div class="hero-bg-num" id="hero-bg-num">22</div>
     <div class="hero-eyebrow">Frame d'Autore — Cinema come linguaggio visivo</div>
     <h1>L'anatomia<br>del <em>fotogramma</em></h1>
     <p class="hero-desc">Non la trama. Non il voto in stelline. La scena come unità di senso: regia, simbologia, ossessione visiva condivisa tra i grandi autori.</p>
@@ -306,19 +249,13 @@ footer p{font-family:var(--fm);font-size:0.55rem;letter-spacing:0.18em;color:var
       <button class="btn-outline" onclick="nav('map')">Mappa visiva →</button>
       <div class="hero-divider"></div>
       <div class="hero-stats">
-        <div><div class="hs-num" id="hs-scene">12</div><div class="hs-label">Scene</div></div>
-        <div><div class="hs-num">12</div><div class="hs-label">Auteurs</div></div>
-        <div><div class="hs-num">8</div><div class="hs-label">Cluster</div></div>
+        <div><div class="hs-num" id="hs-s">22</div><div class="hs-label">Scene</div></div>
+        <div><div class="hs-num">15</div><div class="hs-label">Auteurs</div></div>
+        <div><div class="hs-num">10</div><div class="hs-label">Cluster</div></div>
       </div>
     </div>
   </div>
-
-  <div id="scene-anchor" class="sec-head">
-    <span class="sec-label">Archivio scene</span>
-    <div class="sec-line"></div>
-    <span class="sec-count" id="fc">12 scene in archivio</span>
-  </div>
-
+  <div id="scene-anchor" class="sec-head"><span class="sec-label">Archivio scene</span><div class="sec-line"></div><span class="sec-count" id="fc">22 scene in archivio</span></div>
   <div class="filter-bar">
     <span class="ftag active" onclick="fTag(null,this)">Tutte</span>
     <span class="ftag" onclick="fTag('simmetria',this)">#Simmetria</span>
@@ -336,37 +273,32 @@ footer p{font-family:var(--fm);font-size:0.55rem;letter-spacing:0.18em;color:var
   </div>
   <div class="scene-grid" id="scene-grid"></div>
 </div>
-
-<!-- ══ SCENE DETAIL ══ -->
-<div class="view" id="view-scene">
-  <div class="detail-wrap" id="det-content"></div>
-</div>
-
-<!-- ══ DIRECTORS ══ -->
+<!-- SCENE DETAIL -->
+<div class="view" id="view-scene"><div class="detail-wrap" id="det-content"></div></div>
+<!-- DIRECTORS -->
 <div class="view" id="view-directors">
   <div class="hero" style="min-height:42vh;padding:4rem 2.8rem 3rem">
     <div class="hero-bg"></div><div class="hero-grid"></div><div class="hero-scan"></div><div class="hero-vignette"></div>
-    <div class="hero-bg-num" style="font-size:min(22vw,16rem)">12</div>
+    <div class="hero-bg-num" style="font-size:min(22vw,16rem)">15</div>
     <div class="hero-eyebrow">Auteurs mappati nel database</div>
     <h1 style="font-size:clamp(3rem,6vw,5.5rem)">I <em>Registi</em></h1>
     <p class="hero-desc" style="margin-top:1.2rem">Clicca su un auteur per filtrare le sue scene nell'archivio</p>
   </div>
-  <div class="sec-head"><span class="sec-label">Auteurs</span><div class="sec-line"></div><span class="sec-count">12 registi — 12 scene analizzate</span></div>
+  <div class="sec-head"><span class="sec-label">Auteurs</span><div class="sec-line"></div><span class="sec-count">15 registi — 22 scene analizzate</span></div>
   <div class="directors-grid" id="dir-grid"></div>
 </div>
-
-<!-- ══ VISUAL MAP ══ -->
+<!-- MAP -->
 <div class="view" id="view-map">
   <div class="hero" style="min-height:42vh;padding:4rem 2.8rem 3rem">
     <div class="hero-bg"></div><div class="hero-grid"></div><div class="hero-scan"></div><div class="hero-vignette"></div>
     <div class="hero-bg-num" style="font-size:min(22vw,16rem)">∞</div>
     <div class="hero-eyebrow">Ossessioni condivise tra autori diversi</div>
     <h1 style="font-size:clamp(3rem,6vw,5.5rem)">Mappa delle<br><em>Ossessioni</em></h1>
-    <p class="hero-desc" style="margin-top:1.2rem">Un grafo interattivo delle connessioni visive. Trascina i nodi, clicca per esplorare.</p>
+    <p class="hero-desc" style="margin-top:1.2rem">Grafo interattivo delle connessioni visive. Trascina i nodi, clicca per esplorare.</p>
   </div>
   <div class="sec-head"><span class="sec-label">Grafo interattivo</span><div class="sec-line"></div><span class="sec-count">Drag • Click • Esplora</span></div>
   <div class="graph-section">
-    <p class="graph-intro">I grandi autori non scelgono le loro ossessioni — le subiscono. Ogni nodo dorato è un regista, ogni nodo cerchiato è un'ossessione visiva. Le linee mostrano le connessioni. <strong style="color:var(--cream)">Clicca un nodo</strong> per vedere le connessioni e le scene correlate.</p>
+    <p class="graph-intro">I grandi autori non scelgono le loro ossessioni — le subiscono. Ogni nodo dorato è un regista, ogni nodo cerchiato è un'ossessione visiva. <strong style="color:var(--cream)">Clicca un nodo</strong> per vedere le connessioni e le scene correlate.</p>
     <div class="graph-container" id="graph-container"></div>
     <div class="graph-legend">
       <div class="gl-item"><div class="gl-dot director"></div><span class="gl-text">Regista</span></div>
@@ -379,34 +311,21 @@ footer p{font-family:var(--fm);font-size:0.55rem;letter-spacing:0.18em;color:var
       </div>
       <div class="gp-body">
         <p class="gp-desc" id="gp-desc"></p>
-        <div class="gp-connected-label" id="gp-con-label"></div>
+        <div class="gp-con-label" id="gp-con-label"></div>
         <div class="gp-chips" id="gp-chips"></div>
         <div class="gp-scenes" id="gp-scenes"></div>
       </div>
     </div>
   </div>
 </div>
-
-</div><!-- end #app -->
-
-<footer>
-  <p>CineMap — Frame d'Autore © 2024</p>
-  <div class="filmstrip">
-    <div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div>
-    <div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div>
-    <div class="film-frame"></div><div class="film-frame"></div>
-  </div>
-  <p>Beta — 12 scene in archivio</p>
-</footer>
-
-<!-- Graph tooltip -->
-<div class="graph-tooltip" id="gtip">
-  <div class="gt-label" id="gt-label"></div>
-  <div class="gt-name" id="gt-name"></div>
-  <div class="gt-sub" id="gt-sub"></div>
 </div>
-
-<!-- Add scene modal -->
+<footer>
+  <p>CineMap — Frame d'Autore © 2024 Riccardo Carollo</p>
+  <div class="filmstrip"><div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div></div>
+  <p>Beta — 22 scene in archivio</p>
+</footer>
+<div class="graph-tooltip" id="gtip"><div class="gt-label" id="gt-label"></div><div class="gt-name" id="gt-name"></div><div class="gt-sub" id="gt-sub2"></div></div>
+<!-- ADD MODAL -->
 <div class="modal-overlay" id="add-modal" onclick="if(event.target===this)closeAdd()">
   <div class="modal-box">
     <div class="modal-head">
@@ -414,22 +333,23 @@ footer p{font-family:var(--fm);font-size:0.55rem;letter-spacing:0.18em;color:var
       <button class="modal-close" onclick="closeAdd()">✕ Chiudi</button>
     </div>
     <div class="modal-body">
-      <div class="form-success" id="f-success"><p>✓ Proposta inviata con successo — grazie! La valuteremo presto.</p></div>
+      <div class="form-success" id="f-success"><p>✓ Proposta inviata con successo — grazie!</p></div>
       <form id="scene-form" action="https://formspree.io/f/mkoeynpv" method="POST">
         <div class="form-grid2">
           <div class="field"><label>Film *</label><input type="text" name="film" placeholder="es. Apocalypse Now" required></div>
-          <div class="field"><label>Anno *</label><input type="number" name="anno" placeholder="1979" min="1895" max="2030" required></div>
+          <div class="field"><label>Anno *</label><input type="number" name="anno" placeholder="1979" required></div>
         </div>
         <div class="form-grid2">
           <div class="field"><label>Regista *</label><input type="text" name="regista" placeholder="es. Francis Ford Coppola" required></div>
-          <div class="field"><label>Formato (ratio)</label><input type="text" name="ratio" placeholder="es. 2.39:1"></div>
+          <div class="field"><label>Formato ratio</label><input type="text" name="ratio" placeholder="es. 2.39:1"></div>
         </div>
-        <div class="field"><label>Nome della scena *</label><input type="text" name="scena" placeholder="es. La sequenza della battaglia dell'elicottero" required></div>
-        <div class="field"><label>Perché questa scena conta</label><textarea name="intro" placeholder="Descrivi in 2-3 frasi perché questa scena è fondamentale nel cinema del regista..."></textarea></div>
-        <div class="field"><label>Analisi — Regia</label><textarea name="regia" placeholder="Come usa la macchina da presa, la luce, i movimenti di camera..."></textarea></div>
-        <div class="field"><label>Analisi — Simbologia</label><textarea name="simbologia" placeholder="Cosa rappresenta, cosa nasconde, cosa rivela..."></textarea></div>
+        <div class="field"><label>Nome della scena *</label><input type="text" name="scena" required placeholder="es. La sequenza della battaglia"></div>
+        <div class="field"><label>Perché questa scena conta</label><textarea name="intro" placeholder="2-3 frasi sul perché è fondamentale..."></textarea></div>
+        <div class="field"><label>Analisi — Regia</label><textarea name="regia" placeholder="Macchina da presa, luce, movimenti..."></textarea></div>
+        <div class="field"><label>Analisi — Simbologia</label><textarea name="simbologia" placeholder="Cosa rappresenta, cosa rivela..."></textarea></div>
+        <div class="field"><label>Link YouTube della scena (se esiste)</label><input type="url" name="youtube" placeholder="https://youtube.com/watch?v=..."></div>
         <div class="field">
-          <label>Tag visivi suggeriti</label>
+          <label>Tag visivi</label>
           <div class="tag-sel-grid" id="tag-sel-grid"></div>
           <input type="hidden" name="tags" id="tags-hid">
         </div>
@@ -438,142 +358,137 @@ footer p{font-family:var(--fm);font-size:0.55rem;letter-spacing:0.18em;color:var
           <button type="submit" class="btn-gold">Invia proposta</button>
           <button type="button" class="btn-outline" onclick="closeAdd()">Annulla</button>
         </div>
-        <p class="form-note">Le proposte vengono valutate dalla redazione. Le scene selezionate saranno aggiunte all'archivio con analisi completa.</p>
+        <p class="form-note">Le scene selezionate saranno aggiunte all'archivio con analisi completa.</p>
       </form>
     </div>
   </div>
 </div>
-
 <script>
-// ══════════════════════════════════════════
-//  DATA
-// ══════════════════════════════════════════
-const TMDB = '8265bd1679663a7ea12ac168da84d2e8';
-const IMG = 'https://image.tmdb.org/t/p/';
-const cache = {};
+const TMDB='8265bd1679663a7ea12ac168da84d2e8',IMG='https://image.tmdb.org/t/p/';
+const cache={};
+const ALL_TAGS=['simmetria','soggettiva','body-horror','sogno','piano-sequenza','luce-urbana','colore-rosso','montaggio','tempo','neorealismo','violenza-estetica','surrealismo'];
 
-// Verified TMDB person IDs
-const DIRECTORS = [
-  {id:'cronenberg', name:'David Cronenberg', origin:'Canada · 1943', pid:11090,  obs:['New Flesh','Body Horror','Media come organismo','Metamorfosi']},
-  {id:'kubrick',    name:'Stanley Kubrick',  origin:'USA · 1928',    pid:240,    obs:['Simmetria assiale','Prospettiva centrale','Steadicam','Psicosi dello spazio']},
-  {id:'lynch',      name:'David Lynch',      origin:'USA · 1946',    pid:5765,   obs:['Sogno dentro il sogno','Industrial sublime','Rosso e velluto','Rottura narrativa']},
-  {id:'park',       name:'Park Chan-wook',   origin:'Corea · 1963',  pid:10099,  obs:['Vendetta come struttura','Violenza coreografata','Simmetria narrativa','Shock estetico']},
-  {id:'scorsese',   name:'Martin Scorsese',  origin:'USA · 1942',    pid:1032,   obs:['Luce urbana notturna','Soggettiva come psiche','Rosso come stato emotivo','Mascolinità tossica']},
-  {id:'fulci',      name:'Lucio Fulci',      origin:'Italia · 1927', pid:11521,  obs:['Gore come poesia','L\'occhio come bersaglio','Soglia tra i mondi','Logica onirica']},
-  {id:'coppola',    name:'F.F. Coppola',     origin:'USA · 1939',    pid:1776,   obs:['Potere e famiglia','Montaggio parallelo','Luce chiaroscurale','Tragedia americana']},
-  {id:'scott',      name:'Ridley Scott',     origin:'UK · 1937',     pid:10429,  obs:['World building visivo','Luce industriale','Il futuro come passato','Epica del quotidiano']},
-  {id:'desica',     name:'Vittorio De Sica', origin:'Italia · 1901', pid:12532,  obs:['Attori non professionisti','Roma come personaggio','L\'infanzia come specchio','Dignità nella miseria']},
-  {id:'nolan',      name:'Christopher Nolan',origin:'UK · 1970',     pid:525,    obs:['Tempo non lineare','Pratico vs digitale','La mente come labirinto','Grandiosità controllata']},
-  {id:'tarantino',  name:'Quentin Tarantino',origin:'USA · 1963',    pid:138,    obs:['Dialogo come azione','Citazione che supera l\'originale','Violenza pop','Struttura non lineare']},
-  {id:'fellini',    name:'Federico Fellini', origin:'Italia · 1920', pid:7415,   obs:['Autobiografia come universo','Circo e carnevale','Donna come archetipo','Sogno e memoria']},
+const DIRECTORS=[
+  {id:'cronenberg',name:'David Cronenberg', origin:'Canada · 1943',pid:11090, obs:['New Flesh','Body Horror','Media come organismo','Metamorfosi']},
+  {id:'kubrick',   name:'Stanley Kubrick',  origin:'USA · 1928',  pid:240,   obs:['Simmetria assiale','Prospettiva centrale','Steadicam','Psicosi dello spazio']},
+  {id:'lynch',     name:'David Lynch',      origin:'USA · 1946',  pid:5765,  obs:['Sogno dentro il sogno','Industrial sublime','Rosso e velluto','Rottura narrativa']},
+  {id:'park',      name:'Park Chan-wook',   origin:'Corea · 1963',pid:10099, obs:['Vendetta come struttura','Violenza coreografata','Simmetria narrativa','Shock estetico']},
+  {id:'scorsese',  name:'Martin Scorsese',  origin:'USA · 1942',  pid:1032,  obs:['Luce urbana notturna','Soggettiva come psiche','Rosso come stato emotivo','Mascolinità tossica']},
+  {id:'fulci',     name:'Lucio Fulci',      origin:'Italia · 1927',pid:11521, obs:['Gore come poesia','L\'occhio come bersaglio','Soglia tra i mondi','Logica onirica']},
+  {id:'coppola',   name:'F.F. Coppola',     origin:'USA · 1939',  pid:1776,  obs:['Potere e famiglia','Montaggio parallelo','Luce chiaroscurale','Tragedia americana']},
+  {id:'scott',     name:'Ridley Scott',     origin:'UK · 1937',   pid:10429, obs:['World building visivo','Luce industriale','Il futuro come passato','Epica del quotidiano']},
+  {id:'desica',    name:'Vittorio De Sica', origin:'Italia · 1901',pid:12532, obs:['Attori non professionisti','Roma come personaggio','L\'infanzia come specchio','Dignità nella miseria']},
+  {id:'nolan',     name:'Christopher Nolan',origin:'UK · 1970',   pid:525,   obs:['Tempo non lineare','Pratico vs digitale','La mente come labirinto','Grandiosità controllata']},
+  {id:'tarantino', name:'Quentin Tarantino',origin:'USA · 1963',  pid:138,   obs:['Dialogo come azione','Citazione che supera l\'originale','Violenza pop','Struttura non lineare']},
+  {id:'fellini',   name:'Federico Fellini', origin:'Italia · 1920',pid:7415,  obs:['Autobiografia come universo','Circo e carnevale','Donna come archetipo','Sogno e memoria']},
+  {id:'tarkovsky', name:'Andrei Tarkovsky', origin:'URSS · 1932', pid:11607, obs:['Tempo come materia','Acqua e fuoco','Nostalgia e esilio','Il sacro nel quotidiano']},
+  {id:'wongkarwai',name:'Wong Kar-wai',     origin:'HK · 1958',   pid:12453, obs:['Memoria e desiderio','Step-printing','Colore come emozione','Tempo sfuggente']},
+  {id:'bergman',   name:'Ingmar Bergman',   origin:'Svezia · 1918',pid:6648,  obs:['Volto come paesaggio','Silenzio e Dio','Dualismo psicologico','Il primo piano assoluto']},
 ];
 
-const KEYWORDS = {
-  'simmetria':       {label:'Simmetria',        desc:'La simmetria come trappola visiva e specchio della psiche. Quando un regista costruisce un frame perfettamente bilanciato, nega all\'occhio qualsiasi punto di fuga. È controllo totale — o la sua illusione.',          dirs:['kubrick','coppola','nolan','park']},
-  'colore-rosso':    {label:'Colore Rosso',      desc:'Il rosso attraversa il cinema d\'autore come un codice morale: sangue, passione, pericolo imminente. Ogni autore lo usa con grammatica diversa — stato emotivo in Scorsese, premonizione in Kubrick, violenza pop in Tarantino.',  dirs:['kubrick','scorsese','park','cronenberg','tarantino']},
-  'sogno':           {label:'Sogno & Inconscio', desc:'Lynch e Fellini materializzano il sogno invece di rappresentarlo. Non metafora: diretta irruzione dell\'inconscio nel reale. La logica narrativa si dissolve nel ritmo puro delle immagini.',                                    dirs:['lynch','fellini']},
-  'surrealismo':     {label:'Surrealismo',       desc:'Il reale che cede sotto la pressione dell\'immagine. Cronenberg, Lynch, Fulci e Fellini costruiscono mondi dove la logica non governa — l\'occhio precede sempre il cervello.',                                                   dirs:['cronenberg','lynch','fulci','fellini']},
-  'body-horror':     {label:'Body Horror',       desc:'Cronenberg e Fulci esplorano il corpo come territorio instabile — la carne che tradisce, si fonde, si trasforma. Non horror della paura ma horror della meraviglia biologica.',                                                   dirs:['cronenberg','fulci']},
-  'montaggio':       {label:'Montaggio',         desc:'Il montaggio come atto di senso, non di narrazione. Coppola alterna sacro e profano, Lynch usa il ritmo come logica, Tarantino celebra la pausa come drammaturgia pura.',                                                        dirs:['coppola','lynch','tarantino']},
-  'piano-sequenza':  {label:'Piano Sequenza',    desc:'Il rifiuto del taglio come scelta etica. Park e Nolan usano il piano sequenza per imporre allo spettatore la fisica reale dell\'azione — non puoi sfuggire alla durata di ciò che accade.',                                    dirs:['park','nolan']},
-  'luce-urbana':     {label:'Luce Urbana',       desc:'La città di notte come paesaggio mentale. Scorsese tinge di rosso i vapori di New York. Scott costruisce un futuro dove la luce industriale è l\'unico calore rimasto.',                                                         dirs:['scorsese','scott']},
-  'neorealismo':     {label:'Neorealismo',       desc:'De Sica inventa un cinema che non rappresenta la realtà ma la lascia accadere. Attori non professionisti, location reali, luce naturale. Il cinema come atto morale prima che estetico.',                                       dirs:['desica']},
-  'tempo':           {label:'Tempo & Memoria',   desc:'Nolan smonta il tempo come struttura narrativa. Scott lo usa come tema — la memoria che svanisce, la vita che è troppo breve. Il tempo non è sfondo: è il vero soggetto.',                                                      dirs:['nolan','scott']},
-  'soggettiva':      {label:'Soggettiva',        desc:'La macchina da presa come mente malata. Quando il punto di vista non è neutro ma è la distorsione stessa. Kubrick e Scorsese usano la soggettiva per trasformare lo spazio fisico in spazio psicologico.',                   dirs:['kubrick','scorsese','desica','fellini']},
-  'violenza-estetica':{label:'Violenza Estetica',desc:'La violenza trasformata in coreografia, in ritmo, in estetica. Park, Tarantino e Fulci non mostrano la violenza per sconvolgere — la mostrano per rivelare la struttura nascosta del mondo.',                               dirs:['park','tarantino','fulci','coppola']},
+const KEYWORDS={
+  'simmetria':        {label:'Simmetria',         desc:'La simmetria come trappola visiva e specchio della psiche. Quando un regista costruisce un frame perfettamente bilanciato, nega all\'occhio qualsiasi punto di fuga. È controllo totale — o la sua illusione.',dirs:['kubrick','coppola','nolan','park']},
+  'colore-rosso':     {label:'Colore Rosso',       desc:'Il rosso attraversa il cinema d\'autore come un codice morale: sangue, passione, pericolo imminente. Ogni autore lo usa con grammatica diversa — stato emotivo in Scorsese, premonizione in Kubrick, violenza pop in Tarantino.',dirs:['kubrick','scorsese','park','cronenberg','tarantino']},
+  'sogno':            {label:'Sogno & Inconscio',  desc:'Lynch, Fellini e Tarkovsky materializzano il sogno invece di rappresentarlo. Non metafora: diretta irruzione dell\'inconscio nel reale. La logica narrativa si dissolve nel ritmo puro delle immagini.',dirs:['lynch','fellini','tarkovsky']},
+  'surrealismo':      {label:'Surrealismo',        desc:'Il reale che cede sotto la pressione dell\'immagine. Cronenberg, Lynch, Fulci e Fellini costruiscono mondi dove la logica non governa — l\'occhio precede sempre il cervello.',dirs:['cronenberg','lynch','fulci','fellini']},
+  'body-horror':      {label:'Body Horror',        desc:'Cronenberg e Fulci esplorano il corpo come territorio instabile — la carne che tradisce, si fonde, si trasforma. Non horror della paura ma horror della meraviglia biologica.',dirs:['cronenberg','fulci']},
+  'montaggio':        {label:'Montaggio',          desc:'Il montaggio come atto di senso, non di narrazione. Coppola alterna sacro e profano, Lynch usa il ritmo come logica, Tarantino celebra la pausa come drammaturgia pura.',dirs:['coppola','lynch','tarantino','scorsese']},
+  'piano-sequenza':   {label:'Piano Sequenza',     desc:'Il rifiuto del taglio come scelta etica. Park e Nolan usano il piano sequenza per imporre allo spettatore la fisica reale dell\'azione — non puoi sfuggire alla durata di ciò che accade.',dirs:['park','nolan','scorsese']},
+  'luce-urbana':      {label:'Luce Urbana',        desc:'La città di notte come paesaggio mentale. Scorsese tinge di rosso i vapori di New York. Scott costruisce un futuro dove la luce industriale è l\'unico calore rimasto.',dirs:['scorsese','scott']},
+  'neorealismo':      {label:'Neorealismo',        desc:'De Sica inventa un cinema che non rappresenta la realtà ma la lascia accadere. Attori non professionisti, location reali, luce naturale. Il cinema come atto morale prima che estetico.',dirs:['desica']},
+  'tempo':            {label:'Tempo & Memoria',    desc:'Nolan smonta il tempo come struttura narrativa. Tarkovsky lo usa come materia fisica — il tempo scorre nel frame come acqua. Wong Kar-wai lo rallenta fino a renderlo dolore.',dirs:['nolan','scott','tarkovsky','wongkarwai']},
+  'violenza-estetica':{label:'Violenza Estetica',  desc:'La violenza trasformata in coreografia, in ritmo, in estetica. Park, Tarantino e Cronenberg non mostrano la violenza per sconvolgere — la mostrano per rivelare la struttura nascosta del mondo.',dirs:['park','tarantino','fulci','coppola','cronenberg']},
 };
 
-const STREAMING = {
-  1:['MUBI','Prime Video'], 2:['Prime Video','Apple TV+'], 3:['MUBI','Criterion Channel'],
-  4:['Prime Video','MUBI'], 5:['Apple TV+','Prime Video'], 6:['Prime Video'],
-  7:['Prime Video','Apple TV+'], 8:['Prime Video','Apple TV+','Netflix'],
-  9:['MUBI','Criterion Channel'], 10:['Prime Video','Netflix','Apple TV+'],
-  11:['Prime Video','Apple TV+','Netflix'], 12:['MUBI','Criterion Channel'],
+const STREAMING={
+  1:['MUBI','Prime Video'],2:['Prime Video','Apple TV+'],3:['MUBI','Criterion Channel'],
+  4:['Prime Video','MUBI'],5:['Apple TV+','Prime Video'],6:['Prime Video'],
+  7:['Prime Video','Apple TV+'],8:['Prime Video','Apple TV+','Netflix'],
+  9:['MUBI','Criterion Channel'],10:['Prime Video','Netflix','Apple TV+'],
+  11:['Prime Video','Apple TV+','Netflix'],12:['MUBI','Criterion Channel'],
+  13:['Prime Video','Apple TV+'],14:['Prime Video'],15:['Prime Video','Apple TV+'],
+  16:['MUBI','Criterion Channel'],17:['Prime Video','Netflix'],18:['Prime Video','Apple TV+'],
+  19:['MUBI','Criterion Channel'],20:['MUBI'],21:['MUBI','Criterion Channel'],22:['MUBI'],
 };
-const SURL = {
-  'MUBI':'https://mubi.com','Prime Video':'https://primevideo.com',
-  'Apple TV+':'https://tv.apple.com','Netflix':'https://netflix.com',
-  'Criterion Channel':'https://criterionchannel.com',
-};
-const ALL_TAGS = ['simmetria','soggettiva','body-horror','sogno','piano-sequenza','luce-urbana','colore-rosso','montaggio','tempo','neorealismo','violenza-estetica','surrealismo'];
+const SURL={'MUBI':'https://mubi.com','Prime Video':'https://primevideo.com','Apple TV+':'https://tv.apple.com','Netflix':'https://netflix.com','Criterion Channel':'https://criterionchannel.com'};
 
-let SCENES = [
-  {id:1,  film:'Videodrome',        year:1983, did:'cronenberg', director:'David Cronenberg',  scene:'Il bacio con la televisione',           ratio:'1.85:1', tmdb:11906, tags:['body-horror','colore-rosso','surrealismo'],       tl:['#BodyHorror','#ColoreRosso','#Surrealismo'],       kw:['body-horror','colore-rosso','surrealismo'],       intro:'La scena in cui Max Renn bacia lo schermo televisivo — il cui volto di Nicki Brand pulsa come carne viva — è il manifesto visivo del «New Flesh» di Cronenberg. La televisione non è più un medium: è un organismo.',           an:{regia:'Cronenberg usa un obiettivo macro per trasformare le trame dello schermo in pelle. Il campo è strettissimo, claustrofobico. Non c\'è prospettiva di fuga — solo l\'inevitabilità del contatto.',sceneggiatura:'Il dialogo è eliminato. La scena funziona in silenzio assoluto, lasciando che il corpo parli al posto delle parole. È il trionfo dell\'immagine sulla narrazione.',simbologia:'Lo schermo che diventa carne rappresenta la tesi centrale: i media non riflettono la realtà, la <strong>producono</strong>. Max non guarda la TV — la assorbe e viene assorbito.',produzione:'La protesi fu costruita da Rick Baker con lattice e meccanismi pneumatici che simulavano la respirazione. Ci vollero tre settimane di test per sincronizzare il respiro al ritmo del montaggio.'}},
-  {id:2,  film:'Shining',           year:1980, did:'kubrick',    director:'Stanley Kubrick',   scene:'La sequenza del bagno — Stanza 237',    ratio:'1.33:1', tmdb:694,   tags:['simmetria','colore-rosso','soggettiva'],         tl:['#Simmetria','#ColoreRosso','#Soggettiva'],         kw:['simmetria','colore-rosso','soggettiva'],          intro:'La stanza 237 è la scena di rivelazione più geometricamente precisa della storia del cinema horror. Kubrick la costruisce come una trappola simmetrica — ogni inquadratura è un asse di specchio da cui non si può fuggire.',                                                                                                    an:{regia:'Kubrick usa uno zoom lentissimo — quasi impercettibile — che comprime lo spazio psicologicamente prima ancora che accada qualcosa. La simmetria perfetta del corridoio è deliberata.',sceneggiatura:'King aveva scritto una scena esplicita. Kubrick la trasforma in qualcosa di più angosciante: la bellezza prima dell\'orrore. La narrativa scompare nel puro potere visivo.',simbologia:'Il rosso della vasca non è colore: è premonizione. Kubrick dissemina rosso in ogni scena chiave come un codice subliminale che il conscio ignora ma il subconscio elabora.',produzione:'L\'hotel Overlook fu costruito negli studi di Elstree, Londra. La stanza 237 fu progettata con piastrelle calcolate centimetro per centimetro per la perfezione geometrica nelle riprese steadicam.'}},
-  {id:3,  film:'Mulholland Drive',  year:2001, did:'lynch',      director:'David Lynch',       scene:'Il prologo onirico — Il Jitterbug',      ratio:'1.85:1', tmdb:1018,  tags:['sogno','montaggio','surrealismo'],               tl:['#Sogno','#Montaggio','#Surrealismo'],               kw:['sogno','montaggio','surrealismo'],                intro:'La sequenza iniziale — corpi che ballano il jitterbug sovraimpressionati su uno sfondo scarlatto, poi il volo verso i cuscini bianchi — costruisce in 90 secondi l\'intera grammatica onirica del film.',                                                                                                                   an:{regia:'Lynch usa la doppia esposizione per materializzare visivamente il concetto di sogno dentro il sogno. Le figure danzanti sono fantasmi di qualcosa che non è ancora accaduto.',sceneggiatura:'Non esiste dialogo. Lynch costruisce emozione attraverso musica, ritmo e colore. La sceneggiatura per questa scena era praticamente vuota — improvvisata quasi interamente in montaggio.',simbologia:'Il rosso del fondale è l\'inconscio che affiora. Il bianco dei cuscini è la cancellazione, l\'oblio. La sequenza stabilisce la dialettica colore-sogno che struttura tutto il film.',produzione:'Le riprese del jitterbug furono girate in un studio separato, con ballerini degli anni \'50 contattati da Lynch personalmente. L\'effetto di sovraimpressione fu ottenuto otticamente, non in post-produzione.'}},
-  {id:4,  film:'Oldboy',            year:2003, did:'park',       director:'Park Chan-wook',    scene:'Il piano sequenza del corridoio',        ratio:'2.35:1', tmdb:670,   tags:['piano-sequenza','colore-rosso','violenza-estetica'],tl:['#PianoSequenza','#ColoreRosso','#ViolenzaEstetica'],kw:['piano-sequenza','colore-rosso','violenza-estetica'],intro:'Oh Dae-su da solo contro una ventina di uomini, in un corridoio stretto, senza stacchi di montaggio. Park rifiuta l\'estetica hollywoodiana per mostrare la violenza nella sua natura reale: esaustiva, goffa, brutale.',                                                                                                    an:{regia:'La mdp rimane in posizione fissa laterale per tutta la scena — scelta anti-spettacolare che trasforma il combattimento in performance teatrale. Nessun taglio, nessuna scorciatoia.',sceneggiatura:'Park aveva originariamente scritto questa come sequenza con stacchi. Decise il piano sequenza durante le prove, quando capì che il montaggio avrebbe falsificato la verità fisica.',simbologia:'L\'esaurimento progressivo del protagonista — che si trascina sul pavimento nella parte finale — è il vero soggetto. Non il trionfo dell\'eroe: la sopravvivenza del corpo.',produzione:'La scena richiese tre giorni di riprese e 17 take completi. Choi Min-sik si allenò per tre settimane con le comparse. Nessun stuntman.'}},
-  {id:5,  film:'Taxi Driver',       year:1976, did:'scorsese',   director:'Martin Scorsese',   scene:'L\'incipit — New York notturna',          ratio:'1.85:1', tmdb:103,   tags:['luce-urbana','soggettiva','colore-rosso'],       tl:['#LuceUrbana','#Soggettiva','#ColoreRosso'],        kw:['luce-urbana','soggettiva','colore-rosso'],         intro:'Il taxi emerge dal vapore come dall\'inferno. Gli occhi di Travis nel retrovisore. I neon rossi che scivolano sul vetro. Scorsese costruisce in due minuti l\'intera cosmologia del film: una città che è uno stato mentale.',                                                                                                an:{regia:'Scorsese usa il punto di vista soggettivo per stabilire che tutto è filtrato dalla percezione distorta di Travis. New York non è la New York reale — è la sua psiche proiettata sull\'asfalto.',sceneggiatura:'Paul Schrader scrisse la sceneggiatura in dieci giorni di isolamento, dopo una crisi personale. La voce narrante del diario di Travis fu scritta quasi in stato alterato.',simbologia:'Il vapore che sale dai tombini fu tinto di rosso con gel sui lampioni. Scorsese e il DP Michael Chapman vollero che la città letteralmente sanguinasse.',produzione:'Le riprese notturne furono girate in luglio 1975, ondata di calore record. De Niro rimase in personaggio per tutta la produzione, guidando davvero un taxi nei giorni liberi.'}},
-  {id:6,  film:'Zombi 2',           year:1979, did:'fulci',      director:'Lucio Fulci',       scene:'Lo squalo contro lo zombie',             ratio:'1.85:1', tmdb:11495, tags:['body-horror','surrealismo','violenza-estetica'], tl:['#BodyHorror','#Surrealismo','#ViolenzaEstetica'],  kw:['body-horror','surrealismo'],                      intro:'Uno zombie sott\'acqua che combatte uno squalo vivo. Fulci traduce il cinema horror in poesia dell\'assurdo: la scena è insieme ridicola e terrificante, e questa tensione è esattamente il cuore del suo cinema.',                                                                                                           an:{regia:'Fulci usa il ralenti in momenti precisi per trasformare la violenza in qualcosa di quasi liturgico. Il montaggio alterna grandangolo e primissimo piano con una logica onirica, non narrativa.',sceneggiatura:'La scena non esiste nella sceneggiatura originale. Fulci la improvvisò sul set delle Antille, quando vide casualmente riprese di uno squalo nelle acque dell\'isola.',simbologia:'Lo zombie subacqueo è il cinema di Fulci condensato: il morto che non accetta la morte, il confine tra i mondi che si dissolve. L\'acqua è sempre soglia, nei suoi film.',produzione:'Lo stunt con lo squalo tigre reale fu eseguito dall\'attrice Ramona Fulton, subacquea professionista. La produzione non aveva budget per effetti speciali: lo squalo era vivo.'}},
-  {id:7,  film:'Il Padrino',        year:1972, did:'coppola',    director:'Francis Ford Coppola',scene:'Il battesimo — montaggio parallelo',  ratio:'1.85:1', tmdb:238,   tags:['montaggio','simmetria','violenza-estetica'],     tl:['#Montaggio','#Simmetria','#ViolenzaEstetica'],     kw:['montaggio','simmetria'],                          intro:'Michael Corleone diventa padrino di un bambino mentre i suoi uomini uccidono i capi delle famiglie rivali. Coppola e il montatore William Reynolds creano il pezzo di montaggio parallelo più devastante della storia del cinema.',                                                                                        an:{regia:'Gordon Willis usa la luce quasi da pittore fiammingo: il battesimo è illuminato, sacro; le esecuzioni sono scure, notturne. La regia amplifica l\'ipocrisia dell\'atto con la forza silenziosa del chiaroscuro.',sceneggiatura:'Puzo e Coppola lavorarono settimane su questa sequenza. La scelta di alternare rito sacro con violenza profana non era nel romanzo — è un\'invenzione puramente cinematografica.',simbologia:'Michael mente a Dio in diretta: «Rinuncio a Satana». In quel momento preciso, sta diventando Satana. La sceneggiatura costruisce il doppio senso con precisione chirurgica.',produzione:'La sequenza del battesimo fu girata nella basilica di St. Patrick a New York. Le autorità ecclesiastiche non sapevano cosa stessero filmando nelle scene alternate. Il montaggio finale richiese sei settimane.'}},
-  {id:8,  film:'Blade Runner',      year:1982, did:'scott',      director:'Ridley Scott',      scene:'Il monologo delle lacrime nella pioggia',ratio:'2.39:1', tmdb:78,    tags:['luce-urbana','tempo','soggettiva'],              tl:['#LuceUrbana','#Tempo','#Soggettiva'],              kw:['luce-urbana','tempo'],                            intro:'«Ho visto cose che voi umani non potreste immaginare». Roy Batty muore sotto la pioggia, e il suo monologo finale — improvvisato da Rutger Hauer la notte prima delle riprese — è forse il momento più commovente della fantascienza.',                                                                                    an:{regia:'Scott inquadra Roy dall\'alto mentre muore, poi inverte con un controcampo su Deckard dal basso. La regia ribalta il rapporto di potere: il «mostro» diventa il saggio.',sceneggiatura:'Rutger Hauer riscrisse quasi interamente il monologo la notte prima. Eliminò tutto tranne l\'essenziale: «All those moments will be lost in time, like tears in rain.»',simbologia:'La colomba bianca che Roy libera nel momento della morte è l\'unico elemento di speranza in un film completamente grigio. Scott la aggiunse all\'ultimo momento, quasi per istinto.',produzione:'Le riprese erano alle 6 del mattino. Hauer aveva lavorato tutta la notte sul testo. La scena fu girata in due take. Il secondo è quello nel film.'}},
-  {id:9,  film:'Ladri di Biciclette',year:1948,did:'desica',     director:'Vittorio De Sica',  scene:'Il finale — padre e figlio tra la folla',ratio:'1.37:1', tmdb:15474, tags:['neorealismo','soggettiva'],                     tl:['#Neorealismo','#Soggettiva'],                      kw:['neorealismo'],                                    intro:'Antonio Ricci ruba una bicicletta davanti agli occhi di suo figlio Bruno. Uno dei finali più devastanti del cinema: non c\'è redenzione, non c\'è morale. Solo la folla che inghiotte un uomo diventato ciò che odiava.',                                                                                                   an:{regia:'De Sica non usa musica. La folla reale di Porta Portese diventa il giudice silenzioso. La mdp segue Bruno con uno sguardo quasi documentaristico — testimonia, non commenta.',sceneggiatura:'Zavattini e De Sica discussero a lungo il finale. L\'alternativa era una risoluzione positiva. Scelsero la verità: nella Roma del dopoguerra, non c\'era lieto fine disponibile.',simbologia:'Bruno che prende la mano del padre piangente è il cuore del neorealismo: l\'infanzia come specchio impietoso dell\'Italia adulta. Il figlio vede il padre per quello che è diventato.',produzione:'Lamberto Maggiorani, il protagonista, era un operaio reale. Enzo Staiola (Bruno) fu scelto per strada. De Sica non voleva professionisti: voleva la realtà.'}},
-  {id:10, film:'Inception',         year:2010, did:'nolan',      director:'Christopher Nolan', scene:'Il corridoio a gravità zero',            ratio:'2.39:1', tmdb:27205, tags:['tempo','piano-sequenza','simmetria'],            tl:['#Tempo','#PianoSequenza','#Simmetria'],            kw:['tempo','piano-sequenza','simmetria'],             intro:'Arthur combatte in un corridoio che ruota su se stesso mentre la gravità collassa. Nolan costruisce una delle sequenze d\'azione più fisicamente impossibili mai realizzate — senza CGI, con attori veri e un set rotante.',                                                                                                 an:{regia:'Nolan rifiuta il CGI per la rotazione del corridoio. La mdp è montata sulla struttura rotante insieme agli attori: quello che vedi è reale. Il disorientamento dello spettatore è fisico, non digitale.',sceneggiatura:'Nolan scrisse la sequenza pensando al problema narrativo: come mostrare che la gravità è anomala senza spiegarlo didatticamente? La risposta è nella regia, non nel dialogo.',simbologia:'Il corridoio che ruota è la mente di Fischer che resiste. Arthur deve combattere non solo gli avversari ma la fisica stessa — metafora visiva perfetta dell\'inconscio come campo di battaglia.',produzione:'Il corridoio rotante fu costruito a Cardington, UK, in un ex hangar della RAF. Il set pesava diverse tonnellate ed era azionato da motori elettrici. Le riprese durarono tre settimane.'}},
-  {id:11, film:'Pulp Fiction',       year:1994, did:'tarantino',  director:'Quentin Tarantino', scene:'La danza — Jack Rabbit Slim\'s',          ratio:'2.39:1', tmdb:680,   tags:['violenza-estetica','montaggio','colore-rosso'], tl:['#ViolenzaEstetica','#Montaggio','#ColoreRosso'],   kw:['montaggio','violenza-estetica','colore-rosso'],   intro:'Vincent e Mia ballano il twist su Chuck Berry. Tarantino trasforma un momento banale in cinema puro: la tensione sessuale, il pericolo imminente, la gioia genuina. Il cinema come citazione che supera l\'originale.',                                                                                                    an:{regia:'Tarantino usa una mdp quasi immobile, come se non volesse disturbare il momento. I due attori hanno costruito la coreografia da soli, in prove private. La camera osserva, non interviene.',sceneggiatura:'La scena è una pausa nel ritmo della violenza — usata come respiro prima della tempesta. Il dialogo sul massaggio ai piedi che la precede è deliberatamente comico per abbassare la guardia.',simbologia:'Il twist degli anni \'60 in un ristorante anni \'50, in un film del 1994: Tarantino collassa il tempo pop. Mia e Vincent ballano fuori dalla storia, in un limbo dove il pericolo non esiste ancora.',produzione:'Il concorso di ballo nel film era un vero concorso: Uma Thurman e John Travolta gareggiavano realmente contro le altre coppie. Il trofeo che vincono è vero.'}},
-  {id:12, film:'8½',                 year:1963, did:'fellini',    director:'Federico Fellini',  scene:'La sequenza dell\'harem',                 ratio:'1.85:1', tmdb:421,   tags:['sogno','surrealismo','soggettiva'],              tl:['#Sogno','#Surrealismo','#Soggettiva'],             kw:['sogno','surrealismo'],                            intro:'Guido Anselmi sogna di essere il padrone di un harem dove tutte le donne della sua vita convivono in armonia. Fellini costruisce la sequenza più autobiograficamente onesta e visivamente sfarzosa del cinema italiano.',                                                                                                  an:{regia:'Fellini usa costumi senza tempo, mescolando epoche e stili in un\'unica sequenza. La mdp si muove in modo quasi coreografico, seguendo il ritmo della musica di Rota piuttosto che la logica narrativa.',sceneggiatura:'La scena nacque da un sogno reale di Fellini, annotato sul suo taccuino. Trasferì il sogno quasi letteralmente in sceneggiatura, resistendo ai suggerimenti di renderlo più «logico».',simbologia:'L\'harem è la mente di un regista che vuole controllare tutto — e che viene progressivamente sommerso da ciò che ha creato. La rivolta delle donne è il momento in cui l\'arte sfugge al controllo dell\'autore.',produzione:'Mastroianni fu scelto come alter ego di Fellini anche fisicamente: stesso peso, stessa altezza. Il regista gli chiese di muoversi esattamente come lui si muoveva nel quotidiano.'}},
+// ytId: ID del video YouTube. Aggiorna questi ID con quelli reali trovati su YouTube.
+// Esempio: cerca "Oldboy corridor scene" su YouTube e copia l'ID dall'URL (la parte dopo v=)
+const SCENES=[
+  {id:1, film:'Videodrome',          year:1983,did:'cronenberg',director:'David Cronenberg',  scene:'Il bacio con la televisione',           ratio:'1.85:1',tmdb:11906,ytId:'TgUMZfnCd7o',tags:['body-horror','colore-rosso','surrealismo'],       tl:['#BodyHorror','#ColoreRosso','#Surrealismo'],       kw:['body-horror','colore-rosso','surrealismo'],       intro:'La scena in cui Max Renn bacia lo schermo televisivo — il cui volto di Nicki Brand pulsa come carne viva — è il manifesto visivo del «New Flesh» di Cronenberg. La televisione non è più un medium: è un organismo.',an:{regia:'Cronenberg usa un obiettivo macro per trasformare le trame dello schermo in pelle. Il campo è strettissimo, claustrofobico. Non c\'è prospettiva di fuga.',sceneggiatura:'Il dialogo è eliminato. La scena funziona in silenzio assoluto, lasciando che il corpo parli al posto delle parole. È il trionfo dell\'immagine sulla narrazione.',simbologia:'Lo schermo che diventa carne rappresenta la tesi centrale: i media non riflettono la realtà, la <strong>producono</strong>. Max non guarda la TV — la assorbe e viene assorbito.',produzione:'La protesi fu costruita da Rick Baker con lattice e meccanismi pneumatici che simulavano la respirazione. Tre settimane di test per sincronizzare il respiro al ritmo del montaggio.'}},
+  {id:2, film:'Shining',             year:1980,did:'kubrick',   director:'Stanley Kubrick',   scene:'La sequenza del bagno — Stanza 237',    ratio:'1.33:1',tmdb:694,  ytId:'OiPMagbZm00',tags:['simmetria','colore-rosso','soggettiva'],         tl:['#Simmetria','#ColoreRosso','#Soggettiva'],         kw:['simmetria','colore-rosso','soggettiva'],          intro:'La stanza 237 è la scena di rivelazione più geometricamente precisa della storia del cinema horror. Kubrick la costruisce come una trappola simmetrica — ogni inquadratura è un asse di specchio da cui non si può fuggire.',an:{regia:'Kubrick usa uno zoom lentissimo — quasi impercettibile — che comprime lo spazio psicologicamente prima ancora che accada qualcosa.',sceneggiatura:'King aveva scritto una scena esplicita. Kubrick la trasforma in qualcosa di più angosciante: la bellezza prima dell\'orrore.',simbologia:'Il rosso della vasca non è colore: è premonizione. Kubrick dissemina rosso in ogni scena chiave come un codice subliminale.',produzione:'L\'hotel Overlook fu costruito negli studi di Elstree, Londra. La stanza 237 fu progettata con piastrelle calcolate centimetro per centimetro.'}},
+  {id:3, film:'Mulholland Drive',    year:2001,did:'lynch',     director:'David Lynch',       scene:'Il prologo onirico — Il Jitterbug',      ratio:'1.85:1',tmdb:1018, ytId:null,          tags:['sogno','montaggio','surrealismo'],               tl:['#Sogno','#Montaggio','#Surrealismo'],               kw:['sogno','montaggio','surrealismo'],                intro:'La sequenza iniziale costruisce in 90 secondi l\'intera grammatica onirica del film. Corpi che ballano il jitterbug sovraimpressionati su uno sfondo scarlatto, poi il volo verso i cuscini bianchi.',an:{regia:'Lynch usa la doppia esposizione per materializzare visivamente il concetto di sogno dentro il sogno. Le figure danzanti sono fantasmi di qualcosa che non è ancora accaduto.',sceneggiatura:'Non esiste dialogo. Lynch costruisce emozione attraverso musica, ritmo e colore. La sceneggiatura per questa scena era praticamente vuota.',simbologia:'Il rosso del fondale è l\'inconscio che affiora. Il bianco dei cuscini è la cancellazione, l\'oblio.',produzione:'Le riprese del jitterbug furono girate in un studio separato. L\'effetto di sovraimpressione fu ottenuto otticamente, non in post-produzione.'}},
+  {id:4, film:'Oldboy',              year:2003,did:'park',      director:'Park Chan-wook',    scene:'Il piano sequenza del corridoio',        ratio:'2.35:1',tmdb:670,  ytId:'9NjGMbMFAA0',tags:['piano-sequenza','colore-rosso','violenza-estetica'],tl:['#PianoSequenza','#ColoreRosso','#ViolenzaEstetica'],kw:['piano-sequenza','colore-rosso','violenza-estetica'],intro:'Oh Dae-su da solo contro una ventina di uomini, in un corridoio stretto, senza stacchi di montaggio. Park rifiuta l\'estetica hollywoodiana per mostrare la violenza nella sua natura reale: esaustiva, goffa, brutale.',an:{regia:'La mdp rimane in posizione fissa laterale — scelta anti-spettacolare che trasforma il combattimento in performance teatrale. Nessun taglio, nessuna scorciatoia.',sceneggiatura:'Park aveva originariamente scritto questa come sequenza con stacchi. Decise il piano sequenza durante le prove.',simbologia:'L\'esaurimento progressivo del protagonista è il vero soggetto. Non il trionfo dell\'eroe: la sopravvivenza del corpo.',produzione:'La scena richiese tre giorni di riprese e 17 take completi. Choi Min-sik si allenò per tre settimane. Nessun stuntman.'}},
+  {id:5, film:'Taxi Driver',         year:1976,did:'scorsese',  director:'Martin Scorsese',   scene:'L\'incipit — New York notturna',          ratio:'1.85:1',tmdb:103,  ytId:'Gb-yPLvMEFg',tags:['luce-urbana','soggettiva','colore-rosso'],       tl:['#LuceUrbana','#Soggettiva','#ColoreRosso'],        kw:['luce-urbana','soggettiva','colore-rosso'],         intro:'Il taxi emerge dal vapore come dall\'inferno. Gli occhi di Travis nel retrovisore. I neon rossi che scivolano sul vetro. Scorsese costruisce in due minuti l\'intera cosmologia del film: una città che è uno stato mentale.',an:{regia:'Scorsese usa il punto di vista soggettivo per stabilire che tutto è filtrato dalla percezione distorta di Travis. New York non è la New York reale.',sceneggiatura:'Paul Schrader scrisse la sceneggiatura in dieci giorni di isolamento, dopo una crisi personale.',simbologia:'Il vapore dai tombini fu tinto di rosso con gel sui lampioni. La città letteralmente sanguina.',produzione:'Riprese in luglio 1975, ondata di calore record. De Niro guidò davvero un taxi nei giorni liberi.'}},
+  {id:6, film:'Zombi 2',             year:1979,did:'fulci',     director:'Lucio Fulci',       scene:'Lo squalo contro lo zombie',             ratio:'1.85:1',tmdb:11495,ytId:null,          tags:['body-horror','surrealismo','violenza-estetica'], tl:['#BodyHorror','#Surrealismo','#ViolenzaEstetica'],  kw:['body-horror','surrealismo'],                      intro:'Uno zombie sott\'acqua che combatte uno squalo vivo. Fulci traduce il cinema horror in poesia dell\'assurdo: ridicolo e terrificante insieme, e questa tensione è esattamente il cuore del suo cinema.',an:{regia:'Fulci usa il ralenti per trasformare la violenza in qualcosa di quasi liturgico. Il montaggio alterna grandangolo e primissimo piano con logica onirica.',sceneggiatura:'La scena non esiste nella sceneggiatura originale. Fulci la improvvisò sul set delle Antille.',simbologia:'Lo zombie subacqueo è il cinema di Fulci condensato: il morto che non accetta la morte. L\'acqua è sempre soglia.',produzione:'Lo stunt con lo squalo tigre reale fu eseguito dall\'attrice Ramona Fulton, subacquea professionista.'}},
+  {id:7, film:'Il Padrino',          year:1972,did:'coppola',   director:'F.F. Coppola',      scene:'Il battesimo — montaggio parallelo',     ratio:'1.85:1',tmdb:238,  ytId:'WVJRyUMdDPc',tags:['montaggio','simmetria','violenza-estetica'],     tl:['#Montaggio','#Simmetria','#ViolenzaEstetica'],     kw:['montaggio','simmetria'],                          intro:'Michael Corleone diventa padrino di un bambino mentre i suoi uomini uccidono i capi delle famiglie rivali. Il pezzo di montaggio parallelo più devastante della storia del cinema.',an:{regia:'Gordon Willis usa la luce da pittore fiammingo: il battesimo è illuminato, sacro; le esecuzioni sono scure, notturne.',sceneggiatura:'La scelta di alternare rito sacro con violenza profana non era nel romanzo — è un\'invenzione puramente cinematografica.',simbologia:'Michael mente a Dio in diretta: «Rinuncio a Satana». In quel momento preciso, sta diventando Satana.',produzione:'La sequenza del battesimo fu girata nella basilica di St. Patrick a New York. Il montaggio finale richiese sei settimane.'}},
+  {id:8, film:'Blade Runner',        year:1982,did:'scott',     director:'Ridley Scott',      scene:'Il monologo delle lacrime nella pioggia',ratio:'2.39:1',tmdb:78,   ytId:'NoAzpa1x7jU',tags:['luce-urbana','tempo','soggettiva'],              tl:['#LuceUrbana','#Tempo','#Soggettiva'],              kw:['luce-urbana','tempo'],                            intro:'«Ho visto cose che voi umani non potreste immaginare». Roy Batty muore sotto la pioggia, e il suo monologo — improvvisato da Rutger Hauer la notte prima delle riprese — è forse il momento più commovente della fantascienza.',an:{regia:'Scott inquadra Roy dall\'alto mentre muore, poi inverte con un controcampo su Deckard dal basso. La regia ribalta il rapporto di potere.',sceneggiatura:'Hauer riscrisse quasi interamente il monologo la notte prima. Eliminò tutto tranne l\'essenziale: «All those moments will be lost in time, like tears in rain.»',simbologia:'La colomba bianca che Roy libera nel momento della morte è l\'unico elemento di speranza in un film completamente grigio.',produzione:'Hauer aveva lavorato tutta la notte sul testo. La scena fu girata in due take. Il secondo è quello nel film.'}},
+  {id:9, film:'Ladri di Biciclette', year:1948,did:'desica',    director:'Vittorio De Sica',  scene:'Il finale — padre e figlio tra la folla',ratio:'1.37:1',tmdb:15474,ytId:null,          tags:['neorealismo','soggettiva'],                     tl:['#Neorealismo','#Soggettiva'],                      kw:['neorealismo'],                                    intro:'Antonio Ricci ruba una bicicletta davanti agli occhi di suo figlio Bruno. Uno dei finali più devastanti del cinema: nessuna redenzione, nessuna morale. Solo la folla che inghiotte un uomo diventato ciò che odiava.',an:{regia:'De Sica non usa musica. La folla reale di Porta Portese diventa il giudice silenzioso.',sceneggiatura:'Zavattini e De Sica scelsero la verità: nella Roma del dopoguerra, non c\'era lieto fine.',simbologia:'Bruno che prende la mano del padre piangente è il cuore del neorealismo: l\'infanzia come specchio impietoso dell\'Italia adulta.',produzione:'Lamberto Maggiorani era un operaio reale. Enzo Staiola (Bruno) fu scelto per strada.'}},
+  {id:10,film:'Inception',           year:2010,did:'nolan',     director:'Christopher Nolan', scene:'Il corridoio a gravità zero',            ratio:'2.39:1',tmdb:27205,ytId:'x9bqA1ZNfHc',tags:['tempo','piano-sequenza','simmetria'],            tl:['#Tempo','#PianoSequenza','#Simmetria'],            kw:['tempo','piano-sequenza','simmetria'],             intro:'Arthur combatte in un corridoio che ruota su se stesso mentre la gravità collassa. Nolan costruisce una delle sequenze d\'azione più fisicamente impossibili mai realizzate — senza CGI, con attori veri.',an:{regia:'Nolan rifiuta il CGI. La mdp è montata sulla struttura rotante insieme agli attori: quello che vedi è reale.',sceneggiatura:'Come mostrare che la gravità è anomala senza spiegarlo didatticamente? La risposta è nella regia, non nel dialogo.',simbologia:'Il corridoio che ruota è la mente di Fischer che resiste — metafora visiva perfetta dell\'inconscio come campo di battaglia.',produzione:'Il corridoio rotante fu costruito a Cardington, UK. Il set pesava diverse tonnellate. Le riprese durarono tre settimane.'}},
+  {id:11,film:'Pulp Fiction',        year:1994,did:'tarantino', director:'Quentin Tarantino', scene:'La danza — Jack Rabbit Slim\'s',          ratio:'2.39:1',tmdb:680,  ytId:'VBqRJ0DUjFg',tags:['violenza-estetica','montaggio','colore-rosso'], tl:['#ViolenzaEstetica','#Montaggio','#ColoreRosso'],   kw:['montaggio','violenza-estetica','colore-rosso'],   intro:'Vincent e Mia ballano il twist su Chuck Berry. Tarantino trasforma un momento banale in cinema puro: tensione sessuale, pericolo imminente, gioia genuina. Il cinema come citazione che supera l\'originale.',an:{regia:'Una mdp quasi immobile, come se non volesse disturbare il momento. La camera osserva, non interviene.',sceneggiatura:'La scena è una pausa nel ritmo della violenza — un respiro prima della tempesta.',simbologia:'Il twist degli anni \'60 in un ristorante anni \'50, in un film del 1994: Tarantino collassa il tempo pop.',produzione:'Il concorso di ballo era un vero concorso. Uma Thurman e John Travolta gareggiavano realmente.'}},
+  {id:12,film:'8½',                  year:1963,did:'fellini',   director:'Federico Fellini',  scene:'La sequenza dell\'harem',                 ratio:'1.85:1',tmdb:421,  ytId:null,          tags:['sogno','surrealismo','soggettiva'],              tl:['#Sogno','#Surrealismo','#Soggettiva'],             kw:['sogno','surrealismo'],                            intro:'Guido Anselmi sogna di essere il padrone di un harem dove tutte le donne della sua vita convivono in armonia. La sequenza più autobiograficamente onesta e visivamente sfarzosa del cinema italiano.',an:{regia:'Costumi senza tempo, epoche mescolate. La mdp segue il ritmo della musica di Rota piuttosto che la logica narrativa.',sceneggiatura:'La scena nacque da un sogno reale di Fellini, annotato sul suo taccuino.',simbologia:'L\'harem è la mente di un regista che vuole controllare tutto — e che viene sommerso da ciò che ha creato.',produzione:'Mastroianni fu scelto come alter ego fisico di Fellini: stesso peso, stessa altezza.'}},
+  {id:13,film:'eXistenZ',            year:1999,did:'cronenberg',director:'David Cronenberg',  scene:'Il porto di gioco biologico',            ratio:'1.85:1',tmdb:2758, ytId:null,          tags:['body-horror','surrealismo'],                    tl:['#BodyHorror','#Surrealismo'],                     kw:['body-horror','surrealismo'],                      intro:'Una console videoludica organica che si innesta nella spina dorsale attraverso un\'apertura nel corpo. Cronenberg porta il «New Flesh» di Videodrome alle sue conseguenze logiche: la tecnologia è già carne.',an:{regia:'Cronenberg usa grandangoli estremi per distorcere le proporzioni degli oggetti organici, rendendoli al tempo stesso repellenti e sensuali. La prospettiva falsa crea disorientamento.',sceneggiatura:'Il copione esplora una domanda semplice: cosa succederebbe se i videogiochi fossero corpi? La risposta narrativa è il film intero.',simbologia:'Il porto di gioco non è una metafora: <strong>è</strong> la tesi. La tecnologia non è uno strumento, è un prolungamento biologico dell\'identità.',produzione:'Le console organiche furono costruite da un team di prostetici usando silicone, intestini animali e componenti elettronici reali.'}},
+  {id:14,film:'A History of Violence',year:2005,did:'cronenberg',director:'David Cronenberg', scene:'La scena del sesso sulle scale',          ratio:'2.35:1',tmdb:9532, ytId:null,          tags:['violenza-estetica','soggettiva'],               tl:['#ViolenzaEstetica','#Soggettiva'],                kw:['violenza-estetica','body-horror'],                intro:'Tom Stall e sua moglie fanno sesso violento sulle scale di casa, subito dopo la rivelazione della sua vera identità. Cronenberg usa l\'atto sessuale per esplorare l\'impossibilità di separare l\'uomo dalla violenza che porta dentro.',an:{regia:'Cronenberg mantiene la macchina da presa in posizione fissa, guardando dall\'alto. Nessuna intimità nel senso tradizionale — solo la meccanica di due persone che si sfidano attraverso il corpo.',sceneggiatura:'La scena non è nel fumetto originale. Cronenberg la aggiunse per esplicitare una domanda: può il desiderio sopravvivere alla verità?',simbologia:'Il sesso violento come rinegoziazione del potere: Edie non perdona Tom, lo usa. La violenza entra nella camera da letto e non ne uscirà più.',produzione:'Viggo Mortensen e Maria Bello girarono la scena in un solo giorno. Cronenberg non girò prove — volle che il disagio fosse reale.'}},
+  {id:15,film:'La Promessa dell\'Assassino',year:2007,did:'cronenberg',director:'David Cronenberg',scene:'La scena del bagno turco',        ratio:'2.35:1',tmdb:4512, ytId:null,          tags:['violenza-estetica','soggettiva','piano-sequenza'],tl:['#ViolenzaEstetica','#Soggettiva','#PianoSequenza'],kw:['violenza-estetica','body-horror'],               intro:'Nikolai, completamente nudo in una sauna, viene attaccato da due sicari. La scena è probabilmente il più elaborato studio sulla vulnerabilità fisica mai messo in scena nel cinema d\'azione contemporaneo.',an:{regia:'La nudità totale non è provocazione: è la scelta più radicale possibile. Toglie allo spettatore il comfort del personaggio-corazza. Nikolai è carne, null\'altro.',sceneggiatura:'Steve Knight scrisse la scena sapendo che sarebbe stata girata senza stunt. Viggo Mortensen insistette per interpretarla interamente in prima persona.',simbologia:'Il vapore del bagno turco, i corpi nudi, i coltelli: Cronenberg restituisce alla violenza la sua natura biologica. Non c\'è regia, c\'è sopravvivenza.',produzione:'Mortensen si allenò per mesi con veri lottatori. La scena fu girata in tre giorni in una sauna reale. Alcune ferite furono accidentali.'}},
+  {id:16,film:'Umberto D.',          year:1952,did:'desica',    director:'Vittorio De Sica',  scene:'La mattina di Maria',                    ratio:'1.37:1',tmdb:11838,ytId:null,          tags:['neorealismo','soggettiva'],                     tl:['#Neorealismo','#Soggettiva'],                     kw:['neorealismo'],                                    intro:'La domestica Maria si alza al mattino, macina il caffè, schiaccia le formiche, scopre di essere incinta. De Sica filma il quotidiano con una precisione documentaristica che trasforma l\'ordinario in poesia.',an:{regia:'De Sica usa una serie di dettagli visivi — il piede che schiaccia la formiche, le mani che macinano — per costruire un ritratto che non ha bisogno di parole. Il cinema come osservazione pura.',sceneggiatura:'Zavattini disse che questa era la sequenza di cui era più orgoglioso. Non succede niente di narrativo — eppure è cinematograficamente perfetta.',simbologia:'Maria e Umberto condividono la stessa precarietà esistenziale. La scena del mattino è il contraltare umano della storia del vecchio: due solitudini parallele in una Roma che non li vede.',produzione:'Maria Pia Casilio, la giovane attrice, fu trovata da De Sica in una scuola di recitazione dove non aveva mai recitato. La sua naturalezza era totale.'}},
+  {id:17,film:'Alien',               year:1979,did:'scott',     director:'Ridley Scott',      scene:'Il chestburster',                        ratio:'2.35:1',tmdb:348,  ytId:'51xBbO1EjHM',tags:['body-horror','surrealismo','soggettiva'],       tl:['#BodyHorror','#Surrealismo','#Soggettiva'],       kw:['body-horror','surrealismo','violenza-estetica'],  intro:'La creatura esplode dal petto di Kane a tavola. Una delle scene di shock più studiate del cinema: il suo potere non deriva dal gore ma dalla violazione assoluta di ogni confine corporeo.',an:{regia:'Scott costruisce la scena come una cena normale, abbassando deliberatamente la guardia dello spettatore. Il ritmo è lento, quasi comico, poi il corpo di Kane si trasforma in campo di battaglia.',sceneggiatura:'Dan O\'Bannon scrisse la scena ispirandosi a un incubo ricorrente di violazione corporea. Il titolo originale del film era «Star Beast» — il corpo come territorio alieno.',simbologia:'Il chestburster è una nascita — violenta, non richiesta. H.R. Giger aveva progettato l\'alien come pura sessualità freudiana. Scott lo usò per esplorare la paura maschile della maternità.',produzione:'Gli attori non sapevano cosa sarebbe successo. Il sangue artificiale fu sparato con una pompa nascosta sotto il tavolo. Le reazioni di orrore genuino sono quelle nel film.'}},
+  {id:18,film:'Quei Bravi Ragazzi',  year:1990,did:'scorsese',  director:'Martin Scorsese',   scene:'Il piano sequenza del Copacabana',       ratio:'1.85:1',tmdb:769,  ytId:'UA6M2IKqhNQ',tags:['piano-sequenza','luce-urbana','montaggio'],     tl:['#PianoSequenza','#LuceUrbana','#Montaggio'],      kw:['piano-sequenza','luce-urbana','montaggio'],       intro:'Henry Hill entra nel Copacabana dal retro con Karen, percorre cucine e corridoi, supera decine di persone, fino al loro tavolo sul palco. Il piano sequenza come seduzione — dello spettatore insieme a Karen.',an:{regia:'Scorsese usa la steadicam in modo opposto a Kubrick: non per creare angoscia ma per creare euforia. La macchina da presa è complice di Henry, non osservatore neutro.',sceneggiatura:'Nicholas Pileggi scrisse la scena come semplice descrizione di un ingresso. Scorsese la trasformò nel manifesto visivo dell\'attrazione per la vita criminale.',simbologia:'Il tavolo materializzato dal nulla è la promessa della mafia: il mondo si piega per te. Karen è sedotta non dall\'uomo ma dal <strong>potere</strong>.',produzione:'Ray Liotta e Lorraine Bracco girarono la scena in un solo take. Il Copacabana reale fu usato per le riprese. Le centinaia di comparse furono istruite una per una.'}},
+  {id:19,film:'Il Padrino Parte II', year:1974,did:'coppola',   director:'F.F. Coppola',      scene:'La giovinezza di Vito a New York',       ratio:'1.78:1',tmdb:242,  ytId:null,          tags:['montaggio','tempo','soggettiva'],               tl:['#Montaggio','#Tempo','#Soggettiva'],              kw:['montaggio','tempo'],                             intro:'Il giovane Vito Corleone arriva a New York a inizio Novecento e compie il suo primo atto di violenza calcolata. Coppola costruisce il personaggio del Padrino attraverso le sue origini — mostrando come nasce un mostro.',an:{regia:'Gordon Willis usa una palette seppia e granulare per le scene del passato, creando una distanza temporale visiva. Il presente di Michael e il passato di Vito si rispondono per contrasto.',sceneggiatura:'La struttura parallela del film — Michael al presente, Vito al passato — era considerata infilmabile. Coppola la impose contro il parere della produzione.',simbologia:'Il giovane Vito uccide Fanucci durante la festa di quartiere: la violenza si nasconde nella celebrazione comunitaria. È il DNA della famiglia Corleone.',produzione:'Robert De Niro imparò il dialetto siciliano di Corleone per il ruolo. Il personaggio di Vito è più giovane della sua età reale — recitare la giovinezza di un altro attore fu la sfida maggiore.'}},
+  {id:20,film:'Stalker',             year:1979,did:'tarkovsky', director:'Andrei Tarkovsky',  scene:'Il viaggio nella Zona — dissolvenza sepia',ratio:'1.37:1',tmdb:11185,ytId:null,         tags:['sogno','tempo','soggettiva'],                   tl:['#Sogno','#Tempo','#Soggettiva'],                  kw:['sogno','tempo'],                                  intro:'Lo Stalker accompagna due uomini nella Zona, territorio proibito dove si dice che i desideri si avverino. Tarkovsky usa il passaggio dal bianco e nero al colore per marcare una soglia ontologica: il confine tra il mondo ordinario e quello del significato.',an:{regia:'Il bianco e nero del mondo esterno cede al seppia della Zona in una singola dissolvenza. Non è un effetto — è una dichiarazione filosofica: entriamo in un diverso regime di realtà.',sceneggiatura:'Il romanzo dei fratelli Strugatsky era fantascienza. Tarkovsky eliminò quasi tutto il plot per sostituirlo con tempo puro — piani lunghissimi che filmano l\'attesa.',simbologia:'La Zona non è un luogo fisico: è lo spazio interiore dove le certezze collassano. Chi vuole entrare è già perduto — perché rivelerà ciò che davvero desidera.',produzione:'Il film fu girato due volte. La prima pellicola fu rovinata in laboratorio. Tarkovsky ricominciò da zero, con un budget ridotto. Questa versione è la seconda.'}},
+  {id:21,film:'Persona',             year:1966,did:'bergman',   director:'Ingmar Bergman',    scene:'La fusione dei volti',                   ratio:'1.37:1',tmdb:68718,ytId:null,          tags:['soggettiva','surrealismo','tempo'],              tl:['#Soggettiva','#Surrealismo','#Tempo'],            kw:['sogno','surrealismo'],                            intro:'Il volto dell\'attrice Elisabeth Vogler e quello dell\'infermiera Alma si fondono in un\'unica immagine. Bergman compie qui l\'atto cinematograficamente più radicale della sua carriera: sciogliere i confini dell\'identità individuale.',an:{regia:'Bergman sovrappone otticamente i due profili fino a renderli indistinguibili. Non è un trucco: è la realizzazione visiva di una tesi psicologica.',sceneggiatura:'Il copione fu scritto da Bergman durante una malattia. La fusione dei volti non era prevista — fu una scoperta in sala di montaggio.',simbologia:'Chi assorbe chi? Bergman lascia la domanda aperta deliberatamente. L\'identità non è un dato fisso — è una negoziazione continua.',produzione:'Bibi Andersson e Liv Ullmann divennero amiche inseparabili durante le riprese. Bergman disse che il film trattava «di qualcosa di cui non potevo parlare altrimenti».'}},
+  {id:22,film:'In the Mood for Love',year:2000,did:'wongkarwai',director:'Wong Kar-wai',      scene:'Il corridoio — il rallentatore del desiderio',ratio:'1.66:1',tmdb:11216,ytId:null,      tags:['tempo','soggettiva','colore-rosso'],             tl:['#Tempo','#Soggettiva','#ColoreRosso'],            kw:['tempo','colore-rosso'],                           intro:'Maggie Cheung scende le scale in slow motion per comprare dei noodles. Wong Kar-wai usa il rallentatore non come effetto ma come strumento epistemologico: rallentare il tempo è l\'unico modo per vedere ciò che normalmente sfugge.',an:{regia:'Wong Kar-wai usò la tecnica dello step-printing — stampare ogni fotogramma più volte — per ottenere un rallentamento organico, diverso dal digitale. Il movimento è reale, è il tempo a essere distorto.',sceneggiatura:'Non c\'è sceneggiatura scritta. Wong Kar-wai girò per 15 mesi improvvisando. La struttura narrativa fu trovata in fase di montaggio.',simbologia:'Il rosso del qipao di Maggie Cheung non è decorazione: è emozione codificata. Ogni variazione di colore dell\'abito rappresenta uno stato interiore diverso.',produzione:'Il film fu girato in spazi così angusti che la troupe doveva stare fuori campo appesa alle pareti. Maggie Cheung indossò oltre venti qipao diversi durante le riprese.'}},
 ];
 
-// ══════════════════════════════════════════
-//  IMAGE FETCHING
-// ══════════════════════════════════════════
-async function getImg(type, id, sz) {
-  const k = `${type}_${id}`;
-  if (cache[k] !== undefined) return cache[k];
-  try {
-    const ep = type === 'movie' ? `movie/${id}` : `person/${id}`;
-    const r = await fetch(`https://api.themoviedb.org/3/${ep}?api_key=${TMDB}&language=it`);
-    const d = await r.json();
-    const p = type === 'movie' ? (d.backdrop_path || d.poster_path) : d.profile_path;
-    return cache[k] = p ? `${IMG}${sz}${p}` : null;
-  } catch { return cache[k] = null; }
+// ── IMAGE FETCH ──
+async function getImg(type,id,sz){
+  const k=`${type}_${id}`;
+  if(cache[k]!==undefined)return cache[k];
+  try{
+    const r=await fetch(`https://api.themoviedb.org/3/${type==='movie'?'movie':'person'}/${id}?api_key=${TMDB}&language=it`);
+    const d=await r.json();
+    const p=type==='movie'?(d.backdrop_path||d.poster_path):d.profile_path;
+    return cache[k]=p?`${IMG}${sz}${p}`:null;
+  }catch{return cache[k]=null;}
 }
-
-function loadImg(imgId, phId, type, tmdbId, sz) {
-  getImg(type, tmdbId, sz).then(url => {
-    if (!url) return;
-    const img = document.getElementById(imgId);
-    const ph = document.getElementById(phId);
-    if (img) { img.src = url; img.style.display = 'block'; }
-    if (ph) ph.style.display = 'none';
+function loadImg(iId,pId,type,tmdbId,sz){
+  getImg(type,tmdbId,sz).then(url=>{
+    if(!url)return;
+    const img=document.getElementById(iId),ph=document.getElementById(pId);
+    if(img){img.src=url;img.style.display='block';}
+    if(ph)ph.style.display='none';
   });
 }
 
-// ══════════════════════════════════════════
-//  RENDER SCENES
-// ══════════════════════════════════════════
-function renderScenes(filter) {
-  const list = filter ? SCENES.filter(s => s.tags.includes(filter)) : SCENES;
-  document.getElementById('fc').textContent = `${list.length} scene${filter ? ' filtrate' : ' in archivio'}`;
-  document.getElementById('hs-scene').textContent = SCENES.length;
-  document.getElementById('hero-bg-num').textContent = SCENES.length;
-
-  document.getElementById('scene-grid').innerHTML = list.map((s, i) => `
+// ── RENDER SCENES ──
+function renderScenes(filter){
+  const list=filter?SCENES.filter(s=>s.tags.includes(filter)):SCENES;
+  document.getElementById('fc').textContent=`${list.length} scene${filter?' filtrate':' in archivio'}`;
+  document.getElementById('hs-s').textContent=SCENES.length;
+  document.getElementById('hero-bg-num').textContent=SCENES.length;
+  document.getElementById('scene-grid').innerHTML=list.map((s,i)=>`
     <div class="scene-card" onclick="showScene(${s.id})">
       <div class="sc-thumb">
         <div class="sc-thumb-ph" id="sph_${s.id}"><span class="sc-ph-num">${String(i+1).padStart(2,'0')}</span></div>
         <img id="si_${s.id}" src="" alt="${s.film}" style="display:none">
         <div class="sc-overlay"></div>
         <div class="sc-ratio">${s.ratio}</div>
-        <div class="sc-year-badge">${s.year}</div>
+        <div class="sc-year">${s.year}</div>
       </div>
       <div class="sc-body">
         <div class="sc-director">${s.director.toUpperCase()}</div>
         <div class="sc-title">${s.film}</div>
         <div class="sc-scene">${s.scene}</div>
-        <div class="sc-tags">${s.tl.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+        <div class="sc-tags">${s.tl.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
       </div>
     </div>`).join('');
-
-  list.forEach(s => loadImg(`si_${s.id}`, `sph_${s.id}`, 'movie', s.tmdb, 'w500'));
+  list.forEach(s=>loadImg(`si_${s.id}`,`sph_${s.id}`,'movie',s.tmdb,'w500'));
 }
 
-// ══════════════════════════════════════════
-//  RENDER DIRECTORS
-// ══════════════════════════════════════════
-function renderDirectors() {
-  const grid = document.getElementById('dir-grid');
-  grid.innerHTML = DIRECTORS.map(d => {
-    const n = SCENES.filter(s => s.did === d.id).length;
-    return `<div class="dir-card" onclick="filterByDir('${d.id}')">
+// ── RENDER DIRECTORS ──
+function renderDirectors(){
+  document.getElementById('dir-grid').innerHTML=DIRECTORS.map(d=>{
+    const n=SCENES.filter(s=>s.did===d.id).length;
+    return`<div class="dir-card" onclick="filterByDir('${d.id}')">
       <div class="dir-img-wrap">
         <div class="dir-img-ph" id="dph_${d.id}"><span class="dir-ph-letter">${d.name.charAt(0)}</span></div>
         <img class="dir-img" id="di_${d.id}" src="" alt="${d.name}" style="display:none">
@@ -583,49 +498,58 @@ function renderDirectors() {
       <div class="dir-body">
         <div class="dir-name">${d.name}</div>
         <div class="dir-origin">${d.origin}</div>
-        ${d.obs.slice(0,3).map(o => `<div class="dir-obs">${o}</div>`).join('')}
+        ${d.obs.slice(0,3).map(o=>`<div class="dir-obs">${o}</div>`).join('')}
       </div>
     </div>`;
   }).join('');
-
-  DIRECTORS.forEach(d => loadImg(`di_${d.id}`, `dph_${d.id}`, 'person', d.pid, 'w185'));
+  DIRECTORS.forEach(d=>loadImg(`di_${d.id}`,`dph_${d.id}`,'person',d.pid,'w185'));
 }
 
-// ══════════════════════════════════════════
-//  SHOW SCENE DETAIL
-// ══════════════════════════════════════════
-async function showScene(id) {
-  const s = SCENES.find(x => x.id === id);
-  if (!s) return;
-  const imgUrl = await getImg('movie', s.tmdb, 'w780');
-  const slinks = (STREAMING[s.id] || []).map(n =>
-    `<a class="stream-btn" href="${SURL[n]||'#'}" target="_blank" rel="noopener">${n} ↗</a>`
-  ).join('');
-  const kpills = (s.kw || []).filter(k => KEYWORDS[k]).map(k =>
-    `<span class="kw-pill" onclick="openGraph('${k}')"><span class="kw-pill-text">${KEYWORDS[k].label}</span></span>`
-  ).join('');
+// ── SHOW SCENE DETAIL ──
+async function showScene(id){
+  const s=SCENES.find(x=>x.id===id);if(!s)return;
+  const imgUrl=await getImg('movie',s.tmdb,'w780');
+  const slinks=(STREAMING[s.id]||[]).map(n=>`<a class="stream-btn" href="${SURL[n]||'#'}" target="_blank" rel="noopener">${n} ↗</a>`).join('');
+  const kpills=(s.kw||[]).filter(k=>KEYWORDS[k]).map(k=>`<span class="kw-pill" onclick="openGraphKw('${k}')"><span class="kw-pill-text">${KEYWORDS[k].label}</span></span>`).join('');
 
-  document.getElementById('det-content').innerHTML = `
+  const videoSection = s.ytId ? `
+    <div class="video-section">
+      <div class="video-head">
+        <span class="video-label">▶ Guarda la scena</span>
+        <button class="video-toggle" onclick="toggleVideo('vid_${s.id}',this)">Mostra video</button>
+      </div>
+      <div class="video-embed-wrap" id="vid_${s.id}">
+        <iframe src="" data-src="https://www.youtube-nocookie.com/embed/${s.ytId}?rel=0&modestbranding=1" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="${s.film} — ${s.scene}"></iframe>
+      </div>
+    </div>` : `
+    <div class="video-section">
+      <div class="video-head">
+        <span class="video-label">▶ Clip video</span>
+        <button class="video-toggle" style="opacity:.4;cursor:default">Non disponibile</button>
+      </div>
+      <div class="video-note">La clip di questa scena non è ancora disponibile nell'archivio.</div>
+    </div>`;
+
+  document.getElementById('det-content').innerHTML=`
     <button class="back-btn" onclick="nav('home')">← Torna alle scene</button>
     <div class="detail-grid">
       <div class="detail-frame">
-        ${imgUrl
-          ? `<img src="${imgUrl}" alt="${s.film}"><div class="detail-frame-overlay"></div>`
-          : `<div style="display:flex;align-items:center;justify-content:center;height:100%"><span style="font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:0.5px rgba(200,169,110,0.1)">${String(s.id).padStart(2,'0')}</span></div>`}
+        ${imgUrl?`<img src="${imgUrl}" alt="${s.film}"><div class="detail-frame-overlay"></div>`:`<div style="display:flex;align-items:center;justify-content:center;height:100%"><span style="font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.1)">${String(s.id).padStart(2,'0')}</span></div>`}
       </div>
       <div>
         <div class="det-eyebrow">${s.director.toUpperCase()} · ${s.year}</div>
         <div class="det-title">${s.film}</div>
         <div class="det-scene">${s.scene}</div>
         <div class="det-ratio">Formato ${s.ratio}</div>
-        <div class="det-tags">${s.tl.map(t => `<span class="tag active">${t}</span>`).join('')}</div>
+        <div class="det-tags">${s.tl.map(t=>`<span class="tag active">${t}</span>`).join('')}</div>
         <p class="det-intro">${s.intro}</p>
         <div class="stream-section">
           <div class="stream-label">Dove vederlo</div>
-          <div class="stream-links">${slinks || '<span style="font-family:var(--fm);font-size:0.57rem;color:var(--muted)">Link non disponibili</span>'}</div>
+          <div class="stream-links">${slinks||'<span style="font-family:var(--fm);font-size:.57rem;color:var(--muted)">Link non disponibili</span>'}</div>
         </div>
       </div>
     </div>
+    ${videoSection}
     <div class="anatomy-heading">Anatomia della scena</div>
     <div class="anatomy-grid">
       <div class="anatomy-cell"><div class="anatomy-num">01</div><div class="anatomy-label">Regia</div><div class="anatomy-text">${s.an.regia}</div></div>
@@ -633,13 +557,13 @@ async function showScene(id) {
       <div class="anatomy-cell"><div class="anatomy-num">03</div><div class="anatomy-label">Simbologia</div><div class="anatomy-text">${s.an.simbologia}</div></div>
       <div class="anatomy-cell"><div class="anatomy-num">04</div><div class="anatomy-label">Curiosità produttiva</div><div class="anatomy-text">${s.an.produzione}</div></div>
     </div>
-    ${kpills ? `<div class="kw-block">
+    ${kpills?`<div class="kw-block">
       <div class="kw-block-head">
         <span class="kw-block-title">Parole chiave</span>
-        <span class="kw-block-sub">— clicca per vedere le connessioni tra registi nella mappa visiva</span>
+        <span class="kw-block-sub">— clicca per vedere le connessioni nella mappa visiva</span>
       </div>
       <div class="kw-pills">${kpills}</div>
-    </div>` : ''}
+    </div>`:''}
     <div class="dir-cta-bar">
       <div>
         <div class="dir-cta-text-label">Altre scene di ${s.director.split(' ').pop()}</div>
@@ -647,326 +571,177 @@ async function showScene(id) {
       </div>
       <button class="btn-outline" onclick="filterByDir('${s.did}')">Vai al regista →</button>
     </div>`;
-
   showView('scene');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function openGraph(kwKey) {
-  nav('map');
-  setTimeout(() => openPanel(kwKey, 'keyword'), 400);
-}
-
-// ══════════════════════════════════════════
-//  D3 FORCE GRAPH
-// ══════════════════════════════════════════
-let simulation, graphBuilt = false;
-
-function buildGraph() {
-  if (graphBuilt) return;
-  graphBuilt = true;
-
-  const container = document.getElementById('graph-container');
-  const W = container.clientWidth || 900;
-  const H = 600;
-
-  // Build nodes & links
-  const nodes = [];
-  const links = [];
-
-  DIRECTORS.forEach(d => {
-    nodes.push({ id: d.id, name: d.name, type: 'director', origin: d.origin });
-  });
-
-  Object.entries(KEYWORDS).forEach(([key, kw]) => {
-    nodes.push({ id: `kw_${key}`, name: kw.label, type: 'keyword', key, desc: kw.desc, dirs: kw.dirs });
-    kw.dirs.forEach(did => {
-      links.push({ source: did, target: `kw_${key}` });
-    });
-  });
-
-  const svg = d3.select('#graph-container').append('svg')
-    .attr('width', W).attr('height', H);
-
-  // Defs: glow filter
-  const defs = svg.append('defs');
-  const glow = defs.append('filter').attr('id', 'glow').attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%');
-  glow.append('feGaussianBlur').attr('stdDeviation', '3').attr('result', 'blur');
-  const feMerge = glow.append('feMerge');
-  feMerge.append('feMergeNode').attr('in', 'blur');
-  feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
-
-  const glow2 = defs.append('filter').attr('id', 'glow2').attr('x', '-80%').attr('y', '-80%').attr('width', '260%').attr('height', '260%');
-  glow2.append('feGaussianBlur').attr('stdDeviation', '6').attr('result', 'blur');
-  const feMerge2 = glow2.append('feMerge');
-  feMerge2.append('feMergeNode').attr('in', 'blur');
-  feMerge2.append('feMergeNode').attr('in', 'SourceGraphic');
-
-  simulation = d3.forceSimulation(nodes)
-    .force('link', d3.forceLink(links).id(d => d.id).distance(d => d.source.type === 'director' ? 130 : 100).strength(0.5))
-    .force('charge', d3.forceManyBody().strength(-280))
-    .force('center', d3.forceCenter(W / 2, H / 2))
-    .force('collision', d3.forceCollide().radius(d => d.type === 'director' ? 48 : 40));
-
-  // Links
-  const link = svg.append('g').selectAll('line').data(links).enter().append('line')
-    .attr('stroke', 'rgba(200,169,110,0.15)')
-    .attr('stroke-width', 0.8)
-    .attr('stroke-dasharray', '3 3');
-
-  // Nodes group
-  const node = svg.append('g').selectAll('g').data(nodes).enter().append('g')
-    .attr('cursor', 'pointer')
-    .call(d3.drag()
-      .on('start', (event, d) => { if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
-      .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
-      .on('end', (event, d) => { if (!event.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; })
-    )
-    .on('click', (event, d) => { event.stopPropagation(); openPanel(d.type === 'keyword' ? d.key : d.id, d.type); })
-    .on('mouseenter', (event, d) => showTip(event, d))
-    .on('mousemove', (event) => moveTip(event))
-    .on('mouseleave', () => hideTip());
-
-  // Director nodes — filled circle
-  node.filter(d => d.type === 'director').append('circle')
-    .attr('r', 22)
-    .attr('fill', 'rgba(200,169,110,0.12)')
-    .attr('stroke', 'rgba(200,169,110,0.55)')
-    .attr('stroke-width', 1)
-    .attr('filter', 'url(#glow)');
-
-  // Director initials
-  node.filter(d => d.type === 'director').append('text')
-    .attr('text-anchor', 'middle').attr('dy', '0.38em')
-    .attr('fill', '#c8a96e').attr('font-family', 'Bebas Neue, sans-serif').attr('font-size', '14')
-    .attr('letter-spacing', '1')
-    .text(d => d.name.split(' ').map(n => n[0]).join('').substring(0, 3));
-
-  node.filter(d => d.type === 'director').append('text')
-    .attr('text-anchor', 'middle').attr('dy', '38px')
-    .attr('fill', 'rgba(240,232,216,0.6)').attr('font-family', 'DM Mono, monospace').attr('font-size', '8')
-    .text(d => d.name.split(' ').pop());
-
-  // Keyword nodes — outlined circle
-  node.filter(d => d.type === 'keyword').append('circle')
-    .attr('r', 18)
-    .attr('fill', 'rgba(200,169,110,0.04)')
-    .attr('stroke', 'rgba(200,169,110,0.3)')
-    .attr('stroke-width', 0.8)
-    .attr('stroke-dasharray', '4 2');
-
-  node.filter(d => d.type === 'keyword').append('text')
-    .attr('text-anchor', 'middle').attr('dy', '0.35em')
-    .attr('fill', 'rgba(200,169,110,0.7)').attr('font-family', 'DM Mono, monospace').attr('font-size', '6.5')
-    .attr('letter-spacing', '0.5')
-    .text(d => d.name.substring(0, 8).toUpperCase());
-
-  // Hover highlight
-  node.on('mouseenter', function(event, d) {
-    d3.select(this).select('circle')
-      .transition().duration(200)
-      .attr('stroke', 'rgba(200,169,110,0.9)')
-      .attr('fill', d.type === 'director' ? 'rgba(200,169,110,0.22)' : 'rgba(200,169,110,0.1)')
-      .attr('r', d.type === 'director' ? 26 : 22)
-      .attr('filter', 'url(#glow2)');
-    showTip(event, d);
-  }).on('mouseleave', function(event, d) {
-    d3.select(this).select('circle')
-      .transition().duration(200)
-      .attr('stroke', d.type === 'director' ? 'rgba(200,169,110,0.55)' : 'rgba(200,169,110,0.3)')
-      .attr('fill', d.type === 'director' ? 'rgba(200,169,110,0.12)' : 'rgba(200,169,110,0.04)')
-      .attr('r', d.type === 'director' ? 22 : 18)
-      .attr('filter', d.type === 'director' ? 'url(#glow)' : null);
-    hideTip();
-  });
-
-  // Tick
-  simulation.on('tick', () => {
-    link
-      .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
-      .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
-    node.attr('transform', d => `translate(${Math.max(30, Math.min(W-30, d.x))},${Math.max(30, Math.min(H-30, d.y))})`);
-  });
-
-  // Animate links in
-  link.attr('stroke-opacity', 0).transition().duration(1200).delay((d, i) => i * 40).attr('stroke-opacity', 1);
-  node.attr('opacity', 0).transition().duration(800).delay((d, i) => i * 60).attr('opacity', 1);
-}
-
-function showTip(event, d) {
-  const tip = document.getElementById('gtip');
-  document.getElementById('gt-label').textContent = d.type === 'director' ? 'Regista' : 'Ossessione visiva';
-  document.getElementById('gt-name').textContent = d.name;
-  document.getElementById('gt-sub').textContent = d.type === 'director' ? d.origin : (d.desc || '').substring(0, 80) + '…';
-  tip.style.opacity = '1';
-  tip.style.transform = 'translateY(0)';
-  moveTip(event);
-}
-function moveTip(event) {
-  const tip = document.getElementById('gtip');
-  tip.style.left = (event.clientX + 16) + 'px';
-  tip.style.top = (event.clientY - 10) + 'px';
-}
-function hideTip() {
-  document.getElementById('gtip').style.opacity = '0';
-}
-
-function openPanel(id, type) {
-  const panel = document.getElementById('graph-panel');
-  panel.classList.add('show');
-
-  if (type === 'keyword') {
-    const kw = KEYWORDS[id];
-    if (!kw) return;
-    document.getElementById('gp-title').textContent = kw.label;
-    document.getElementById('gp-sub').textContent = `${kw.dirs.length} registi condividono questa ossessione`;
-    document.getElementById('gp-desc').textContent = kw.desc;
-    document.getElementById('gp-con-label').textContent = 'Registi collegati — clicca per filtrare';
-    document.getElementById('gp-chips').innerHTML = kw.dirs.map(did => {
-      const d = DIRECTORS.find(x => x.id === did);
-      return d ? `<span class="gp-chip" onclick="filterByDir('${d.id}')">${d.name}</span>` : '';
-    }).join('');
-    const scenes = SCENES.filter(s => s.kw && s.kw.includes(id));
-    document.getElementById('gp-scenes').innerHTML = scenes.map(s =>
-      `<div class="gp-scene" onclick="showScene(${s.id})">
-        <div class="gp-s-film">${s.director.split(' ').pop()} · ${s.year}</div>
-        <div class="gp-s-name">${s.film}</div>
-        <div class="gp-s-scene">${s.scene}</div>
-      </div>`).join('');
-  } else {
-    const d = DIRECTORS.find(x => x.id === id);
-    if (!d) return;
-    const dScenes = SCENES.filter(s => s.did === id);
-    const dKws = [...new Set(dScenes.flatMap(s => s.kw || []))];
-    document.getElementById('gp-title').textContent = d.name;
-    document.getElementById('gp-sub').textContent = d.origin;
-    document.getElementById('gp-desc').textContent = d.obs.join(' · ');
-    document.getElementById('gp-con-label').textContent = 'Ossessioni visive — clicca per esplorare';
-    document.getElementById('gp-chips').innerHTML = dKws.map(k => {
-      const kw = KEYWORDS[k];
-      return kw ? `<span class="gp-chip" onclick="openPanel('${k}','keyword')">${kw.label}</span>` : '';
-    }).join('');
-    document.getElementById('gp-scenes').innerHTML = dScenes.map(s =>
-      `<div class="gp-scene" onclick="showScene(${s.id})">
-        <div class="gp-s-film">${s.film} · ${s.year}</div>
-        <div class="gp-s-scene">${s.scene}</div>
-      </div>`).join('');
+function toggleVideo(wrapId, btn){
+  const wrap=document.getElementById(wrapId);
+  const show=!wrap.classList.contains('show');
+  wrap.classList.toggle('show',show);
+  btn.textContent=show?'Nascondi video':'Mostra video';
+  if(show){
+    const iframe=wrap.querySelector('iframe');
+    if(iframe&&!iframe.src)iframe.src=iframe.dataset.src;
   }
-
-  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-function closePanel() {
-  document.getElementById('graph-panel').classList.remove('show');
+function openGraphKw(kw){nav('map');setTimeout(()=>openPanel(kw,'keyword'),400);}
+
+// ── D3 GRAPH ──
+let graphBuilt=false;
+function buildGraph(){
+  if(graphBuilt)return;graphBuilt=true;
+  const cont=document.getElementById('graph-container');
+  const W=cont.clientWidth||900,H=600;
+  const nodes=[],links=[];
+  DIRECTORS.forEach(d=>nodes.push({id:d.id,name:d.name,type:'director',origin:d.origin}));
+  Object.entries(KEYWORDS).forEach(([key,kw])=>{
+    nodes.push({id:`kw_${key}`,name:kw.label,type:'keyword',key,desc:kw.desc,dirs:kw.dirs});
+    kw.dirs.forEach(did=>links.push({source:did,target:`kw_${key}`}));
+  });
+  const svg=d3.select('#graph-container').append('svg').attr('width',W).attr('height',H);
+  const defs=svg.append('defs');
+  const gf=defs.append('filter').attr('id','gf').attr('x','-50%').attr('y','-50%').attr('width','200%').attr('height','200%');
+  gf.append('feGaussianBlur').attr('stdDeviation','3').attr('result','b');
+  const fm=gf.append('feMerge');fm.append('feMergeNode').attr('in','b');fm.append('feMergeNode').attr('in','SourceGraphic');
+  const gf2=defs.append('filter').attr('id','gf2').attr('x','-80%').attr('y','-80%').attr('width','260%').attr('height','260%');
+  gf2.append('feGaussianBlur').attr('stdDeviation','6').attr('result','b');
+  const fm2=gf2.append('feMerge');fm2.append('feMergeNode').attr('in','b');fm2.append('feMergeNode').attr('in','SourceGraphic');
+  const sim=d3.forceSimulation(nodes)
+    .force('link',d3.forceLink(links).id(d=>d.id).distance(140).strength(0.5))
+    .force('charge',d3.forceManyBody().strength(-320))
+    .force('center',d3.forceCenter(W/2,H/2))
+    .force('collision',d3.forceCollide().radius(d=>d.type==='director'?50:42));
+  const link=svg.append('g').selectAll('line').data(links).enter().append('line')
+    .attr('stroke','rgba(200,169,110,.14)').attr('stroke-width',.8).attr('stroke-dasharray','3 3').attr('stroke-opacity',0);
+  link.transition().duration(1400).delay((_,i)=>i*30).attr('stroke-opacity',1);
+  const node=svg.append('g').selectAll('g').data(nodes).enter().append('g')
+    .attr('cursor','pointer')
+    .call(d3.drag()
+      .on('start',(e,d)=>{if(!e.active)sim.alphaTarget(.3).restart();d.fx=d.x;d.fy=d.y;})
+      .on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;})
+      .on('end',(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}))
+    .on('click',(e,d)=>{e.stopPropagation();openPanel(d.type==='keyword'?d.key:d.id,d.type);})
+    .on('mouseenter',(e,d)=>{showTip(e,d);d3.select(e.currentTarget).select('circle').transition().duration(180).attr('r',d.type==='director'?28:24).attr('fill',d.type==='director'?'rgba(200,169,110,.22)':'rgba(200,169,110,.1)').attr('stroke','rgba(200,169,110,.9)').attr('filter','url(#gf2)');})
+    .on('mousemove',e=>moveTip(e))
+    .on('mouseleave',(e,d)=>{hideTip();d3.select(e.currentTarget).select('circle').transition().duration(180).attr('r',d.type==='director'?22:18).attr('fill',d.type==='director'?'rgba(200,169,110,.12)':'rgba(200,169,110,.04)').attr('stroke',d.type==='director'?'rgba(200,169,110,.55)':'rgba(200,169,110,.3)').attr('filter',d.type==='director'?'url(#gf)':null);});
+  node.filter(d=>d.type==='director').append('circle').attr('r',22).attr('fill','rgba(200,169,110,.12)').attr('stroke','rgba(200,169,110,.55)').attr('stroke-width',1).attr('filter','url(#gf)');
+  node.filter(d=>d.type==='director').append('text').attr('text-anchor','middle').attr('dy','.38em').attr('fill','#c8a96e').attr('font-family','Bebas Neue,sans-serif').attr('font-size','13').text(d=>d.name.split(' ').map(n=>n[0]).join('').substring(0,3));
+  node.filter(d=>d.type==='director').append('text').attr('text-anchor','middle').attr('dy','40px').attr('fill','rgba(240,232,216,.6)').attr('font-family','DM Mono,monospace').attr('font-size','7.5').text(d=>d.name.split(' ').pop());
+  node.filter(d=>d.type==='keyword').append('circle').attr('r',18).attr('fill','rgba(200,169,110,.04)').attr('stroke','rgba(200,169,110,.3)').attr('stroke-width',.8).attr('stroke-dasharray','4 2');
+  node.filter(d=>d.type==='keyword').append('text').attr('text-anchor','middle').attr('dy','.35em').attr('fill','rgba(200,169,110,.7)').attr('font-family','DM Mono,monospace').attr('font-size','6.5').text(d=>d.name.substring(0,9).toUpperCase());
+  node.attr('opacity',0).transition().duration(900).delay((_,i)=>i*55).attr('opacity',1);
+  sim.on('tick',()=>{
+    link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
+    node.attr('transform',d=>`translate(${Math.max(30,Math.min(W-30,d.x))},${Math.max(30,Math.min(H-30,d.y))})`);
+  });
 }
 
-// ══════════════════════════════════════════
-//  NAVIGATION
-// ══════════════════════════════════════════
-function nav(view) {
-  document.querySelectorAll('nav ul li').forEach(l => l.classList.remove('active'));
-  const el = document.getElementById('nl-' + view);
-  if (el) el.classList.add('active');
-  showView(view);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (view === 'map') setTimeout(() => buildGraph(), 100);
+function showTip(e,d){
+  const t=document.getElementById('gtip');
+  document.getElementById('gt-label').textContent=d.type==='director'?'Regista':'Ossessione';
+  document.getElementById('gt-name').textContent=d.name;
+  document.getElementById('gt-sub2').textContent=d.type==='director'?d.origin:(d.desc||'').substring(0,75)+'…';
+  t.style.opacity='1';moveTip(e);
 }
+function moveTip(e){const t=document.getElementById('gtip');t.style.left=(e.clientX+16)+'px';t.style.top=(e.clientY-10)+'px';}
+function hideTip(){document.getElementById('gtip').style.opacity='0';}
 
-function showView(view) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  const t = document.getElementById('view-' + view);
-  if (t) t.classList.add('active');
+function openPanel(id,type){
+  const p=document.getElementById('graph-panel');p.classList.add('show');
+  if(type==='keyword'){
+    const kw=KEYWORDS[id];if(!kw)return;
+    document.getElementById('gp-title').textContent=kw.label;
+    document.getElementById('gp-sub').textContent=`${kw.dirs.length} registi condividono questa ossessione`;
+    document.getElementById('gp-desc').textContent=kw.desc;
+    document.getElementById('gp-con-label').textContent='Registi collegati';
+    document.getElementById('gp-chips').innerHTML=kw.dirs.map(did=>{const d=DIRECTORS.find(x=>x.id===did);return d?`<span class="gp-chip" onclick="filterByDir('${d.id}')">${d.name}</span>`:''}).join('');
+    document.getElementById('gp-scenes').innerHTML=SCENES.filter(s=>s.kw&&s.kw.includes(id)).map(s=>`<div class="gp-scene" onclick="showScene(${s.id})"><div class="gp-s-film">${s.director.split(' ').pop()} · ${s.year}</div><div class="gp-s-name">${s.film}</div><div class="gp-s-scene">${s.scene}</div></div>`).join('');
+  }else{
+    const d=DIRECTORS.find(x=>x.id===id);if(!d)return;
+    const ds=SCENES.filter(s=>s.did===id);
+    const dkw=[...new Set(ds.flatMap(s=>s.kw||[]))];
+    document.getElementById('gp-title').textContent=d.name;
+    document.getElementById('gp-sub').textContent=d.origin;
+    document.getElementById('gp-desc').textContent=d.obs.join(' · ');
+    document.getElementById('gp-con-label').textContent='Ossessioni visive';
+    document.getElementById('gp-chips').innerHTML=dkw.map(k=>{const kw=KEYWORDS[k];return kw?`<span class="gp-chip" onclick="openPanel('${k}','keyword')">${kw.label}</span>`:''}).join('');
+    document.getElementById('gp-scenes').innerHTML=ds.map(s=>`<div class="gp-scene" onclick="showScene(${s.id})"><div class="gp-s-film">${s.film} · ${s.year}</div><div class="gp-s-scene">${s.scene}</div></div>`).join('');
+  }
+  p.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
+function closePanel(){document.getElementById('graph-panel').classList.remove('show');}
 
-function fTag(tag, el) {
-  document.querySelectorAll('.filter-bar .ftag').forEach(t => t.classList.remove('active'));
-  if (el) el.classList.add('active');
-  renderScenes(tag);
+// ── NAV ──
+function nav(view){
+  document.querySelectorAll('nav ul li').forEach(l=>l.classList.remove('active'));
+  const el=document.getElementById('nl-'+view);if(el)el.classList.add('active');
+  showView(view);window.scrollTo({top:0,behavior:'smooth'});
+  if(view==='map')setTimeout(()=>buildGraph(),120);
 }
-
-function filterByDir(dirId) {
+function showView(view){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  const t=document.getElementById('view-'+view);if(t)t.classList.add('active');
+}
+function fTag(tag,el){
+  document.querySelectorAll('.filter-bar .ftag').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');renderScenes(tag);
+}
+function filterByDir(dirId){
   nav('home');
-  setTimeout(() => {
-    const d = DIRECTORS.find(x => x.id === dirId);
-    document.querySelectorAll('.filter-bar .ftag').forEach(t => t.classList.remove('active'));
-    document.getElementById('fc').textContent = `${SCENES.filter(s => s.did === dirId).length} scene di ${d?.name || dirId}`;
-    const grid = document.getElementById('scene-grid');
-    const list = SCENES.filter(s => s.did === dirId);
-    grid.innerHTML = list.map((s, i) => `
+  setTimeout(()=>{
+    const d=DIRECTORS.find(x=>x.id===dirId);
+    document.querySelectorAll('.filter-bar .ftag').forEach(t=>t.classList.remove('active'));
+    const list=SCENES.filter(s=>s.did===dirId);
+    document.getElementById('fc').textContent=`${list.length} scene di ${d?.name||dirId}`;
+    document.getElementById('scene-grid').innerHTML=list.map((s,i)=>`
       <div class="scene-card" onclick="showScene(${s.id})">
         <div class="sc-thumb">
           <div class="sc-thumb-ph" id="sp2_${s.id}"><span class="sc-ph-num">${String(i+1).padStart(2,'0')}</span></div>
           <img id="si2_${s.id}" src="" alt="${s.film}" style="display:none">
-          <div class="sc-overlay"></div>
-          <div class="sc-ratio">${s.ratio}</div>
-          <div class="sc-year-badge">${s.year}</div>
+          <div class="sc-overlay"></div><div class="sc-ratio">${s.ratio}</div><div class="sc-year">${s.year}</div>
         </div>
         <div class="sc-body">
           <div class="sc-director">${s.director.toUpperCase()}</div>
           <div class="sc-title">${s.film}</div>
           <div class="sc-scene">${s.scene}</div>
-          <div class="sc-tags">${s.tl.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+          <div class="sc-tags">${s.tl.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
         </div>
       </div>`).join('');
-    list.forEach(s => loadImg(`si2_${s.id}`, `sp2_${s.id}`, 'movie', s.tmdb, 'w500'));
-  }, 80);
+    list.forEach(s=>loadImg(`si2_${s.id}`,`sp2_${s.id}`,'movie',s.tmdb,'w500'));
+  },80);
 }
 
-// ══════════════════════════════════════════
-//  ADD SCENE MODAL
-// ══════════════════════════════════════════
-function openAdd() {
-  document.getElementById('tag-sel-grid').innerHTML = ALL_TAGS.map(t =>
-    `<span class="tsel" data-t="${t}" onclick="this.classList.toggle('on');updTags()">#${t}</span>`
-  ).join('');
+// ── FORM ──
+function openAdd(){
+  document.getElementById('tag-sel-grid').innerHTML=ALL_TAGS.map(t=>`<span class="tsel" data-t="${t}" onclick="this.classList.toggle('on');document.getElementById('tags-hid').value=[...document.querySelectorAll('.tsel.on')].map(e=>e.dataset.t).join(', ')">#${t}</span>`).join('');
   document.getElementById('f-success').classList.remove('show');
-  document.getElementById('scene-form').style.display = 'block';
+  document.getElementById('scene-form').style.display='block';
   document.getElementById('add-modal').classList.add('open');
 }
-function updTags() {
-  document.getElementById('tags-hid').value = [...document.querySelectorAll('.tsel.on')].map(e => e.dataset.t).join(', ');
-}
-function closeAdd() {
-  document.getElementById('add-modal').classList.remove('open');
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('scene-form');
-  if (!form) return;
-  form.addEventListener('submit', async e => {
+function closeAdd(){document.getElementById('add-modal').classList.remove('open');}
+document.addEventListener('DOMContentLoaded',()=>{
+  const form=document.getElementById('scene-form');if(!form)return;
+  form.addEventListener('submit',async e=>{
     e.preventDefault();
-    try {
-      const r = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
-      if (r.ok) { document.getElementById('f-success').classList.add('show'); form.style.display = 'none'; }
-      else alert('Errore nell\'invio. Riprova.');
-    } catch { alert('Errore di rete. Riprova.'); }
+    try{const r=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{Accept:'application/json'}});
+      if(r.ok){document.getElementById('f-success').classList.add('show');form.style.display='none';}
+      else alert('Errore. Riprova.');}
+    catch{alert('Errore di rete.');}
   });
 });
 
-// ══════════════════════════════════════════
-//  CUSTOM CURSOR
-// ══════════════════════════════════════════
-const cur = document.getElementById('cur');
-const curR = document.getElementById('curRing');
-let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx + 'px'; cur.style.top = my + 'px'; });
-function animCursor() {
-  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-  curR.style.left = rx + 'px'; curR.style.top = ry + 'px';
-  requestAnimationFrame(animCursor);
-}
-animCursor();
-document.querySelectorAll('button,a,[onclick]').forEach(el => {
-  el.addEventListener('mouseenter', () => { cur.style.width = '14px'; cur.style.height = '14px'; curR.style.width = '46px'; curR.style.height = '46px'; });
-  el.addEventListener('mouseleave', () => { cur.style.width = '8px'; cur.style.height = '8px'; curR.style.width = '32px'; curR.style.height = '32px'; });
-});
+// ── CURSOR ──
+const cur=document.getElementById('cur'),curR=document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function animC(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(animC);})();
 
-// ══════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════
-renderScenes();
-renderDirectors();
+// ── INIT ──
+renderScenes();renderDirectors();
 </script>
 </body>
 </html>
+
 
