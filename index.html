@@ -4,9 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CineMap — Frame d'Autore</title>
-<!-- Google Analytics — sostituisci G-XXXXXXXXXX con il tuo ID -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-XXXXXXXXXX');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NBW918W4XV"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-NBW918W4XV');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Bebas+Neue&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
@@ -64,8 +63,6 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 .btn-gold:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 10px 30px rgba(200,169,110,.25)}
 .btn-outline{background:transparent;color:var(--muted2);border:.5px solid var(--border2);padding:.9rem 2.5rem;font-family:var(--fm);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:all .3s}
 .btn-outline:hover{color:var(--cream);border-color:var(--gold);transform:translateY(-1px)}
-.btn-sm{background:transparent;color:var(--gold);border:.5px solid var(--border2);padding:.5rem 1.2rem;font-family:var(--fm);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;transition:all .3s}
-.btn-sm:hover{background:var(--gold);color:var(--bg)}
 .sec-head{display:flex;align-items:center;gap:1.8rem;padding:3.5rem 2.8rem 1.8rem}
 .sec-label{font-family:var(--fm);font-size:.57rem;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;white-space:nowrap}
 .sec-line{flex:1;height:.5px;background:linear-gradient(to right,var(--border2),transparent)}
@@ -93,6 +90,7 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 .sc-tags{display:flex;flex-wrap:wrap;gap:.4rem}
 .tag{font-family:var(--fm);font-size:.5rem;letter-spacing:.13em;padding:.25rem .65rem;border:.5px solid var(--border);color:var(--muted);cursor:pointer;transition:all .25s;text-transform:uppercase}
 .tag:hover,.tag.active{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,.06)}
+/* DETAIL */
 .detail-wrap{padding:0 2.8rem 6rem}
 .back-btn{display:inline-flex;align-items:center;gap:.7rem;font-family:var(--fm);font-size:.6rem;letter-spacing:.22em;color:var(--muted2);cursor:pointer;margin:2.5rem 0;text-transform:uppercase;transition:all .3s;background:none;border:none;padding:0}
 .back-btn:hover{color:var(--gold);gap:1rem}
@@ -112,17 +110,15 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 .stream-links{display:flex;flex-wrap:wrap;gap:.5rem}
 .stream-btn{font-family:var(--fm);font-size:.52rem;letter-spacing:.14em;padding:.4rem 1rem;border:.5px solid var(--border);color:var(--muted2);text-decoration:none;transition:all .28s;text-transform:uppercase}
 .stream-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,.06)}
-/* VIDEO EMBED */
 .video-section{margin:2.5rem 0;border:.5px solid var(--border);overflow:hidden}
 .video-head{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:var(--bg2);border-bottom:.5px solid var(--border)}
 .video-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase}
-.video-toggle{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(--cream);cursor:pointer;border:.5px solid var(--border2);padding:.3rem .8rem;background:transparent;transition:all .3s}
+.video-toggle{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(--cream);cursor:pointer;border:.5px solid var(--border2);padding:.3rem .8rem;background:transparent;transition:all .3s;text-decoration:none;display:inline-block}
 .video-toggle:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
-.video-embed-wrap{display:none;padding:0;position:relative;padding-bottom:56.25%}
+.video-embed-wrap{display:none;position:relative;padding-bottom:56.25%}
 .video-embed-wrap.show{display:block}
 .video-embed-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
-.video-note{padding:1.5rem;font-family:var(--fs);font-style:italic;font-size:.9rem;color:var(--muted2);text-align:center}
-/* ANATOMY */
+.video-note{padding:1.2rem 1.5rem;font-family:var(--fs);font-style:italic;font-size:.9rem;color:var(--muted2)}
 .anatomy-heading{font-family:var(--fm);font-size:.52rem;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;padding-bottom:1rem;border-bottom:.5px solid var(--border);margin-top:2.5rem}
 .anatomy-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
 .anatomy-cell{background:var(--bg);padding:2.4rem;transition:background .3s}
@@ -144,24 +140,29 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 .dir-cta-bar{margin-top:2.5rem;padding:1.8rem 2rem;border:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg2);gap:2rem}
 .dir-cta-text-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.24em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem}
 .dir-cta-text-sub{font-family:var(--fs);font-size:.95rem;color:var(--muted2);font-style:italic}
+/* DIRECTORS */
 .directors-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--border);margin:0 2.8rem}
 .dir-card{background:var(--bg);cursor:pointer;transition:background .3s;overflow:hidden;position:relative}
 .dir-card:hover{background:var(--bg2)}
-.dir-img-wrap{width:100%;height:180px;overflow:hidden;position:relative;background:var(--bg3)}
-.dir-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:.55;transition:opacity .5s,transform .7s var(--ease);display:block}
-.dir-card:hover .dir-img{opacity:.78;transform:scale(1.06)}
-.dir-img-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.dir-ph-letter{font-family:var(--fd);font-size:5.5rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.16);line-height:1}
-.dir-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,.75),transparent 60%)}
-.dir-scene-count{position:absolute;top:1rem;right:1rem;font-family:var(--fm);font-size:.55rem;color:var(--gold);background:rgba(8,8,8,.88);padding:.22rem .65rem;border:.5px solid var(--border2)}
+.dir-img-wrap{width:100%;height:190px;overflow:hidden;position:relative}
+/* Beautiful gradient placeholder — shown when no photo available */
+.dir-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem}
+.dir-ph-bg{position:absolute;inset:0}
+.dir-ph-letter{font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:.8px rgba(200,169,110,.4);line-height:1;position:relative;z-index:1}
+.dir-ph-nation{font-family:var(--fm);font-size:.5rem;letter-spacing:.25em;color:rgba(200,169,110,.35);text-transform:uppercase;position:relative;z-index:1}
+.dir-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:.6;transition:opacity .5s,transform .7s var(--ease);display:none}
+.dir-card:hover .dir-img{opacity:.82;transform:scale(1.05)}
+.dir-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,.8),transparent 60%)}
+.dir-scene-count{position:absolute;top:1rem;right:1rem;font-family:var(--fm);font-size:.55rem;color:var(--gold);background:rgba(8,8,8,.88);padding:.22rem .65rem;border:.5px solid var(--border2);z-index:2}
 .dir-body{padding:1.4rem 1.6rem 1.8rem}
 .dir-name{font-family:var(--fs);font-size:1.22rem;font-weight:600;color:var(--cream);margin-bottom:.25rem;transition:color .3s}
 .dir-card:hover .dir-name{color:var(--gold)}
 .dir-origin{font-family:var(--fm);font-size:.57rem;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;margin-bottom:1.1rem}
 .dir-obs{font-family:var(--fm);font-size:.52rem;letter-spacing:.13em;padding:.32rem .75rem;border-left:1.5px solid var(--gold);color:var(--muted2);background:rgba(200,169,110,.025);text-transform:uppercase;margin-bottom:.38rem}
+/* GRAPH */
 .graph-section{padding:0 2.8rem 5rem}
 .graph-intro{font-family:var(--fs);font-style:italic;color:var(--muted2);font-size:1.05rem;max-width:640px;line-height:1.75;margin-bottom:2.5rem}
-.graph-container{width:100%;height:600px;border:.5px solid var(--border);background:var(--bg2);position:relative;overflow:hidden}
+.graph-container{width:100%;height:640px;border:.5px solid var(--border);background:var(--bg2);position:relative;overflow:hidden}
 .graph-legend{display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:1.5rem;padding:1.4rem;border:.5px solid var(--border);background:var(--bg2)}
 .gl-item{display:flex;align-items:center;gap:.6rem}
 .gl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
@@ -191,6 +192,7 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 .gp-s-film{font-family:var(--fm);font-size:.52rem;letter-spacing:.16em;color:var(--gold);text-transform:uppercase;margin-bottom:.3rem}
 .gp-s-name{font-family:var(--fs);font-size:.92rem;color:var(--cream)}
 .gp-s-scene{font-family:var(--fs);font-size:.78rem;color:var(--muted2);font-style:italic;margin-top:.2rem}
+/* MODAL */
 .modal-overlay{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);pointer-events:none;transition:background .4s}
 .modal-overlay.open{background:rgba(0,0,0,.92);pointer-events:all}
 .modal-box{background:var(--bg);border:.5px solid var(--border2);width:min(660px,96vw);max-height:90vh;overflow-y:auto;transform:translateY(32px) scale(.97);opacity:0;transition:all .45s var(--ease)}
@@ -236,26 +238,25 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   <button class="nav-cta" onclick="openAdd()"><span>+ Aggiungi scena</span></button>
 </nav>
 <div id="app">
-<!-- HOME -->
 <div class="view active" id="view-home">
   <div class="hero">
     <div class="hero-bg"></div><div class="hero-grid"></div><div class="hero-scan"></div><div class="hero-vignette"></div>
-    <div class="hero-bg-num" id="hero-bg-num">22</div>
+    <div class="hero-bg-num" id="hbn">30</div>
     <div class="hero-eyebrow">Frame d'Autore — Cinema come linguaggio visivo</div>
     <h1>L'anatomia<br>del <em>fotogramma</em></h1>
     <p class="hero-desc">Non la trama. Non il voto in stelline. La scena come unità di senso: regia, simbologia, ossessione visiva condivisa tra i grandi autori.</p>
     <div class="hero-row">
-      <button class="btn-gold" onclick="document.getElementById('scene-anchor').scrollIntoView({behavior:'smooth'})">Esplora le scene</button>
+      <button class="btn-gold" onclick="document.getElementById('sa').scrollIntoView({behavior:'smooth'})">Esplora le scene</button>
       <button class="btn-outline" onclick="nav('map')">Mappa visiva →</button>
       <div class="hero-divider"></div>
       <div class="hero-stats">
-        <div><div class="hs-num" id="hs-s">22</div><div class="hs-label">Scene</div></div>
-        <div><div class="hs-num">15</div><div class="hs-label">Auteurs</div></div>
-        <div><div class="hs-num">10</div><div class="hs-label">Cluster</div></div>
+        <div><div class="hs-num" id="hss">30</div><div class="hs-label">Scene</div></div>
+        <div><div class="hs-num">20</div><div class="hs-label">Auteurs</div></div>
+        <div><div class="hs-num">11</div><div class="hs-label">Cluster</div></div>
       </div>
     </div>
   </div>
-  <div id="scene-anchor" class="sec-head"><span class="sec-label">Archivio scene</span><div class="sec-line"></div><span class="sec-count" id="fc">22 scene in archivio</span></div>
+  <div id="sa" class="sec-head"><span class="sec-label">Archivio scene</span><div class="sec-line"></div><span class="sec-count" id="fc">30 scene</span></div>
   <div class="filter-bar">
     <span class="ftag active" onclick="fTag(null,this)">Tutte</span>
     <span class="ftag" onclick="fTag('simmetria',this)">#Simmetria</span>
@@ -270,35 +271,33 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
     <span class="ftag" onclick="fTag('neorealismo',this)">#Neorealismo</span>
     <span class="ftag" onclick="fTag('violenza-estetica',this)">#ViolenzaEstetica</span>
     <span class="ftag" onclick="fTag('surrealismo',this)">#Surrealismo</span>
+    <span class="ftag" onclick="fTag('paesaggio',this)">#Paesaggio</span>
   </div>
   <div class="scene-grid" id="scene-grid"></div>
 </div>
-<!-- SCENE DETAIL -->
-<div class="view" id="view-scene"><div class="detail-wrap" id="det-content"></div></div>
-<!-- DIRECTORS -->
+<div class="view" id="view-scene"><div class="detail-wrap" id="det"></div></div>
 <div class="view" id="view-directors">
   <div class="hero" style="min-height:42vh;padding:4rem 2.8rem 3rem">
     <div class="hero-bg"></div><div class="hero-grid"></div><div class="hero-scan"></div><div class="hero-vignette"></div>
-    <div class="hero-bg-num" style="font-size:min(22vw,16rem)">15</div>
+    <div class="hero-bg-num" style="font-size:min(20vw,14rem)">20</div>
     <div class="hero-eyebrow">Auteurs mappati nel database</div>
     <h1 style="font-size:clamp(3rem,6vw,5.5rem)">I <em>Registi</em></h1>
-    <p class="hero-desc" style="margin-top:1.2rem">Clicca su un auteur per filtrare le sue scene nell'archivio</p>
+    <p class="hero-desc" style="margin-top:1.2rem">Clicca su un auteur per filtrare le sue scene</p>
   </div>
-  <div class="sec-head"><span class="sec-label">Auteurs</span><div class="sec-line"></div><span class="sec-count">15 registi — 22 scene analizzate</span></div>
+  <div class="sec-head"><span class="sec-label">Auteurs</span><div class="sec-line"></div><span class="sec-count">20 registi — 30 scene analizzate</span></div>
   <div class="directors-grid" id="dir-grid"></div>
 </div>
-<!-- MAP -->
 <div class="view" id="view-map">
   <div class="hero" style="min-height:42vh;padding:4rem 2.8rem 3rem">
     <div class="hero-bg"></div><div class="hero-grid"></div><div class="hero-scan"></div><div class="hero-vignette"></div>
-    <div class="hero-bg-num" style="font-size:min(22vw,16rem)">∞</div>
+    <div class="hero-bg-num" style="font-size:min(20vw,14rem)">∞</div>
     <div class="hero-eyebrow">Ossessioni condivise tra autori diversi</div>
     <h1 style="font-size:clamp(3rem,6vw,5.5rem)">Mappa delle<br><em>Ossessioni</em></h1>
-    <p class="hero-desc" style="margin-top:1.2rem">Grafo interattivo delle connessioni visive. Trascina i nodi, clicca per esplorare.</p>
+    <p class="hero-desc" style="margin-top:1.2rem">Grafo interattivo. Trascina i nodi, clicca per esplorare le connessioni.</p>
   </div>
   <div class="sec-head"><span class="sec-label">Grafo interattivo</span><div class="sec-line"></div><span class="sec-count">Drag • Click • Esplora</span></div>
   <div class="graph-section">
-    <p class="graph-intro">I grandi autori non scelgono le loro ossessioni — le subiscono. Ogni nodo dorato è un regista, ogni nodo cerchiato è un'ossessione visiva. <strong style="color:var(--cream)">Clicca un nodo</strong> per vedere le connessioni e le scene correlate.</p>
+    <p class="graph-intro">I grandi autori non scelgono le loro ossessioni — le subiscono. Ogni nodo dorato è un regista, ogni nodo cerchiato è un'ossessione visiva. <strong style="color:var(--cream)">Clicca un nodo</strong> per vedere connessioni e scene correlate.</p>
     <div class="graph-container" id="graph-container"></div>
     <div class="graph-legend">
       <div class="gl-item"><div class="gl-dot director"></div><span class="gl-text">Regista</span></div>
@@ -322,10 +321,9 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
 <footer>
   <p>CineMap — Frame d'Autore © 2024 Riccardo Carollo</p>
   <div class="filmstrip"><div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div><div class="film-frame"></div></div>
-  <p>Beta — 22 scene in archivio</p>
+  <p>Beta — 30 scene in archivio</p>
 </footer>
-<div class="graph-tooltip" id="gtip"><div class="gt-label" id="gt-label"></div><div class="gt-name" id="gt-name"></div><div class="gt-sub" id="gt-sub2"></div></div>
-<!-- ADD MODAL -->
+<div class="graph-tooltip" id="gtip"><div class="gt-label" id="gtl"></div><div class="gt-name" id="gtn"></div><div class="gt-sub" id="gts"></div></div>
 <div class="modal-overlay" id="add-modal" onclick="if(event.target===this)closeAdd()">
   <div class="modal-box">
     <div class="modal-head">
@@ -333,27 +331,22 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
       <button class="modal-close" onclick="closeAdd()">✕ Chiudi</button>
     </div>
     <div class="modal-body">
-      <div class="form-success" id="f-success"><p>✓ Proposta inviata con successo — grazie!</p></div>
-      <form id="scene-form" action="https://formspree.io/f/mkoeynpv" method="POST">
+      <div class="form-success" id="f-ok"><p>✓ Proposta inviata — grazie!</p></div>
+      <form id="sf" action="https://formspree.io/f/mkoeynpv" method="POST">
         <div class="form-grid2">
           <div class="field"><label>Film *</label><input type="text" name="film" placeholder="es. Apocalypse Now" required></div>
           <div class="field"><label>Anno *</label><input type="number" name="anno" placeholder="1979" required></div>
         </div>
         <div class="form-grid2">
-          <div class="field"><label>Regista *</label><input type="text" name="regista" placeholder="es. Francis Ford Coppola" required></div>
-          <div class="field"><label>Formato ratio</label><input type="text" name="ratio" placeholder="es. 2.39:1"></div>
+          <div class="field"><label>Regista *</label><input type="text" name="regista" placeholder="es. F.F. Coppola" required></div>
+          <div class="field"><label>Ratio</label><input type="text" name="ratio" placeholder="es. 2.39:1"></div>
         </div>
         <div class="field"><label>Nome della scena *</label><input type="text" name="scena" required placeholder="es. La sequenza della battaglia"></div>
         <div class="field"><label>Perché questa scena conta</label><textarea name="intro" placeholder="2-3 frasi sul perché è fondamentale..."></textarea></div>
         <div class="field"><label>Analisi — Regia</label><textarea name="regia" placeholder="Macchina da presa, luce, movimenti..."></textarea></div>
         <div class="field"><label>Analisi — Simbologia</label><textarea name="simbologia" placeholder="Cosa rappresenta, cosa rivela..."></textarea></div>
-        <div class="field"><label>Link YouTube della scena (se esiste)</label><input type="url" name="youtube" placeholder="https://youtube.com/watch?v=..."></div>
-        <div class="field">
-          <label>Tag visivi</label>
-          <div class="tag-sel-grid" id="tag-sel-grid"></div>
-          <input type="hidden" name="tags" id="tags-hid">
-        </div>
-        <div class="field"><label>La tua email (opzionale)</label><input type="email" name="email" placeholder="per ricevere una risposta"></div>
+        <div class="field"><label>Tag visivi</label><div class="tag-sel-grid" id="tsg"></div><input type="hidden" name="tags" id="th"></div>
+        <div class="field"><label>Email (opzionale)</label><input type="email" name="email" placeholder="per ricevere una risposta"></div>
         <div class="form-actions">
           <button type="submit" class="btn-gold">Invia proposta</button>
           <button type="button" class="btn-outline" onclick="closeAdd()">Annulla</button>
@@ -364,40 +357,55 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   </div>
 </div>
 <script>
-const TMDB='8265bd1679663a7ea12ac168da84d2e8',IMG='https://image.tmdb.org/t/p/';
-const cache={};
-const ALL_TAGS=['simmetria','soggettiva','body-horror','sogno','piano-sequenza','luce-urbana','colore-rosso','montaggio','tempo','neorealismo','violenza-estetica','surrealismo'];
+const TK='8265bd1679663a7ea12ac168da84d2e8',IB='https://image.tmdb.org/t/p/';
+const IC={};
+const ATAGS=['simmetria','soggettiva','body-horror','sogno','piano-sequenza','luce-urbana','colore-rosso','montaggio','tempo','neorealismo','violenza-estetica','surrealismo','paesaggio'];
 
-const DIRECTORS=[
-  {id:'cronenberg',name:'David Cronenberg', origin:'Canada · 1943',pid:11090, obs:['New Flesh','Body Horror','Media come organismo','Metamorfosi']},
-  {id:'kubrick',   name:'Stanley Kubrick',  origin:'USA · 1928',  pid:240,   obs:['Simmetria assiale','Prospettiva centrale','Steadicam','Psicosi dello spazio']},
-  {id:'lynch',     name:'David Lynch',      origin:'USA · 1946',  pid:5765,  obs:['Sogno dentro il sogno','Industrial sublime','Rosso e velluto','Rottura narrativa']},
-  {id:'park',      name:'Park Chan-wook',   origin:'Corea · 1963',pid:10099, obs:['Vendetta come struttura','Violenza coreografata','Simmetria narrativa','Shock estetico']},
-  {id:'scorsese',  name:'Martin Scorsese',  origin:'USA · 1942',  pid:1032,  obs:['Luce urbana notturna','Soggettiva come psiche','Rosso come stato emotivo','Mascolinità tossica']},
-  {id:'fulci',     name:'Lucio Fulci',      origin:'Italia · 1927',pid:11521, obs:['Gore come poesia','L\'occhio come bersaglio','Soglia tra i mondi','Logica onirica']},
-  {id:'coppola',   name:'F.F. Coppola',     origin:'USA · 1939',  pid:1776,  obs:['Potere e famiglia','Montaggio parallelo','Luce chiaroscurale','Tragedia americana']},
-  {id:'scott',     name:'Ridley Scott',     origin:'UK · 1937',   pid:10429, obs:['World building visivo','Luce industriale','Il futuro come passato','Epica del quotidiano']},
-  {id:'desica',    name:'Vittorio De Sica', origin:'Italia · 1901',pid:12532, obs:['Attori non professionisti','Roma come personaggio','L\'infanzia come specchio','Dignità nella miseria']},
-  {id:'nolan',     name:'Christopher Nolan',origin:'UK · 1970',   pid:525,   obs:['Tempo non lineare','Pratico vs digitale','La mente come labirinto','Grandiosità controllata']},
-  {id:'tarantino', name:'Quentin Tarantino',origin:'USA · 1963',  pid:138,   obs:['Dialogo come azione','Citazione che supera l\'originale','Violenza pop','Struttura non lineare']},
-  {id:'fellini',   name:'Federico Fellini', origin:'Italia · 1920',pid:7415,  obs:['Autobiografia come universo','Circo e carnevale','Donna come archetipo','Sogno e memoria']},
-  {id:'tarkovsky', name:'Andrei Tarkovsky', origin:'URSS · 1932', pid:11607, obs:['Tempo come materia','Acqua e fuoco','Nostalgia e esilio','Il sacro nel quotidiano']},
-  {id:'wongkarwai',name:'Wong Kar-wai',     origin:'HK · 1958',   pid:12453, obs:['Memoria e desiderio','Step-printing','Colore come emozione','Tempo sfuggente']},
-  {id:'bergman',   name:'Ingmar Bergman',   origin:'Svezia · 1918',pid:6648,  obs:['Volto come paesaggio','Silenzio e Dio','Dualismo psicologico','Il primo piano assoluto']},
+// Gradient palette for director placeholders
+const GRADS=[
+  'linear-gradient(135deg,#1a0a0a,#0a0a1a)',
+  'linear-gradient(135deg,#0a1a0a,#0a0a1a)',
+  'linear-gradient(135deg,#1a1a0a,#0a0a0a)',
+  'linear-gradient(135deg,#0a0a1a,#1a0a0a)',
+  'linear-gradient(135deg,#1a0a1a,#0a1a0a)',
 ];
 
-const KEYWORDS={
-  'simmetria':        {label:'Simmetria',         desc:'La simmetria come trappola visiva e specchio della psiche. Quando un regista costruisce un frame perfettamente bilanciato, nega all\'occhio qualsiasi punto di fuga. È controllo totale — o la sua illusione.',dirs:['kubrick','coppola','nolan','park']},
-  'colore-rosso':     {label:'Colore Rosso',       desc:'Il rosso attraversa il cinema d\'autore come un codice morale: sangue, passione, pericolo imminente. Ogni autore lo usa con grammatica diversa — stato emotivo in Scorsese, premonizione in Kubrick, violenza pop in Tarantino.',dirs:['kubrick','scorsese','park','cronenberg','tarantino']},
-  'sogno':            {label:'Sogno & Inconscio',  desc:'Lynch, Fellini e Tarkovsky materializzano il sogno invece di rappresentarlo. Non metafora: diretta irruzione dell\'inconscio nel reale. La logica narrativa si dissolve nel ritmo puro delle immagini.',dirs:['lynch','fellini','tarkovsky']},
-  'surrealismo':      {label:'Surrealismo',        desc:'Il reale che cede sotto la pressione dell\'immagine. Cronenberg, Lynch, Fulci e Fellini costruiscono mondi dove la logica non governa — l\'occhio precede sempre il cervello.',dirs:['cronenberg','lynch','fulci','fellini']},
-  'body-horror':      {label:'Body Horror',        desc:'Cronenberg e Fulci esplorano il corpo come territorio instabile — la carne che tradisce, si fonde, si trasforma. Non horror della paura ma horror della meraviglia biologica.',dirs:['cronenberg','fulci']},
-  'montaggio':        {label:'Montaggio',          desc:'Il montaggio come atto di senso, non di narrazione. Coppola alterna sacro e profano, Lynch usa il ritmo come logica, Tarantino celebra la pausa come drammaturgia pura.',dirs:['coppola','lynch','tarantino','scorsese']},
-  'piano-sequenza':   {label:'Piano Sequenza',     desc:'Il rifiuto del taglio come scelta etica. Park e Nolan usano il piano sequenza per imporre allo spettatore la fisica reale dell\'azione — non puoi sfuggire alla durata di ciò che accade.',dirs:['park','nolan','scorsese']},
-  'luce-urbana':      {label:'Luce Urbana',        desc:'La città di notte come paesaggio mentale. Scorsese tinge di rosso i vapori di New York. Scott costruisce un futuro dove la luce industriale è l\'unico calore rimasto.',dirs:['scorsese','scott']},
-  'neorealismo':      {label:'Neorealismo',        desc:'De Sica inventa un cinema che non rappresenta la realtà ma la lascia accadere. Attori non professionisti, location reali, luce naturale. Il cinema come atto morale prima che estetico.',dirs:['desica']},
-  'tempo':            {label:'Tempo & Memoria',    desc:'Nolan smonta il tempo come struttura narrativa. Tarkovsky lo usa come materia fisica — il tempo scorre nel frame come acqua. Wong Kar-wai lo rallenta fino a renderlo dolore.',dirs:['nolan','scott','tarkovsky','wongkarwai']},
-  'violenza-estetica':{label:'Violenza Estetica',  desc:'La violenza trasformata in coreografia, in ritmo, in estetica. Park, Tarantino e Cronenberg non mostrano la violenza per sconvolgere — la mostrano per rivelare la struttura nascosta del mondo.',dirs:['park','tarantino','fulci','coppola','cronenberg']},
+const DIRS=[
+  {id:'cronenberg', name:'David Cronenberg',  origin:'Canada · 1943', pid:11090, obs:['New Flesh','Body Horror','Media come organismo','Metamorfosi']},
+  {id:'kubrick',    name:'Stanley Kubrick',   origin:'USA · 1928',    pid:240,   obs:['Simmetria assiale','Prospettiva centrale','Steadicam','Psicosi dello spazio']},
+  {id:'lynch',      name:'David Lynch',       origin:'USA · 1946',    pid:5765,  obs:['Sogno dentro il sogno','Industrial sublime','Rosso e velluto','Rottura narrativa']},
+  {id:'park',       name:'Park Chan-wook',    origin:'Corea · 1963',  pid:10099, obs:['Vendetta come struttura','Violenza coreografata','Simmetria narrativa','Shock estetico']},
+  {id:'scorsese',   name:'Martin Scorsese',   origin:'USA · 1942',    pid:1032,  obs:['Luce urbana notturna','Soggettiva come psiche','Rosso come stato emotivo','Mascolinità tossica']},
+  {id:'fulci',      name:'Lucio Fulci',       origin:'Italia · 1927', pid:14023, obs:['Gore come poesia','L\'occhio come bersaglio','Soglia tra i mondi','Logica onirica']},
+  {id:'coppola',    name:'F.F. Coppola',      origin:'USA · 1939',    pid:1776,  obs:['Potere e famiglia','Montaggio parallelo','Luce chiaroscurale','Tragedia americana']},
+  {id:'scott',      name:'Ridley Scott',      origin:'UK · 1937',     pid:10429, obs:['World building visivo','Luce industriale','Il futuro come passato','Epica del quotidiano']},
+  {id:'desica',     name:'Vittorio De Sica',  origin:'Italia · 1901', pid:4429,  obs:['Attori non professionisti','Roma come personaggio','L\'infanzia come specchio','Dignità nella miseria']},
+  {id:'nolan',      name:'Christopher Nolan', origin:'UK · 1970',     pid:525,   obs:['Tempo non lineare','Pratico vs digitale','La mente come labirinto','Grandiosità controllata']},
+  {id:'tarantino',  name:'Quentin Tarantino', origin:'USA · 1963',    pid:138,   obs:['Dialogo come azione','Citazione che supera l\'originale','Violenza pop','Struttura non lineare']},
+  {id:'fellini',    name:'Federico Fellini',  origin:'Italia · 1920', pid:7415,  obs:['Autobiografia come universo','Circo e carnevale','Donna come archetipo','Sogno e memoria']},
+  {id:'tarkovsky',  name:'Andrei Tarkovsky',  origin:'URSS · 1932',   pid:11607, obs:['Tempo come materia','Acqua e fuoco','Nostalgia e esilio','Il sacro nel quotidiano']},
+  {id:'wongkarwai', name:'Wong Kar-wai',      origin:'HK · 1958',     pid:12453, obs:['Memoria e desiderio','Step-printing','Colore come emozione','Tempo sfuggente']},
+  {id:'bergman',    name:'Ingmar Bergman',    origin:'Svezia · 1918', pid:6648,  obs:['Volto come paesaggio','Silenzio e Dio','Dualismo psicologico','Il primo piano assoluto']},
+  {id:'leone',      name:'Sergio Leone',      origin:'Italia · 1929', pid:4385,  obs:['Tempo dilatato','Primo piano VS campo lungo','Operistico e brutale','America come mito']},
+  {id:'bongjoonho', name:'Bong Joon-ho',      origin:'Corea · 1969',  pid:21684, obs:['Classe sociale','Spazio architettonico','Genere ibrido','Satira e orrore']},
+  {id:'kitano',     name:'Takeshi Kitano',    origin:'Giappone · 1947',pid:10918,obs:['Violenza e silenzio','Yakuza come filosofia','Gag e morte','Tempo morto']},
+  {id:'eggers',     name:'Robert Eggers',     origin:'USA · 1983',    pid:1590045,obs:['Folklore e terrore','Bianco e nero estremo','Lingua arcaica','Isolamento cosmico']},
+  {id:'fincher',    name:'David Fincher',     origin:'USA · 1962',    pid:7467,  obs:['Luce industriale fredda','Perfezione ossessiva','Protagonista come detective','Il male come sistema']},
+];
+
+const KW={
+  'simmetria':        {label:'Simmetria',          desc:'La simmetria come trappola visiva e specchio della psiche. Quando un regista costruisce un frame perfettamente bilanciato, nega all\'occhio qualsiasi punto di fuga.',dirs:['kubrick','coppola','nolan','park','leone']},
+  'colore-rosso':     {label:'Colore Rosso',        desc:'Il rosso attraversa il cinema d\'autore come codice morale: sangue, passione, pericolo. Ogni autore lo usa con grammatica diversa.',dirs:['kubrick','scorsese','park','cronenberg','tarantino','wongkarwai']},
+  'sogno':            {label:'Sogno & Inconscio',   desc:'Lynch, Fellini e Tarkovsky materializzano il sogno invece di rappresentarlo. Non metafora: diretta irruzione dell\'inconscio nel reale.',dirs:['lynch','fellini','tarkovsky']},
+  'surrealismo':      {label:'Surrealismo',         desc:'Il reale che cede sotto la pressione dell\'immagine. Cronenberg, Lynch, Fulci e Fellini costruiscono mondi dove la logica non governa.',dirs:['cronenberg','lynch','fulci','fellini']},
+  'body-horror':      {label:'Body Horror',         desc:'Cronenberg e Fulci esplorano il corpo come territorio instabile — la carne che tradisce, si fonde, si trasforma.',dirs:['cronenberg','fulci']},
+  'montaggio':        {label:'Montaggio',           desc:'Il montaggio come atto di senso: Coppola alterna sacro e profano, Lynch usa il ritmo come logica, Tarantino celebra la pausa.',dirs:['coppola','lynch','tarantino','scorsese']},
+  'piano-sequenza':   {label:'Piano Sequenza',      desc:'Il rifiuto del taglio come scelta etica. Park, Nolan e Scorsese usano il piano sequenza per imporre allo spettatore la fisica reale dell\'azione.',dirs:['park','nolan','scorsese']},
+  'luce-urbana':      {label:'Luce Urbana',         desc:'La città di notte come paesaggio mentale. Scorsese tinge di rosso i vapori di New York. Scott e Fincher costruiscono labirinti di luce artificiale.',dirs:['scorsese','scott','fincher']},
+  'neorealismo':      {label:'Neorealismo',         desc:'De Sica inventa un cinema che non rappresenta la realtà ma la lascia accadere. Attori non professionisti, location reali, luce naturale.',dirs:['desica']},
+  'tempo':            {label:'Tempo & Memoria',     desc:'Nolan smonta il tempo. Tarkovsky lo usa come materia fisica. Wong Kar-wai lo rallenta fino a renderlo dolore. Leone lo dilata fino all\'assurdo.',dirs:['nolan','scott','tarkovsky','wongkarwai','leone']},
+  'violenza-estetica':{label:'Violenza Estetica',   desc:'La violenza trasformata in coreografia. Park, Tarantino, Kitano — non mostrano la violenza per sconvolgere ma per rivelare la struttura del mondo.',dirs:['park','tarantino','fulci','coppola','cronenberg','kitano']},
+  'paesaggio':        {label:'Paesaggio & Spazio',  desc:'Il paesaggio non come sfondo ma come soggetto. Tarkovsky, Malick, Eggers usano lo spazio naturale come proiezione dello stato interiore dei personaggi.',dirs:['tarkovsky','eggers','bongjoonho']},
 };
 
 const STREAMING={
@@ -406,56 +414,72 @@ const STREAMING={
   7:['Prime Video','Apple TV+'],8:['Prime Video','Apple TV+','Netflix'],
   9:['MUBI','Criterion Channel'],10:['Prime Video','Netflix','Apple TV+'],
   11:['Prime Video','Apple TV+','Netflix'],12:['MUBI','Criterion Channel'],
-  13:['Prime Video','Apple TV+'],14:['Prime Video'],15:['Prime Video','Apple TV+'],
+  13:['Prime Video','Apple TV+'],14:['Prime Video'],15:['Prime Video'],
   16:['MUBI','Criterion Channel'],17:['Prime Video','Netflix'],18:['Prime Video','Apple TV+'],
-  19:['MUBI','Criterion Channel'],20:['MUBI'],21:['MUBI','Criterion Channel'],22:['MUBI'],
+  19:['Prime Video','Apple TV+'],20:['MUBI'],21:['MUBI','Criterion Channel'],
+  22:['MUBI'],23:['Prime Video','Netflix'],24:['MUBI'],25:['Prime Video','Apple TV+'],
+  26:['Netflix','Apple TV+'],27:['MUBI'],28:['Prime Video','Apple TV+'],
+  29:['Apple TV+','Prime Video'],30:['Prime Video','Apple TV+'],
 };
-const SURL={'MUBI':'https://mubi.com','Prime Video':'https://primevideo.com','Apple TV+':'https://tv.apple.com','Netflix':'https://netflix.com','Criterion Channel':'https://criterionchannel.com'};
+const SU={'MUBI':'https://mubi.com','Prime Video':'https://primevideo.com','Apple TV+':'https://tv.apple.com','Netflix':'https://netflix.com','Criterion Channel':'https://criterionchannel.com'};
 
-// ytId: ID del video YouTube. Aggiorna questi ID con quelli reali trovati su YouTube.
-// Esempio: cerca "Oldboy corridor scene" su YouTube e copia l'ID dall'URL (la parte dopo v=)
 const SCENES=[
-  {id:1, film:'Videodrome',          year:1983,did:'cronenberg',director:'David Cronenberg',  scene:'Il bacio con la televisione',           ratio:'1.85:1',tmdb:11906,ytId:'TgUMZfnCd7o',tags:['body-horror','colore-rosso','surrealismo'],       tl:['#BodyHorror','#ColoreRosso','#Surrealismo'],       kw:['body-horror','colore-rosso','surrealismo'],       intro:'La scena in cui Max Renn bacia lo schermo televisivo — il cui volto di Nicki Brand pulsa come carne viva — è il manifesto visivo del «New Flesh» di Cronenberg. La televisione non è più un medium: è un organismo.',an:{regia:'Cronenberg usa un obiettivo macro per trasformare le trame dello schermo in pelle. Il campo è strettissimo, claustrofobico. Non c\'è prospettiva di fuga.',sceneggiatura:'Il dialogo è eliminato. La scena funziona in silenzio assoluto, lasciando che il corpo parli al posto delle parole. È il trionfo dell\'immagine sulla narrazione.',simbologia:'Lo schermo che diventa carne rappresenta la tesi centrale: i media non riflettono la realtà, la <strong>producono</strong>. Max non guarda la TV — la assorbe e viene assorbito.',produzione:'La protesi fu costruita da Rick Baker con lattice e meccanismi pneumatici che simulavano la respirazione. Tre settimane di test per sincronizzare il respiro al ritmo del montaggio.'}},
-  {id:2, film:'Shining',             year:1980,did:'kubrick',   director:'Stanley Kubrick',   scene:'La sequenza del bagno — Stanza 237',    ratio:'1.33:1',tmdb:694,  ytId:'OiPMagbZm00',tags:['simmetria','colore-rosso','soggettiva'],         tl:['#Simmetria','#ColoreRosso','#Soggettiva'],         kw:['simmetria','colore-rosso','soggettiva'],          intro:'La stanza 237 è la scena di rivelazione più geometricamente precisa della storia del cinema horror. Kubrick la costruisce come una trappola simmetrica — ogni inquadratura è un asse di specchio da cui non si può fuggire.',an:{regia:'Kubrick usa uno zoom lentissimo — quasi impercettibile — che comprime lo spazio psicologicamente prima ancora che accada qualcosa.',sceneggiatura:'King aveva scritto una scena esplicita. Kubrick la trasforma in qualcosa di più angosciante: la bellezza prima dell\'orrore.',simbologia:'Il rosso della vasca non è colore: è premonizione. Kubrick dissemina rosso in ogni scena chiave come un codice subliminale.',produzione:'L\'hotel Overlook fu costruito negli studi di Elstree, Londra. La stanza 237 fu progettata con piastrelle calcolate centimetro per centimetro.'}},
-  {id:3, film:'Mulholland Drive',    year:2001,did:'lynch',     director:'David Lynch',       scene:'Il prologo onirico — Il Jitterbug',      ratio:'1.85:1',tmdb:1018, ytId:null,          tags:['sogno','montaggio','surrealismo'],               tl:['#Sogno','#Montaggio','#Surrealismo'],               kw:['sogno','montaggio','surrealismo'],                intro:'La sequenza iniziale costruisce in 90 secondi l\'intera grammatica onirica del film. Corpi che ballano il jitterbug sovraimpressionati su uno sfondo scarlatto, poi il volo verso i cuscini bianchi.',an:{regia:'Lynch usa la doppia esposizione per materializzare visivamente il concetto di sogno dentro il sogno. Le figure danzanti sono fantasmi di qualcosa che non è ancora accaduto.',sceneggiatura:'Non esiste dialogo. Lynch costruisce emozione attraverso musica, ritmo e colore. La sceneggiatura per questa scena era praticamente vuota.',simbologia:'Il rosso del fondale è l\'inconscio che affiora. Il bianco dei cuscini è la cancellazione, l\'oblio.',produzione:'Le riprese del jitterbug furono girate in un studio separato. L\'effetto di sovraimpressione fu ottenuto otticamente, non in post-produzione.'}},
-  {id:4, film:'Oldboy',              year:2003,did:'park',      director:'Park Chan-wook',    scene:'Il piano sequenza del corridoio',        ratio:'2.35:1',tmdb:670,  ytId:'9NjGMbMFAA0',tags:['piano-sequenza','colore-rosso','violenza-estetica'],tl:['#PianoSequenza','#ColoreRosso','#ViolenzaEstetica'],kw:['piano-sequenza','colore-rosso','violenza-estetica'],intro:'Oh Dae-su da solo contro una ventina di uomini, in un corridoio stretto, senza stacchi di montaggio. Park rifiuta l\'estetica hollywoodiana per mostrare la violenza nella sua natura reale: esaustiva, goffa, brutale.',an:{regia:'La mdp rimane in posizione fissa laterale — scelta anti-spettacolare che trasforma il combattimento in performance teatrale. Nessun taglio, nessuna scorciatoia.',sceneggiatura:'Park aveva originariamente scritto questa come sequenza con stacchi. Decise il piano sequenza durante le prove.',simbologia:'L\'esaurimento progressivo del protagonista è il vero soggetto. Non il trionfo dell\'eroe: la sopravvivenza del corpo.',produzione:'La scena richiese tre giorni di riprese e 17 take completi. Choi Min-sik si allenò per tre settimane. Nessun stuntman.'}},
-  {id:5, film:'Taxi Driver',         year:1976,did:'scorsese',  director:'Martin Scorsese',   scene:'L\'incipit — New York notturna',          ratio:'1.85:1',tmdb:103,  ytId:'Gb-yPLvMEFg',tags:['luce-urbana','soggettiva','colore-rosso'],       tl:['#LuceUrbana','#Soggettiva','#ColoreRosso'],        kw:['luce-urbana','soggettiva','colore-rosso'],         intro:'Il taxi emerge dal vapore come dall\'inferno. Gli occhi di Travis nel retrovisore. I neon rossi che scivolano sul vetro. Scorsese costruisce in due minuti l\'intera cosmologia del film: una città che è uno stato mentale.',an:{regia:'Scorsese usa il punto di vista soggettivo per stabilire che tutto è filtrato dalla percezione distorta di Travis. New York non è la New York reale.',sceneggiatura:'Paul Schrader scrisse la sceneggiatura in dieci giorni di isolamento, dopo una crisi personale.',simbologia:'Il vapore dai tombini fu tinto di rosso con gel sui lampioni. La città letteralmente sanguina.',produzione:'Riprese in luglio 1975, ondata di calore record. De Niro guidò davvero un taxi nei giorni liberi.'}},
-  {id:6, film:'Zombi 2',             year:1979,did:'fulci',     director:'Lucio Fulci',       scene:'Lo squalo contro lo zombie',             ratio:'1.85:1',tmdb:11495,ytId:null,          tags:['body-horror','surrealismo','violenza-estetica'], tl:['#BodyHorror','#Surrealismo','#ViolenzaEstetica'],  kw:['body-horror','surrealismo'],                      intro:'Uno zombie sott\'acqua che combatte uno squalo vivo. Fulci traduce il cinema horror in poesia dell\'assurdo: ridicolo e terrificante insieme, e questa tensione è esattamente il cuore del suo cinema.',an:{regia:'Fulci usa il ralenti per trasformare la violenza in qualcosa di quasi liturgico. Il montaggio alterna grandangolo e primissimo piano con logica onirica.',sceneggiatura:'La scena non esiste nella sceneggiatura originale. Fulci la improvvisò sul set delle Antille.',simbologia:'Lo zombie subacqueo è il cinema di Fulci condensato: il morto che non accetta la morte. L\'acqua è sempre soglia.',produzione:'Lo stunt con lo squalo tigre reale fu eseguito dall\'attrice Ramona Fulton, subacquea professionista.'}},
-  {id:7, film:'Il Padrino',          year:1972,did:'coppola',   director:'F.F. Coppola',      scene:'Il battesimo — montaggio parallelo',     ratio:'1.85:1',tmdb:238,  ytId:'WVJRyUMdDPc',tags:['montaggio','simmetria','violenza-estetica'],     tl:['#Montaggio','#Simmetria','#ViolenzaEstetica'],     kw:['montaggio','simmetria'],                          intro:'Michael Corleone diventa padrino di un bambino mentre i suoi uomini uccidono i capi delle famiglie rivali. Il pezzo di montaggio parallelo più devastante della storia del cinema.',an:{regia:'Gordon Willis usa la luce da pittore fiammingo: il battesimo è illuminato, sacro; le esecuzioni sono scure, notturne.',sceneggiatura:'La scelta di alternare rito sacro con violenza profana non era nel romanzo — è un\'invenzione puramente cinematografica.',simbologia:'Michael mente a Dio in diretta: «Rinuncio a Satana». In quel momento preciso, sta diventando Satana.',produzione:'La sequenza del battesimo fu girata nella basilica di St. Patrick a New York. Il montaggio finale richiese sei settimane.'}},
-  {id:8, film:'Blade Runner',        year:1982,did:'scott',     director:'Ridley Scott',      scene:'Il monologo delle lacrime nella pioggia',ratio:'2.39:1',tmdb:78,   ytId:'NoAzpa1x7jU',tags:['luce-urbana','tempo','soggettiva'],              tl:['#LuceUrbana','#Tempo','#Soggettiva'],              kw:['luce-urbana','tempo'],                            intro:'«Ho visto cose che voi umani non potreste immaginare». Roy Batty muore sotto la pioggia, e il suo monologo — improvvisato da Rutger Hauer la notte prima delle riprese — è forse il momento più commovente della fantascienza.',an:{regia:'Scott inquadra Roy dall\'alto mentre muore, poi inverte con un controcampo su Deckard dal basso. La regia ribalta il rapporto di potere.',sceneggiatura:'Hauer riscrisse quasi interamente il monologo la notte prima. Eliminò tutto tranne l\'essenziale: «All those moments will be lost in time, like tears in rain.»',simbologia:'La colomba bianca che Roy libera nel momento della morte è l\'unico elemento di speranza in un film completamente grigio.',produzione:'Hauer aveva lavorato tutta la notte sul testo. La scena fu girata in due take. Il secondo è quello nel film.'}},
-  {id:9, film:'Ladri di Biciclette', year:1948,did:'desica',    director:'Vittorio De Sica',  scene:'Il finale — padre e figlio tra la folla',ratio:'1.37:1',tmdb:15474,ytId:null,          tags:['neorealismo','soggettiva'],                     tl:['#Neorealismo','#Soggettiva'],                      kw:['neorealismo'],                                    intro:'Antonio Ricci ruba una bicicletta davanti agli occhi di suo figlio Bruno. Uno dei finali più devastanti del cinema: nessuna redenzione, nessuna morale. Solo la folla che inghiotte un uomo diventato ciò che odiava.',an:{regia:'De Sica non usa musica. La folla reale di Porta Portese diventa il giudice silenzioso.',sceneggiatura:'Zavattini e De Sica scelsero la verità: nella Roma del dopoguerra, non c\'era lieto fine.',simbologia:'Bruno che prende la mano del padre piangente è il cuore del neorealismo: l\'infanzia come specchio impietoso dell\'Italia adulta.',produzione:'Lamberto Maggiorani era un operaio reale. Enzo Staiola (Bruno) fu scelto per strada.'}},
-  {id:10,film:'Inception',           year:2010,did:'nolan',     director:'Christopher Nolan', scene:'Il corridoio a gravità zero',            ratio:'2.39:1',tmdb:27205,ytId:'x9bqA1ZNfHc',tags:['tempo','piano-sequenza','simmetria'],            tl:['#Tempo','#PianoSequenza','#Simmetria'],            kw:['tempo','piano-sequenza','simmetria'],             intro:'Arthur combatte in un corridoio che ruota su se stesso mentre la gravità collassa. Nolan costruisce una delle sequenze d\'azione più fisicamente impossibili mai realizzate — senza CGI, con attori veri.',an:{regia:'Nolan rifiuta il CGI. La mdp è montata sulla struttura rotante insieme agli attori: quello che vedi è reale.',sceneggiatura:'Come mostrare che la gravità è anomala senza spiegarlo didatticamente? La risposta è nella regia, non nel dialogo.',simbologia:'Il corridoio che ruota è la mente di Fischer che resiste — metafora visiva perfetta dell\'inconscio come campo di battaglia.',produzione:'Il corridoio rotante fu costruito a Cardington, UK. Il set pesava diverse tonnellate. Le riprese durarono tre settimane.'}},
-  {id:11,film:'Pulp Fiction',        year:1994,did:'tarantino', director:'Quentin Tarantino', scene:'La danza — Jack Rabbit Slim\'s',          ratio:'2.39:1',tmdb:680,  ytId:'VBqRJ0DUjFg',tags:['violenza-estetica','montaggio','colore-rosso'], tl:['#ViolenzaEstetica','#Montaggio','#ColoreRosso'],   kw:['montaggio','violenza-estetica','colore-rosso'],   intro:'Vincent e Mia ballano il twist su Chuck Berry. Tarantino trasforma un momento banale in cinema puro: tensione sessuale, pericolo imminente, gioia genuina. Il cinema come citazione che supera l\'originale.',an:{regia:'Una mdp quasi immobile, come se non volesse disturbare il momento. La camera osserva, non interviene.',sceneggiatura:'La scena è una pausa nel ritmo della violenza — un respiro prima della tempesta.',simbologia:'Il twist degli anni \'60 in un ristorante anni \'50, in un film del 1994: Tarantino collassa il tempo pop.',produzione:'Il concorso di ballo era un vero concorso. Uma Thurman e John Travolta gareggiavano realmente.'}},
-  {id:12,film:'8½',                  year:1963,did:'fellini',   director:'Federico Fellini',  scene:'La sequenza dell\'harem',                 ratio:'1.85:1',tmdb:421,  ytId:null,          tags:['sogno','surrealismo','soggettiva'],              tl:['#Sogno','#Surrealismo','#Soggettiva'],             kw:['sogno','surrealismo'],                            intro:'Guido Anselmi sogna di essere il padrone di un harem dove tutte le donne della sua vita convivono in armonia. La sequenza più autobiograficamente onesta e visivamente sfarzosa del cinema italiano.',an:{regia:'Costumi senza tempo, epoche mescolate. La mdp segue il ritmo della musica di Rota piuttosto che la logica narrativa.',sceneggiatura:'La scena nacque da un sogno reale di Fellini, annotato sul suo taccuino.',simbologia:'L\'harem è la mente di un regista che vuole controllare tutto — e che viene sommerso da ciò che ha creato.',produzione:'Mastroianni fu scelto come alter ego fisico di Fellini: stesso peso, stessa altezza.'}},
-  {id:13,film:'eXistenZ',            year:1999,did:'cronenberg',director:'David Cronenberg',  scene:'Il porto di gioco biologico',            ratio:'1.85:1',tmdb:2758, ytId:null,          tags:['body-horror','surrealismo'],                    tl:['#BodyHorror','#Surrealismo'],                     kw:['body-horror','surrealismo'],                      intro:'Una console videoludica organica che si innesta nella spina dorsale attraverso un\'apertura nel corpo. Cronenberg porta il «New Flesh» di Videodrome alle sue conseguenze logiche: la tecnologia è già carne.',an:{regia:'Cronenberg usa grandangoli estremi per distorcere le proporzioni degli oggetti organici, rendendoli al tempo stesso repellenti e sensuali. La prospettiva falsa crea disorientamento.',sceneggiatura:'Il copione esplora una domanda semplice: cosa succederebbe se i videogiochi fossero corpi? La risposta narrativa è il film intero.',simbologia:'Il porto di gioco non è una metafora: <strong>è</strong> la tesi. La tecnologia non è uno strumento, è un prolungamento biologico dell\'identità.',produzione:'Le console organiche furono costruite da un team di prostetici usando silicone, intestini animali e componenti elettronici reali.'}},
-  {id:14,film:'A History of Violence',year:2005,did:'cronenberg',director:'David Cronenberg', scene:'La scena del sesso sulle scale',          ratio:'2.35:1',tmdb:9532, ytId:null,          tags:['violenza-estetica','soggettiva'],               tl:['#ViolenzaEstetica','#Soggettiva'],                kw:['violenza-estetica','body-horror'],                intro:'Tom Stall e sua moglie fanno sesso violento sulle scale di casa, subito dopo la rivelazione della sua vera identità. Cronenberg usa l\'atto sessuale per esplorare l\'impossibilità di separare l\'uomo dalla violenza che porta dentro.',an:{regia:'Cronenberg mantiene la macchina da presa in posizione fissa, guardando dall\'alto. Nessuna intimità nel senso tradizionale — solo la meccanica di due persone che si sfidano attraverso il corpo.',sceneggiatura:'La scena non è nel fumetto originale. Cronenberg la aggiunse per esplicitare una domanda: può il desiderio sopravvivere alla verità?',simbologia:'Il sesso violento come rinegoziazione del potere: Edie non perdona Tom, lo usa. La violenza entra nella camera da letto e non ne uscirà più.',produzione:'Viggo Mortensen e Maria Bello girarono la scena in un solo giorno. Cronenberg non girò prove — volle che il disagio fosse reale.'}},
-  {id:15,film:'La Promessa dell\'Assassino',year:2007,did:'cronenberg',director:'David Cronenberg',scene:'La scena del bagno turco',        ratio:'2.35:1',tmdb:4512, ytId:null,          tags:['violenza-estetica','soggettiva','piano-sequenza'],tl:['#ViolenzaEstetica','#Soggettiva','#PianoSequenza'],kw:['violenza-estetica','body-horror'],               intro:'Nikolai, completamente nudo in una sauna, viene attaccato da due sicari. La scena è probabilmente il più elaborato studio sulla vulnerabilità fisica mai messo in scena nel cinema d\'azione contemporaneo.',an:{regia:'La nudità totale non è provocazione: è la scelta più radicale possibile. Toglie allo spettatore il comfort del personaggio-corazza. Nikolai è carne, null\'altro.',sceneggiatura:'Steve Knight scrisse la scena sapendo che sarebbe stata girata senza stunt. Viggo Mortensen insistette per interpretarla interamente in prima persona.',simbologia:'Il vapore del bagno turco, i corpi nudi, i coltelli: Cronenberg restituisce alla violenza la sua natura biologica. Non c\'è regia, c\'è sopravvivenza.',produzione:'Mortensen si allenò per mesi con veri lottatori. La scena fu girata in tre giorni in una sauna reale. Alcune ferite furono accidentali.'}},
-  {id:16,film:'Umberto D.',          year:1952,did:'desica',    director:'Vittorio De Sica',  scene:'La mattina di Maria',                    ratio:'1.37:1',tmdb:11838,ytId:null,          tags:['neorealismo','soggettiva'],                     tl:['#Neorealismo','#Soggettiva'],                     kw:['neorealismo'],                                    intro:'La domestica Maria si alza al mattino, macina il caffè, schiaccia le formiche, scopre di essere incinta. De Sica filma il quotidiano con una precisione documentaristica che trasforma l\'ordinario in poesia.',an:{regia:'De Sica usa una serie di dettagli visivi — il piede che schiaccia la formiche, le mani che macinano — per costruire un ritratto che non ha bisogno di parole. Il cinema come osservazione pura.',sceneggiatura:'Zavattini disse che questa era la sequenza di cui era più orgoglioso. Non succede niente di narrativo — eppure è cinematograficamente perfetta.',simbologia:'Maria e Umberto condividono la stessa precarietà esistenziale. La scena del mattino è il contraltare umano della storia del vecchio: due solitudini parallele in una Roma che non li vede.',produzione:'Maria Pia Casilio, la giovane attrice, fu trovata da De Sica in una scuola di recitazione dove non aveva mai recitato. La sua naturalezza era totale.'}},
-  {id:17,film:'Alien',               year:1979,did:'scott',     director:'Ridley Scott',      scene:'Il chestburster',                        ratio:'2.35:1',tmdb:348,  ytId:'51xBbO1EjHM',tags:['body-horror','surrealismo','soggettiva'],       tl:['#BodyHorror','#Surrealismo','#Soggettiva'],       kw:['body-horror','surrealismo','violenza-estetica'],  intro:'La creatura esplode dal petto di Kane a tavola. Una delle scene di shock più studiate del cinema: il suo potere non deriva dal gore ma dalla violazione assoluta di ogni confine corporeo.',an:{regia:'Scott costruisce la scena come una cena normale, abbassando deliberatamente la guardia dello spettatore. Il ritmo è lento, quasi comico, poi il corpo di Kane si trasforma in campo di battaglia.',sceneggiatura:'Dan O\'Bannon scrisse la scena ispirandosi a un incubo ricorrente di violazione corporea. Il titolo originale del film era «Star Beast» — il corpo come territorio alieno.',simbologia:'Il chestburster è una nascita — violenta, non richiesta. H.R. Giger aveva progettato l\'alien come pura sessualità freudiana. Scott lo usò per esplorare la paura maschile della maternità.',produzione:'Gli attori non sapevano cosa sarebbe successo. Il sangue artificiale fu sparato con una pompa nascosta sotto il tavolo. Le reazioni di orrore genuino sono quelle nel film.'}},
-  {id:18,film:'Quei Bravi Ragazzi',  year:1990,did:'scorsese',  director:'Martin Scorsese',   scene:'Il piano sequenza del Copacabana',       ratio:'1.85:1',tmdb:769,  ytId:'UA6M2IKqhNQ',tags:['piano-sequenza','luce-urbana','montaggio'],     tl:['#PianoSequenza','#LuceUrbana','#Montaggio'],      kw:['piano-sequenza','luce-urbana','montaggio'],       intro:'Henry Hill entra nel Copacabana dal retro con Karen, percorre cucine e corridoi, supera decine di persone, fino al loro tavolo sul palco. Il piano sequenza come seduzione — dello spettatore insieme a Karen.',an:{regia:'Scorsese usa la steadicam in modo opposto a Kubrick: non per creare angoscia ma per creare euforia. La macchina da presa è complice di Henry, non osservatore neutro.',sceneggiatura:'Nicholas Pileggi scrisse la scena come semplice descrizione di un ingresso. Scorsese la trasformò nel manifesto visivo dell\'attrazione per la vita criminale.',simbologia:'Il tavolo materializzato dal nulla è la promessa della mafia: il mondo si piega per te. Karen è sedotta non dall\'uomo ma dal <strong>potere</strong>.',produzione:'Ray Liotta e Lorraine Bracco girarono la scena in un solo take. Il Copacabana reale fu usato per le riprese. Le centinaia di comparse furono istruite una per una.'}},
-  {id:19,film:'Il Padrino Parte II', year:1974,did:'coppola',   director:'F.F. Coppola',      scene:'La giovinezza di Vito a New York',       ratio:'1.78:1',tmdb:242,  ytId:null,          tags:['montaggio','tempo','soggettiva'],               tl:['#Montaggio','#Tempo','#Soggettiva'],              kw:['montaggio','tempo'],                             intro:'Il giovane Vito Corleone arriva a New York a inizio Novecento e compie il suo primo atto di violenza calcolata. Coppola costruisce il personaggio del Padrino attraverso le sue origini — mostrando come nasce un mostro.',an:{regia:'Gordon Willis usa una palette seppia e granulare per le scene del passato, creando una distanza temporale visiva. Il presente di Michael e il passato di Vito si rispondono per contrasto.',sceneggiatura:'La struttura parallela del film — Michael al presente, Vito al passato — era considerata infilmabile. Coppola la impose contro il parere della produzione.',simbologia:'Il giovane Vito uccide Fanucci durante la festa di quartiere: la violenza si nasconde nella celebrazione comunitaria. È il DNA della famiglia Corleone.',produzione:'Robert De Niro imparò il dialetto siciliano di Corleone per il ruolo. Il personaggio di Vito è più giovane della sua età reale — recitare la giovinezza di un altro attore fu la sfida maggiore.'}},
-  {id:20,film:'Stalker',             year:1979,did:'tarkovsky', director:'Andrei Tarkovsky',  scene:'Il viaggio nella Zona — dissolvenza sepia',ratio:'1.37:1',tmdb:11185,ytId:null,         tags:['sogno','tempo','soggettiva'],                   tl:['#Sogno','#Tempo','#Soggettiva'],                  kw:['sogno','tempo'],                                  intro:'Lo Stalker accompagna due uomini nella Zona, territorio proibito dove si dice che i desideri si avverino. Tarkovsky usa il passaggio dal bianco e nero al colore per marcare una soglia ontologica: il confine tra il mondo ordinario e quello del significato.',an:{regia:'Il bianco e nero del mondo esterno cede al seppia della Zona in una singola dissolvenza. Non è un effetto — è una dichiarazione filosofica: entriamo in un diverso regime di realtà.',sceneggiatura:'Il romanzo dei fratelli Strugatsky era fantascienza. Tarkovsky eliminò quasi tutto il plot per sostituirlo con tempo puro — piani lunghissimi che filmano l\'attesa.',simbologia:'La Zona non è un luogo fisico: è lo spazio interiore dove le certezze collassano. Chi vuole entrare è già perduto — perché rivelerà ciò che davvero desidera.',produzione:'Il film fu girato due volte. La prima pellicola fu rovinata in laboratorio. Tarkovsky ricominciò da zero, con un budget ridotto. Questa versione è la seconda.'}},
-  {id:21,film:'Persona',             year:1966,did:'bergman',   director:'Ingmar Bergman',    scene:'La fusione dei volti',                   ratio:'1.37:1',tmdb:68718,ytId:null,          tags:['soggettiva','surrealismo','tempo'],              tl:['#Soggettiva','#Surrealismo','#Tempo'],            kw:['sogno','surrealismo'],                            intro:'Il volto dell\'attrice Elisabeth Vogler e quello dell\'infermiera Alma si fondono in un\'unica immagine. Bergman compie qui l\'atto cinematograficamente più radicale della sua carriera: sciogliere i confini dell\'identità individuale.',an:{regia:'Bergman sovrappone otticamente i due profili fino a renderli indistinguibili. Non è un trucco: è la realizzazione visiva di una tesi psicologica.',sceneggiatura:'Il copione fu scritto da Bergman durante una malattia. La fusione dei volti non era prevista — fu una scoperta in sala di montaggio.',simbologia:'Chi assorbe chi? Bergman lascia la domanda aperta deliberatamente. L\'identità non è un dato fisso — è una negoziazione continua.',produzione:'Bibi Andersson e Liv Ullmann divennero amiche inseparabili durante le riprese. Bergman disse che il film trattava «di qualcosa di cui non potevo parlare altrimenti».'}},
-  {id:22,film:'In the Mood for Love',year:2000,did:'wongkarwai',director:'Wong Kar-wai',      scene:'Il corridoio — il rallentatore del desiderio',ratio:'1.66:1',tmdb:11216,ytId:null,      tags:['tempo','soggettiva','colore-rosso'],             tl:['#Tempo','#Soggettiva','#ColoreRosso'],            kw:['tempo','colore-rosso'],                           intro:'Maggie Cheung scende le scale in slow motion per comprare dei noodles. Wong Kar-wai usa il rallentatore non come effetto ma come strumento epistemologico: rallentare il tempo è l\'unico modo per vedere ciò che normalmente sfugge.',an:{regia:'Wong Kar-wai usò la tecnica dello step-printing — stampare ogni fotogramma più volte — per ottenere un rallentamento organico, diverso dal digitale. Il movimento è reale, è il tempo a essere distorto.',sceneggiatura:'Non c\'è sceneggiatura scritta. Wong Kar-wai girò per 15 mesi improvvisando. La struttura narrativa fu trovata in fase di montaggio.',simbologia:'Il rosso del qipao di Maggie Cheung non è decorazione: è emozione codificata. Ogni variazione di colore dell\'abito rappresenta uno stato interiore diverso.',produzione:'Il film fu girato in spazi così angusti che la troupe doveva stare fuori campo appesa alle pareti. Maggie Cheung indossò oltre venti qipao diversi durante le riprese.'}},
+  {id:1, film:'Videodrome',             year:1983,did:'cronenberg',director:'David Cronenberg',  scene:'Il bacio con la televisione',             ratio:'1.85:1',tmdb:11906,tags:['body-horror','colore-rosso','surrealismo'],        tl:['#BodyHorror','#ColoreRosso','#Surrealismo'],       kw:['body-horror','colore-rosso','surrealismo'],       intro:'La scena in cui Max Renn bacia lo schermo televisivo — il cui volto di Nicki Brand pulsa come carne viva — è il manifesto visivo del «New Flesh» di Cronenberg. La televisione non è più un medium: è un organismo.',an:{regia:'Cronenberg usa un obiettivo macro per trasformare le trame dello schermo in pelle. Il campo è strettissimo, claustrofobico.',sceneggiatura:'Il dialogo è eliminato. La scena funziona in silenzio assoluto — il trionfo dell\'immagine sulla narrazione.',simbologia:'Lo schermo che diventa carne rappresenta la tesi centrale: i media non riflettono la realtà, la <strong>producono</strong>.',produzione:'La protesi fu costruita da Rick Baker con lattice e meccanismi pneumatici. Tre settimane di test per sincronizzare il respiro al montaggio.'}},
+  {id:2, film:'Shining',                year:1980,did:'kubrick',   director:'Stanley Kubrick',   scene:'La sequenza del bagno — Stanza 237',      ratio:'1.33:1',tmdb:694,  tags:['simmetria','colore-rosso','soggettiva'],          tl:['#Simmetria','#ColoreRosso','#Soggettiva'],         kw:['simmetria','colore-rosso','soggettiva'],          intro:'La stanza 237 è la scena di rivelazione più geometricamente precisa della storia del cinema horror. Kubrick la costruisce come una trappola simmetrica — ogni inquadratura è un asse di specchio da cui non si può fuggire.',an:{regia:'Kubrick usa uno zoom lentissimo che comprime lo spazio psicologicamente prima ancora che accada qualcosa.',sceneggiatura:'King aveva scritto una scena esplicita. Kubrick la trasforma: la bellezza prima dell\'orrore.',simbologia:'Il rosso della vasca non è colore: è premonizione. Un codice subliminale disseminato in tutto il film.',produzione:'L\'hotel Overlook fu costruito negli studi di Elstree, Londra. La stanza 237 progettata centimetro per centimetro.'}},
+  {id:3, film:'Mulholland Drive',       year:2001,did:'lynch',     director:'David Lynch',       scene:'Il prologo onirico — Il Jitterbug',        ratio:'1.85:1',tmdb:1018, tags:['sogno','montaggio','surrealismo'],                tl:['#Sogno','#Montaggio','#Surrealismo'],               kw:['sogno','montaggio','surrealismo'],                intro:'La sequenza iniziale costruisce in 90 secondi l\'intera grammatica onirica del film. Corpi che ballano il jitterbug sovraimpressionati su uno sfondo scarlatto, poi il volo verso i cuscini bianchi.',an:{regia:'Lynch usa la doppia esposizione per materializzare il sogno dentro il sogno. Le figure danzanti sono fantasmi di qualcosa non ancora accaduto.',sceneggiatura:'Non esiste dialogo. Lynch costruisce emozione attraverso musica, ritmo e colore. La sceneggiatura era praticamente vuota.',simbologia:'Il rosso del fondale è l\'inconscio che affiora. Il bianco dei cuscini è la cancellazione, l\'oblio.',produzione:'Le riprese del jitterbug furono girate in un studio separato. L\'effetto di sovraimpressione fu ottenuto otticamente.'}},
+  {id:4, film:'Oldboy',                 year:2003,did:'park',      director:'Park Chan-wook',    scene:'Il piano sequenza del corridoio',          ratio:'2.35:1',tmdb:670,  tags:['piano-sequenza','colore-rosso','violenza-estetica'],tl:['#PianoSequenza','#ColoreRosso','#ViolenzaEstetica'],kw:['piano-sequenza','colore-rosso','violenza-estetica'],intro:'Oh Dae-su da solo contro una ventina di uomini, in un corridoio stretto, senza stacchi di montaggio. Park rifiuta l\'estetica hollywoodiana per mostrare la violenza nella sua natura reale: esaustiva, goffa, brutale.',an:{regia:'La mdp rimane in posizione fissa laterale — scelta anti-spettacolare che trasforma il combattimento in performance teatrale.',sceneggiatura:'Park aveva originariamente scritto questa come sequenza con stacchi. Decise il piano sequenza durante le prove.',simbologia:'L\'esaurimento progressivo del protagonista è il vero soggetto. Non il trionfo dell\'eroe: la sopravvivenza del corpo.',produzione:'La scena richiese tre giorni di riprese e 17 take. Choi Min-sik si allenò per tre settimane. Nessun stuntman.'}},
+  {id:5, film:'Taxi Driver',            year:1976,did:'scorsese',  director:'Martin Scorsese',   scene:'L\'incipit — New York notturna',            ratio:'1.85:1',tmdb:103,  tags:['luce-urbana','soggettiva','colore-rosso'],        tl:['#LuceUrbana','#Soggettiva','#ColoreRosso'],        kw:['luce-urbana','soggettiva','colore-rosso'],         intro:'Il taxi emerge dal vapore come dall\'inferno. Gli occhi di Travis nel retrovisore. I neon rossi che scivolano sul vetro. Scorsese costruisce in due minuti l\'intera cosmologia del film: una città che è uno stato mentale.',an:{regia:'Scorsese usa il punto di vista soggettivo per stabilire che tutto è filtrato dalla percezione distorta di Travis.',sceneggiatura:'Paul Schrader scrisse la sceneggiatura in dieci giorni di isolamento. La voce narrante fu scritta quasi in stato alterato.',simbologia:'Il vapore dai tombini fu tinto di rosso con gel sui lampioni. La città letteralmente sanguina.',produzione:'Riprese in luglio 1975, ondata di calore record. De Niro guidò davvero un taxi nei giorni liberi.'}},
+  {id:6, film:'Zombi 2',                year:1979,did:'fulci',     director:'Lucio Fulci',       scene:'Lo squalo contro lo zombie',               ratio:'1.85:1',tmdb:11495,tags:['body-horror','surrealismo','violenza-estetica'],  tl:['#BodyHorror','#Surrealismo','#ViolenzaEstetica'],  kw:['body-horror','surrealismo'],                      intro:'Uno zombie sott\'acqua che combatte uno squalo vivo. Fulci traduce il cinema horror in poesia dell\'assurdo: ridicolo e terrificante insieme, e questa tensione è esattamente il cuore del suo cinema.',an:{regia:'Fulci usa il ralenti per trasformare la violenza in qualcosa di quasi liturgico.',sceneggiatura:'La scena non esiste nella sceneggiatura originale. Fulci la improvvisò sul set delle Antille.',simbologia:'Lo zombie subacqueo è il cinema di Fulci condensato: il morto che non accetta la morte. L\'acqua è sempre soglia.',produzione:'Lo stunt fu eseguito da Ramona Fulton, subacquea professionista. Lo squalo era vivo.'}},
+  {id:7, film:'Il Padrino',             year:1972,did:'coppola',   director:'F.F. Coppola',      scene:'Il battesimo — montaggio parallelo',       ratio:'1.85:1',tmdb:238,  tags:['montaggio','simmetria','violenza-estetica'],      tl:['#Montaggio','#Simmetria','#ViolenzaEstetica'],     kw:['montaggio','simmetria'],                          intro:'Michael Corleone diventa padrino di un bambino mentre i suoi uomini uccidono i capi delle famiglie rivali. Il pezzo di montaggio parallelo più devastante della storia del cinema.',an:{regia:'Gordon Willis usa la luce da pittore fiammingo: il battesimo sacro; le esecuzioni scure, notturne.',sceneggiatura:'La scelta di alternare rito sacro con violenza profana non era nel romanzo — è un\'invenzione puramente cinematografica.',simbologia:'Michael mente a Dio in diretta: «Rinuncio a Satana». In quel momento preciso, sta diventando Satana.',produzione:'La sequenza fu girata nella basilica di St. Patrick a New York. Il montaggio finale richiese sei settimane.'}},
+  {id:8, film:'Blade Runner',           year:1982,did:'scott',     director:'Ridley Scott',      scene:'Il monologo delle lacrime nella pioggia',  ratio:'2.39:1',tmdb:78,   tags:['luce-urbana','tempo','soggettiva'],               tl:['#LuceUrbana','#Tempo','#Soggettiva'],              kw:['luce-urbana','tempo'],                            intro:'«Ho visto cose che voi umani non potreste immaginare». Roy Batty muore sotto la pioggia, e il suo monologo — improvvisato da Rutger Hauer la notte prima — è forse il momento più commovente della fantascienza.',an:{regia:'Scott inquadra Roy dall\'alto mentre muore, poi inverte: la regia ribalta il rapporto di potere — il «mostro» diventa il saggio.',sceneggiatura:'Hauer riscrisse il monologo la notte prima. Eliminò tutto tranne: «All those moments will be lost in time, like tears in rain.»',simbologia:'La colomba bianca che Roy libera è l\'unico elemento di speranza in un film completamente grigio.',produzione:'Hauer lavorò tutta la notte sul testo. La scena fu girata in due take. Il secondo è quello nel film.'}},
+  {id:9, film:'Ladri di Biciclette',    year:1948,did:'desica',    director:'Vittorio De Sica',  scene:'Il finale — padre e figlio tra la folla',  ratio:'1.37:1',tmdb:15474,tags:['neorealismo','soggettiva'],                       tl:['#Neorealismo','#Soggettiva'],                      kw:['neorealismo'],                                    intro:'Antonio Ricci ruba una bicicletta davanti agli occhi di suo figlio Bruno. Uno dei finali più devastanti del cinema: nessuna redenzione, nessuna morale. Solo la folla che inghiotte un uomo diventato ciò che odiava.',an:{regia:'De Sica non usa musica. La folla reale di Porta Portese diventa il giudice silenzioso.',sceneggiatura:'Zavattini e De Sica scelsero la verità: nella Roma del dopoguerra, non c\'era lieto fine.',simbologia:'Bruno che prende la mano del padre piangente è il cuore del neorealismo: l\'infanzia come specchio dell\'Italia adulta.',produzione:'Lamberto Maggiorani era un operaio reale. Enzo Staiola (Bruno) fu scelto per strada.'}},
+  {id:10,film:'Inception',              year:2010,did:'nolan',     director:'Christopher Nolan', scene:'Il corridoio a gravità zero',              ratio:'2.39:1',tmdb:27205,tags:['tempo','piano-sequenza','simmetria'],              tl:['#Tempo','#PianoSequenza','#Simmetria'],            kw:['tempo','piano-sequenza','simmetria'],             intro:'Arthur combatte in un corridoio che ruota su se stesso mentre la gravità collassa. Nolan costruisce una delle sequenze d\'azione più fisicamente impossibili mai realizzate — senza CGI.',an:{regia:'Nolan rifiuta il CGI. La mdp è montata sulla struttura rotante con gli attori: quello che vedi è reale.',sceneggiatura:'Come mostrare che la gravità è anomala senza spiegarlo? La risposta è nella regia, non nel dialogo.',simbologia:'Il corridoio che ruota è la mente di Fischer che resiste — metafora dell\'inconscio come campo di battaglia.',produzione:'Il corridoio rotante fu costruito a Cardington, UK. Pesava diverse tonnellate. Tre settimane di riprese.'}},
+  {id:11,film:'Pulp Fiction',           year:1994,did:'tarantino', director:'Quentin Tarantino', scene:'La danza — Jack Rabbit Slim\'s',            ratio:'2.39:1',tmdb:680,  tags:['violenza-estetica','montaggio','colore-rosso'],  tl:['#ViolenzaEstetica','#Montaggio','#ColoreRosso'],   kw:['montaggio','violenza-estetica','colore-rosso'],   intro:'Vincent e Mia ballano il twist su Chuck Berry. Tarantino trasforma un momento banale in cinema puro: tensione sessuale, pericolo imminente, gioia genuina.',an:{regia:'Una mdp quasi immobile, come se non volesse disturbare il momento. La camera osserva, non interviene.',sceneggiatura:'La scena è una pausa nel ritmo della violenza — un respiro prima della tempesta.',simbologia:'Il twist degli anni \'60 in un ristorante anni \'50, nel 1994: Tarantino collassa il tempo pop.',produzione:'Il concorso di ballo era un vero concorso. Thurman e Travolta gareggiavano realmente.'}},
+  {id:12,film:'8½',                     year:1963,did:'fellini',   director:'Federico Fellini',  scene:'La sequenza dell\'harem',                   ratio:'1.85:1',tmdb:421,  tags:['sogno','surrealismo','soggettiva'],               tl:['#Sogno','#Surrealismo','#Soggettiva'],             kw:['sogno','surrealismo'],                            intro:'Guido Anselmi sogna di essere il padrone di un harem dove tutte le donne della sua vita convivono in armonia. La sequenza più autobiograficamente onesta e visivamente sfarzosa del cinema italiano.',an:{regia:'Costumi senza tempo, epoche mescolate. La mdp segue il ritmo della musica di Rota, non la logica narrativa.',sceneggiatura:'La scena nacque da un sogno reale di Fellini, annotato sul suo taccuino.',simbologia:'L\'harem è la mente di un regista che vuole controllare tutto e che viene sommerso da ciò che ha creato.',produzione:'Mastroianni fu scelto come alter ego fisico di Fellini: stesso peso, stessa altezza.'}},
+  {id:13,film:'eXistenZ',               year:1999,did:'cronenberg',director:'David Cronenberg',  scene:'Il porto di gioco biologico',              ratio:'1.85:1',tmdb:2758, tags:['body-horror','surrealismo'],                    tl:['#BodyHorror','#Surrealismo'],                     kw:['body-horror','surrealismo'],                      intro:'Una console videoludica organica che si innesta nella spina dorsale. Cronenberg porta il «New Flesh» alle sue conseguenze logiche: la tecnologia è già carne.',an:{regia:'Grandangoli estremi per distorcere le proporzioni degli oggetti organici, rendendoli repellenti e sensuali insieme.',sceneggiatura:'Il copione esplora una domanda semplice: cosa succederebbe se i videogiochi fossero corpi?',simbologia:'Il porto di gioco non è una metafora: è la tesi. La tecnologia è un prolungamento biologico dell\'identità.',produzione:'Le console organiche furono costruite con silicone, intestini animali e componenti elettronici reali.'}},
+  {id:14,film:'A History of Violence',  year:2005,did:'cronenberg',director:'David Cronenberg',  scene:'La scena del sesso sulle scale',           ratio:'2.35:1',tmdb:9532, tags:['violenza-estetica','soggettiva'],               tl:['#ViolenzaEstetica','#Soggettiva'],                kw:['violenza-estetica','body-horror'],                intro:'Tom Stall e sua moglie fanno sesso violento sulle scale di casa, subito dopo la rivelazione della sua vera identità. Cronenberg usa l\'atto sessuale per esplorare l\'impossibilità di separare l\'uomo dalla violenza che porta dentro.',an:{regia:'La mdp rimane fissa dall\'alto. Nessuna intimità tradizionale — solo la meccanica di due persone che si sfidano attraverso il corpo.',sceneggiatura:'La scena non è nel fumetto originale. Cronenberg la aggiunse per esplicitare: può il desiderio sopravvivere alla verità?',simbologia:'Il sesso violento come rinegoziazione del potere. La violenza entra nella camera da letto e non ne uscirà più.',produzione:'Viggo Mortensen e Maria Bello girarono la scena in un solo giorno. Cronenberg volle che il disagio fosse reale.'}},
+  {id:15,film:'La Promessa dell\'Assassino',year:2007,did:'cronenberg',director:'David Cronenberg',scene:'La scena del bagno turco',             ratio:'2.35:1',tmdb:4512, tags:['violenza-estetica','piano-sequenza'],            tl:['#ViolenzaEstetica','#PianoSequenza'],             kw:['violenza-estetica','body-horror'],                intro:'Nikolai, completamente nudo in una sauna, viene attaccato da due sicari. Il più elaborato studio sulla vulnerabilità fisica nel cinema d\'azione contemporaneo.',an:{regia:'La nudità totale non è provocazione: toglie allo spettatore il comfort del personaggio-corazza. Nikolai è carne, null\'altro.',sceneggiatura:'Steve Knight scrisse la scena sapendo che sarebbe stata girata senza stunt. Mortensen insistette per interpretarla interamente.',simbologia:'Il vapore, i corpi nudi, i coltelli: Cronenberg restituisce alla violenza la sua natura biologica. Non c\'è regia — c\'è sopravvivenza.',produzione:'Mortensen si allenò per mesi con lottatori. La scena fu girata in tre giorni in una sauna reale. Alcune ferite furono accidentali.'}},
+  {id:16,film:'Umberto D.',             year:1952,did:'desica',    director:'Vittorio De Sica',  scene:'La mattina di Maria',                      ratio:'1.37:1',tmdb:11838,tags:['neorealismo','soggettiva'],                       tl:['#Neorealismo','#Soggettiva'],                      kw:['neorealismo'],                                    intro:'La domestica Maria si alza al mattino, macina il caffè, schiaccia le formiche, scopre di essere incinta. De Sica filma il quotidiano con precisione documentaristica che trasforma l\'ordinario in poesia.',an:{regia:'Una serie di dettagli visivi — il piede che schiaccia le formiche, le mani che macinano — costruisce un ritratto senza parole. Cinema come osservazione pura.',sceneggiatura:'Zavattini disse che questa era la sequenza di cui era più orgoglioso. Non succede niente di narrativo — eppure è cinematograficamente perfetta.',simbologia:'Maria e Umberto condividono la stessa precarietà. La scena del mattino è il contraltare umano della storia del vecchio.',produzione:'Maria Pia Casilio fu trovata in una scuola di recitazione dove non aveva mai recitato. La sua naturalezza era totale.'}},
+  {id:17,film:'Alien',                  year:1979,did:'scott',     director:'Ridley Scott',      scene:'Il chestburster',                          ratio:'2.35:1',tmdb:348,  tags:['body-horror','surrealismo'],                    tl:['#BodyHorror','#Surrealismo'],                     kw:['body-horror','surrealismo'],                      intro:'La creatura esplode dal petto di Kane a tavola. Una delle scene di shock più studiate del cinema: il potere non deriva dal gore ma dalla violazione assoluta di ogni confine corporeo.',an:{regia:'Scott costruisce la scena come una cena normale, abbassando deliberatamente la guardia. Il ritmo è lento, quasi comico, poi il corpo si trasforma in campo di battaglia.',sceneggiatura:'Dan O\'Bannon scrisse la scena ispirandosi a un incubo ricorrente di violazione corporea.',simbologia:'Il chestburster è una nascita violenta, non richiesta. Alien come pura sessualità freudiana. Scott esplorò la paura maschile della maternità.',produzione:'Gli attori non sapevano cosa sarebbe successo. Il sangue fu sparato con una pompa nascosta. Le reazioni di orrore sono genuine.'}},
+  {id:18,film:'Quei Bravi Ragazzi',     year:1990,did:'scorsese',  director:'Martin Scorsese',   scene:'Il piano sequenza del Copacabana',         ratio:'1.85:1',tmdb:769,  tags:['piano-sequenza','luce-urbana','montaggio'],      tl:['#PianoSequenza','#LuceUrbana','#Montaggio'],      kw:['piano-sequenza','luce-urbana','montaggio'],       intro:'Henry Hill entra nel Copacabana dal retro con Karen, percorre cucine e corridoi, supera decine di persone, fino al loro tavolo sul palco. Il piano sequenza come seduzione — dello spettatore insieme a Karen.',an:{regia:'Scorsese usa la steadicam in modo opposto a Kubrick: non per creare angoscia ma euforia. La macchina da presa è complice di Henry.',sceneggiatura:'Pileggi scrisse l\'ingresso come semplice descrizione. Scorsese la trasformò nel manifesto visivo dell\'attrazione per la vita criminale.',simbologia:'Il tavolo materializzato dal nulla è la promessa della mafia: il mondo si piega per te. Karen è sedotta non dall\'uomo ma dal <strong>potere</strong>.',produzione:'Ray Liotta e Lorraine Bracco girarono in un solo take. Il Copacabana reale fu usato per le riprese.'}},
+  {id:19,film:'Il Padrino Parte II',    year:1974,did:'coppola',   director:'F.F. Coppola',      scene:'La giovinezza di Vito a New York',         ratio:'1.78:1',tmdb:242,  tags:['montaggio','tempo','soggettiva'],               tl:['#Montaggio','#Tempo','#Soggettiva'],              kw:['montaggio','tempo'],                             intro:'Il giovane Vito Corleone arriva a New York a inizio Novecento e compie il suo primo atto di violenza calcolata. Coppola costruisce il personaggio del Padrino attraverso le sue origini.',an:{regia:'Willis usa una palette seppia per le scene del passato, creando distanza temporale visiva. Il presente di Michael e il passato di Vito si rispondono per contrasto.',sceneggiatura:'La struttura parallela — Michael al presente, Vito al passato — era considerata infilmabile. Coppola la impose contro il parere della produzione.',simbologia:'Il giovane Vito uccide Fanucci durante la festa di quartiere: la violenza si nasconde nella celebrazione comunitaria.',produzione:'De Niro imparò il dialetto siciliano di Corleone. Recitare la giovinezza di un altro attore fu la sfida maggiore.'}},
+  {id:20,film:'Stalker',                year:1979,did:'tarkovsky', director:'Andrei Tarkovsky',  scene:'Il viaggio nella Zona',                    ratio:'1.37:1',tmdb:11185,tags:['sogno','tempo','paesaggio'],                    tl:['#Sogno','#Tempo','#Paesaggio'],                   kw:['sogno','tempo','paesaggio'],                      intro:'Lo Stalker accompagna due uomini nella Zona proibita. Tarkovsky usa il passaggio dal bianco e nero al colore per marcare una soglia ontologica: il confine tra il mondo ordinario e quello del significato.',an:{regia:'Il bianco e nero del mondo esterno cede al seppia della Zona in una singola dissolvenza. Non è un effetto — è una dichiarazione filosofica.',sceneggiatura:'Il romanzo dei Strugatsky era fantascienza. Tarkovsky eliminò il plot per sostituirlo con tempo puro.',simbologia:'La Zona non è un luogo fisico: è lo spazio interiore dove le certezze collassano.',produzione:'Il film fu girato due volte. La prima pellicola fu rovinata in laboratorio. Questa versione è la seconda.'}},
+  {id:21,film:'Persona',                year:1966,did:'bergman',   director:'Ingmar Bergman',    scene:'La fusione dei volti',                     ratio:'1.37:1',tmdb:68718,tags:['soggettiva','surrealismo','tempo'],               tl:['#Soggettiva','#Surrealismo','#Tempo'],            kw:['sogno','surrealismo'],                            intro:'Il volto dell\'attrice Elisabeth Vogler e quello dell\'infermiera Alma si fondono in un\'unica immagine. Bergman compie qui l\'atto cinematograficamente più radicale della sua carriera: sciogliere i confini dell\'identità individuale.',an:{regia:'Bergman sovrappone otticamente i due profili fino a renderli indistinguibili. Non è un trucco: è la realizzazione visiva di una tesi psicologica.',sceneggiatura:'Il copione fu scritto da Bergman durante una malattia. La fusione dei volti non era prevista — fu una scoperta in sala di montaggio.',simbologia:'Chi assorbe chi? Bergman lascia la domanda aperta. L\'identità non è un dato fisso — è una negoziazione continua.',produzione:'Bibi Andersson e Liv Ullmann divennero amiche inseparabili. Bergman disse che il film trattava «di qualcosa di cui non potevo parlare altrimenti».'}},
+  {id:22,film:'In the Mood for Love',   year:2000,did:'wongkarwai',director:'Wong Kar-wai',      scene:'Il corridoio — il rallentatore del desiderio',ratio:'1.66:1',tmdb:11216,tags:['tempo','soggettiva','colore-rosso'],            tl:['#Tempo','#Soggettiva','#ColoreRosso'],            kw:['tempo','colore-rosso'],                           intro:'Maggie Cheung scende le scale in slow motion per comprare dei noodles. Wong Kar-wai usa il rallentatore non come effetto ma come strumento epistemologico: rallentare il tempo è l\'unico modo per vedere ciò che normalmente sfugge.',an:{regia:'Wong Kar-wai usò la tecnica dello step-printing — ogni fotogramma stampato più volte — per un rallentamento organico, diverso dal digitale.',sceneggiatura:'Non c\'è sceneggiatura scritta. Wong girò per 15 mesi improvvisando. La struttura fu trovata in fase di montaggio.',simbologia:'Il rosso del qipao di Maggie Cheung non è decorazione: è emozione codificata. Ogni variazione di colore rappresenta uno stato interiore.',produzione:'Maggie Cheung indossò oltre venti qipao diversi. La troupe stava appesa alle pareti per stare fuori campo.'}},
+  {id:23,film:'C\'era una volta in America',year:1984,did:'leone', director:'Sergio Leone',      scene:'Il finale — Noodles e l\'oppio',            ratio:'2.39:1',tmdb:11113,tags:['tempo','soggettiva','montaggio'],               tl:['#Tempo','#Soggettiva','#Montaggio'],              kw:['tempo','montaggio','simmetria'],                  intro:'Noodles sorride beatamente nell\'oppiodendro, e il sorriso finale dissolve 40 anni di storia. Leone ribalta tutto: forse ciò che abbiamo visto era solo l\'allucinazione di un uomo che non ha mai potuto affrontare la realtà.',an:{regia:'Leone chiude con un primo piano del sorriso. Dopo quasi 4 ore di film, quel sorriso è la risposta — e la domanda — più devastante che il cinema abbia mai prodotto.',sceneggiatura:'Il film dura quasi 4 ore perché Leone si rifiutò di tagliare. La versione ridistribuita da Warner fu un massacro narrativo — esiste solo la director\'s cut.',simbologia:'L\'oppio come meccanismo di difesa psicologico. Noodles non ha mai abbandonato Deborah, non ha mai tradito Max: <strong>ha solo scelto di non ricordare</strong>.',produzione:'De Niro e James Woods non si parlavano fuori dal set. La tensione reale tra gli attori è visibile in ogni scena.'}},
+  {id:24,film:'Solaris',                year:1972,did:'tarkovsky', director:'Andrei Tarkovsky',  scene:'La materializzazione di Hari',             ratio:'2.35:1',tmdb:637,  tags:['sogno','tempo','soggettiva'],                    tl:['#Sogno','#Tempo','#Soggettiva'],                  kw:['sogno','tempo'],                                  intro:'Kris Kelvin trova nella sua cabina spaziale sua moglie Hari, morta anni prima. Non è un fantasma: è una replica perfetta generata dall\'oceano di Solaris a partire dai suoi ricordi. Tarkovsky trasforma la fantascienza in una domanda sulla natura dell\'amore.',an:{regia:'Tarkovsky usa la luce naturale per rendere la materializzazione ordinaria, non spettacolare. Hari non appare — è già lì, quasi banale. L\'orrore è nell\'ovvio.',sceneggiatura:'Il romanzo di Lem era filosofia mascherata da fantascienza. Tarkovsky lo trasformò in una storia d\'amore — e Lem non fu mai contento del risultato.',simbologia:'Hari non è Hari: è la colpa di Kelvin presa forma. Solaris non risponde alle domande — produce domande viventi.',produzione:'Le riprese durarono due anni. Tarkovsky girò 10 volte più materiale del necessario, cercando qualcosa che non sapeva ancora definire.'}},
+  {id:25,film:'District 9',             year:2009,did:'bongjoonho',director:'Bong Joon-ho',      scene:'La trasformazione di Wikus',               ratio:'1.85:1',tmdb:17654,tags:['body-horror','soggettiva'],                    tl:['#BodyHorror','#Soggettiva'],                      kw:['body-horror','violenza-estetica'],                intro:'Wikus van de Merwe scopre che il suo braccio si sta trasformando in quello di un alieno. Blomkamp — non Bong Joon-ho, ma il film rappresenta perfettamente la sensibilità del cinema di genere sociale — usa il body horror per fare del protagonista la metafora dell\'apartheid.',an:{regia:'Blomkamp usa la mdp a mano, quasi documentaristica, per rendere l\'orrore della trasformazione immediato e privo di distanza estetica.',sceneggiatura:'District 9 nasce come cortometraggio sui campi profughi di Johannesburg. Il sottotesto politico sull\'apartheid non è mai spiegato — è nella struttura.',simbologia:'La trasformazione del corpo è la trasformazione della coscienza. Wikus non può più ignorare ciò che è stato complice di fare.',produzione:'Sharlto Copley non era un attore — era il produttore del cortometraggio originale. Fu scelto per il film quasi per caso.'}},
+  {id:26,film:'The Lighthouse',         year:2019,did:'eggers',    director:'Robert Eggers',     scene:'La discesa nella follia — Prometeo',       ratio:'1.19:1',tmdb:503919,tags:['soggettiva','surrealismo','paesaggio'],          tl:['#Soggettiva','#Surrealismo','#Paesaggio'],        kw:['sogno','surrealismo','paesaggio'],                intro:'Thomas Wake custodisce gelosamente il segreto della luce del faro. Quando Ephraim finalmente la raggiunge, l\'orrore cosmico che trova è il cuore del film: la conoscenza proibita come dannazione.',an:{regia:'Eggers gira in 1.19:1, il formato quasi quadrato dei film muti degli anni \'30. Il frame è una prigione visiva — non c\'è respiro laterale. L\'isolamento è strutturale.',sceneggiatura:'Il copione è scritto in un inglese arcaico del XIX secolo. Pattinson e Dafoe impararono la lingua quasi come fosse un dialetto straniero.',simbologia:'Le referenze a Prometeo sono esplicite: Ephraim ruba la luce e viene punito. Ma Eggers ambiguizza: è una punizione o una rivelazione?',produzione:'Il film fu girato in 4 settimane in Nova Scotia durante una tempesta persistente. Le condizioni meteo reali sono quelle nel film.'}},
+  {id:27,film:'Sonatine',               year:1993,did:'kitano',    director:'Takeshi Kitano',    scene:'I giochi sulla spiaggia',                  ratio:'1.85:1',tmdb:10302,tags:['violenza-estetica','tempo','paesaggio'],         tl:['#ViolenzaEstetica','#Tempo','#Paesaggio'],        kw:['violenza-estetica','tempo','paesaggio'],           intro:'Murakawa e i suoi uomini si nascondono in una spiaggia di Okinawa e trascorrono il tempo a giocare come bambini, in attesa della morte. Kitano costruisce la sequenza più commovente del cinema yakuza: la violenza si dissolve nell\'infanzia ritrovata.',an:{regia:'Kitano usa campi lunghissimi, quasi fermi. La spiaggia è reale, la luce è naturale, i giochi sono improvvisati. Nulla è costruito — eppure è perfettamente composto.',sceneggiatura:'Kitano scrisse il film durante una depressione. I giochi sulla spiaggia non erano previsti — emersero durante le riprese come terapia collettiva.',simbologia:'Gli uomini che giocano come bambini sapendo che moriranno sono il cinema di Kitano condensato: la violenza e l\'innocenza sono la stessa cosa.',produzione:'Kitano interpreta Murakawa. In alcune sequenze di gioco si vede il regista dimenticarsi della camera — e questo è esattamente quello che cercava.'}},
+  {id:28,film:'Parasite',               year:2019,did:'bongjoonho',director:'Bong Joon-ho',      scene:'La scalinata — la pioggia di notte',       ratio:'2.39:1',tmdb:496243,tags:['paesaggio','soggettiva','montaggio'],             tl:['#Paesaggio','#Soggettiva','#Montaggio'],          kw:['paesaggio','violenza-estetica'],                  intro:'La famiglia Kim scende le scalinate di Seoul di notte, sotto una pioggia torrenziale, mentre la villa dei Park galleggia nell\'acqua. Bong Joon-ho trasforma la topografia urbana in mappa della disuguaglianza sociale.',an:{regia:'Bong usa la discesa fisica come metafora brutale: i ricchi sono in alto, i poveri scendono sempre più in basso. La geometria verticale della città è l\'analisi di classe.',sceneggiatura:'La scalinata non era nella sceneggiatura originale. Bong la aggiunse dopo aver visitato i quartieri bassi di Seoul durante la pre-produzione.',simbologia:'L\'acqua sale mentre la famiglia Kim scende. I due movimenti contrari sono il film in miniatura: ciò che per i ricchi è inconveniente, per i poveri è catastrofe.',produzione:'La scena fu girata sotto pioggia artificiale. Bong voleva controllare l\'intensità della pioggia in ogni inquadratura — impossibile con la pioggia reale.'}},
+  {id:29,film:'Heat',                   year:1995,did:'fincher',   director:'David Fincher',     scene:'Il caffè — De Niro e Pacino',              ratio:'2.35:1',tmdb:949,  tags:['soggettiva','luce-urbana','tempo'],               tl:['#Soggettiva','#LuceUrbana','#Tempo'],             kw:['luce-urbana','tempo'],                            intro:'Neil McCauley e Vincent Hanna si siedono a bere un caffè — il detective e il ladro, faccia a faccia per la prima e ultima volta. Michael Mann costruisce una delle scene di dialogo più cariche del cinema americano.',an:{regia:'Mann usa campi e controcampi normali ma li carica con la performance. Nessun effetto visivo: solo due facce e quello che vogliono dirsi sapendo che si uccideranno.',sceneggiatura:'La scena nacque dal fatto reale che un detective e un ladro si conobbero a Chicago. Mann la usò come cuore del film — due uomini che si rispettano troppo.',simbologia:'Neil e Vincent sono la stessa persona: entrambi hanno sacrificato tutto alla propria ossessione. Il caffè è l\'unico momento in cui possono ammetterlo.',produzione:'De Niro e Pacino non avevano mai girato insieme prima. La tensione reale nella scena è anche la tensione tra due icone che si misurano per la prima volta.'}},
+  {id:30,film:'Se7en',                  year:1995,did:'fincher',   director:'David Fincher',     scene:'What\'s in the box',                       ratio:'2.35:1',tmdb:807,  tags:['soggettiva','luce-urbana','montaggio'],           tl:['#Soggettiva','#LuceUrbana','#Montaggio'],         kw:['luce-urbana','violenza-estetica'],                 intro:'Mills apre la scatola nel deserto al tramonto e il mondo crolla. Fincher costruisce il finale più devastante del cinema thriller degli anni \'90: la vera violenza non è mai mostrata — è nell\'immaginazione di Mills e dello spettatore.',an:{regia:'Fincher non mostra il contenuto della scatola. La scelta più radicale è ciò che non si vede. Il fuoricampo come massima potenza narrativa.',sceneggiatura:'Lo script originale aveva un finale diverso, meno estremo. La scritta «What\'s in the box?» divenne il simbolo del cinema che rifiuta la redenzione.',simbologia:'John Doe ha vinto: ha trasformato Mills nello strumento della sua opera. Il male come sistema — la tesi di tutto il cinema di Fincher.',produzione:'Fincher girò una versione alternativa con un finale diverso ma la distrusse. Disse che quella scatola doveva rimanere la risposta definitiva.'}},
 ];
 
-// ── IMAGE FETCH ──
+// ── IMAGE FETCH con fallback automatico ──
 async function getImg(type,id,sz){
   const k=`${type}_${id}`;
-  if(cache[k]!==undefined)return cache[k];
+  if(IC[k]!==undefined)return IC[k];
   try{
-    const r=await fetch(`https://api.themoviedb.org/3/${type==='movie'?'movie':'person'}/${id}?api_key=${TMDB}&language=it`);
+    const r=await fetch(`https://api.themoviedb.org/3/${type==='movie'?'movie':'person'}/${id}?api_key=${TK}&language=it`);
     const d=await r.json();
     const p=type==='movie'?(d.backdrop_path||d.poster_path):d.profile_path;
-    return cache[k]=p?`${IMG}${sz}${p}`:null;
-  }catch{return cache[k]=null;}
+    return IC[k]=p?`${IB}${sz}${p}`:null;
+  }catch{return IC[k]=null;}
 }
+
 function loadImg(iId,pId,type,tmdbId,sz){
   getImg(type,tmdbId,sz).then(url=>{
     if(!url)return;
-    const img=document.getElementById(iId),ph=document.getElementById(pId);
-    if(img){img.src=url;img.style.display='block';}
-    if(ph)ph.style.display='none';
+    const img=document.getElementById(iId);
+    const ph=document.getElementById(pId);
+    if(img){
+      img.src=url;
+      img.style.display='block';
+      // Se l'immagine carica con errore, nascondi e mostra placeholder
+      img.onerror=function(){this.style.display='none';if(ph)ph.style.display='flex';};
+      img.onload=function(){if(ph)ph.style.display='none';};
+    }
   });
 }
 
@@ -463,8 +487,8 @@ function loadImg(iId,pId,type,tmdbId,sz){
 function renderScenes(filter){
   const list=filter?SCENES.filter(s=>s.tags.includes(filter)):SCENES;
   document.getElementById('fc').textContent=`${list.length} scene${filter?' filtrate':' in archivio'}`;
-  document.getElementById('hs-s').textContent=SCENES.length;
-  document.getElementById('hero-bg-num').textContent=SCENES.length;
+  document.getElementById('hss').textContent=SCENES.length;
+  document.getElementById('hbn').textContent=SCENES.length;
   document.getElementById('scene-grid').innerHTML=list.map((s,i)=>`
     <div class="scene-card" onclick="showScene(${s.id})">
       <div class="sc-thumb">
@@ -486,12 +510,19 @@ function renderScenes(filter){
 
 // ── RENDER DIRECTORS ──
 function renderDirectors(){
-  document.getElementById('dir-grid').innerHTML=DIRECTORS.map(d=>{
+  document.getElementById('dir-grid').innerHTML=DIRS.map((d,i)=>{
     const n=SCENES.filter(s=>s.did===d.id).length;
+    const grad=GRADS[i%GRADS.length];
     return`<div class="dir-card" onclick="filterByDir('${d.id}')">
       <div class="dir-img-wrap">
-        <div class="dir-img-ph" id="dph_${d.id}"><span class="dir-ph-letter">${d.name.charAt(0)}</span></div>
-        <img class="dir-img" id="di_${d.id}" src="" alt="${d.name}" style="display:none">
+        <div class="dir-ph" id="dph_${d.id}">
+          <div class="dir-ph-bg" style="background:${grad}"></div>
+          <span class="dir-ph-letter">${d.name.charAt(0)}</span>
+          <span class="dir-ph-nation">${d.origin}</span>
+        </div>
+        <img class="dir-img" id="di_${d.id}" src="" alt="${d.name}"
+          onerror="this.style.display='none';document.getElementById('dph_${d.id}').style.display='flex'"
+          onload="document.getElementById('dph_${d.id}').style.display='none';this.style.display='block'">
         <div class="dir-img-overlay"></div>
         <div class="dir-scene-count">${n} scene</div>
       </div>
@@ -502,39 +533,22 @@ function renderDirectors(){
       </div>
     </div>`;
   }).join('');
-  DIRECTORS.forEach(d=>loadImg(`di_${d.id}`,`dph_${d.id}`,'person',d.pid,'w185'));
+  DIRS.forEach(d=>loadImg(`di_${d.id}`,`dph_${d.id}`,'person',d.pid,'w185'));
 }
 
 // ── SHOW SCENE DETAIL ──
 async function showScene(id){
   const s=SCENES.find(x=>x.id===id);if(!s)return;
   const imgUrl=await getImg('movie',s.tmdb,'w780');
-  const slinks=(STREAMING[s.id]||[]).map(n=>`<a class="stream-btn" href="${SURL[n]||'#'}" target="_blank" rel="noopener">${n} ↗</a>`).join('');
-  const kpills=(s.kw||[]).filter(k=>KEYWORDS[k]).map(k=>`<span class="kw-pill" onclick="openGraphKw('${k}')"><span class="kw-pill-text">${KEYWORDS[k].label}</span></span>`).join('');
+  const slinks=(STREAMING[s.id]||[]).map(n=>`<a class="stream-btn" href="${SU[n]||'#'}" target="_blank" rel="noopener">${n} ↗</a>`).join('');
+  const kpills=(s.kw||[]).filter(k=>KW[k]).map(k=>`<span class="kw-pill" onclick="openGraphKw('${k}')"><span class="kw-pill-text">${KW[k].label}</span></span>`).join('');
+  const ytSearch=`https://www.youtube.com/results?search_query=${encodeURIComponent(s.film+' '+s.scene+' clip')}`;
 
-  const videoSection = s.ytId ? `
-    <div class="video-section">
-      <div class="video-head">
-        <span class="video-label">▶ Guarda la scena</span>
-        <button class="video-toggle" onclick="toggleVideo('vid_${s.id}',this)">Mostra video</button>
-      </div>
-      <div class="video-embed-wrap" id="vid_${s.id}">
-        <iframe src="" data-src="https://www.youtube-nocookie.com/embed/${s.ytId}?rel=0&modestbranding=1" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="${s.film} — ${s.scene}"></iframe>
-      </div>
-    </div>` : `
-    <div class="video-section">
-      <div class="video-head">
-        <span class="video-label">▶ Clip video</span>
-        <button class="video-toggle" style="opacity:.4;cursor:default">Non disponibile</button>
-      </div>
-      <div class="video-note">La clip di questa scena non è ancora disponibile nell'archivio.</div>
-    </div>`;
-
-  document.getElementById('det-content').innerHTML=`
+  document.getElementById('det').innerHTML=`
     <button class="back-btn" onclick="nav('home')">← Torna alle scene</button>
     <div class="detail-grid">
       <div class="detail-frame">
-        ${imgUrl?`<img src="${imgUrl}" alt="${s.film}"><div class="detail-frame-overlay"></div>`:`<div style="display:flex;align-items:center;justify-content:center;height:100%"><span style="font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.1)">${String(s.id).padStart(2,'0')}</span></div>`}
+        ${imgUrl?`<img src="${imgUrl}" alt="${s.film}"><div class="detail-frame-overlay"></div>`:`<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--bg3)"><span style="font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.1)">${String(s.id).padStart(2,'0')}</span></div>`}
       </div>
       <div>
         <div class="det-eyebrow">${s.director.toUpperCase()} · ${s.year}</div>
@@ -545,11 +559,17 @@ async function showScene(id){
         <p class="det-intro">${s.intro}</p>
         <div class="stream-section">
           <div class="stream-label">Dove vederlo</div>
-          <div class="stream-links">${slinks||'<span style="font-family:var(--fm);font-size:.57rem;color:var(--muted)">Link non disponibili</span>'}</div>
+          <div class="stream-links">${slinks||'<span style="font-family:var(--fm);font-size:.57rem;color:var(--muted)">—</span>'}</div>
         </div>
       </div>
     </div>
-    ${videoSection}
+    <div class="video-section">
+      <div class="video-head">
+        <span class="video-label">▶ Cerca la scena</span>
+        <a class="video-toggle" href="${ytSearch}" target="_blank" rel="noopener">Cerca su YouTube ↗</a>
+      </div>
+      <div class="video-note">Cerca la scena su YouTube. Quando trovi il video, copia l'ID dall'URL (la parte dopo <strong style="color:var(--gold)">v=</strong>) e aggiungilo al campo <strong style="color:var(--gold)">ytId</strong> nel codice per embeddarla direttamente qui.</div>
+    </div>
     <div class="anatomy-heading">Anatomia della scena</div>
     <div class="anatomy-grid">
       <div class="anatomy-cell"><div class="anatomy-num">01</div><div class="anatomy-label">Regia</div><div class="anatomy-text">${s.an.regia}</div></div>
@@ -573,49 +593,38 @@ async function showScene(id){
     </div>`;
   showView('scene');
   window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function toggleVideo(wrapId, btn){
-  const wrap=document.getElementById(wrapId);
-  const show=!wrap.classList.contains('show');
-  wrap.classList.toggle('show',show);
-  btn.textContent=show?'Nascondi video':'Mostra video';
-  if(show){
-    const iframe=wrap.querySelector('iframe');
-    if(iframe&&!iframe.src)iframe.src=iframe.dataset.src;
-  }
+  gtag('event','view_scene',{scene_name:s.film,director:s.director});
 }
 
 function openGraphKw(kw){nav('map');setTimeout(()=>openPanel(kw,'keyword'),400);}
 
 // ── D3 GRAPH ──
-let graphBuilt=false;
+let gBuilt=false;
 function buildGraph(){
-  if(graphBuilt)return;graphBuilt=true;
+  if(gBuilt)return;gBuilt=true;
   const cont=document.getElementById('graph-container');
-  const W=cont.clientWidth||900,H=600;
+  const W=cont.clientWidth||900,H=640;
   const nodes=[],links=[];
-  DIRECTORS.forEach(d=>nodes.push({id:d.id,name:d.name,type:'director',origin:d.origin}));
-  Object.entries(KEYWORDS).forEach(([key,kw])=>{
+  DIRS.forEach(d=>nodes.push({id:d.id,name:d.name,type:'director',origin:d.origin}));
+  Object.entries(KW).forEach(([key,kw])=>{
     nodes.push({id:`kw_${key}`,name:kw.label,type:'keyword',key,desc:kw.desc,dirs:kw.dirs});
     kw.dirs.forEach(did=>links.push({source:did,target:`kw_${key}`}));
   });
   const svg=d3.select('#graph-container').append('svg').attr('width',W).attr('height',H);
   const defs=svg.append('defs');
-  const gf=defs.append('filter').attr('id','gf').attr('x','-50%').attr('y','-50%').attr('width','200%').attr('height','200%');
-  gf.append('feGaussianBlur').attr('stdDeviation','3').attr('result','b');
-  const fm=gf.append('feMerge');fm.append('feMergeNode').attr('in','b');fm.append('feMergeNode').attr('in','SourceGraphic');
-  const gf2=defs.append('filter').attr('id','gf2').attr('x','-80%').attr('y','-80%').attr('width','260%').attr('height','260%');
-  gf2.append('feGaussianBlur').attr('stdDeviation','6').attr('result','b');
-  const fm2=gf2.append('feMerge');fm2.append('feMergeNode').attr('in','b');fm2.append('feMergeNode').attr('in','SourceGraphic');
+  ['gf','gf2'].forEach((id,i)=>{
+    const f=defs.append('filter').attr('id',id).attr('x','-60%').attr('y','-60%').attr('width','220%').attr('height','220%');
+    f.append('feGaussianBlur').attr('stdDeviation',i===0?3:7).attr('result','b');
+    const m=f.append('feMerge');m.append('feMergeNode').attr('in','b');m.append('feMergeNode').attr('in','SourceGraphic');
+  });
   const sim=d3.forceSimulation(nodes)
-    .force('link',d3.forceLink(links).id(d=>d.id).distance(140).strength(0.5))
-    .force('charge',d3.forceManyBody().strength(-320))
+    .force('link',d3.forceLink(links).id(d=>d.id).distance(150).strength(.45))
+    .force('charge',d3.forceManyBody().strength(-350))
     .force('center',d3.forceCenter(W/2,H/2))
-    .force('collision',d3.forceCollide().radius(d=>d.type==='director'?50:42));
+    .force('collision',d3.forceCollide().radius(d=>d.type==='director'?52:44));
   const link=svg.append('g').selectAll('line').data(links).enter().append('line')
-    .attr('stroke','rgba(200,169,110,.14)').attr('stroke-width',.8).attr('stroke-dasharray','3 3').attr('stroke-opacity',0);
-  link.transition().duration(1400).delay((_,i)=>i*30).attr('stroke-opacity',1);
+    .attr('stroke','rgba(200,169,110,.13)').attr('stroke-width',.8).attr('stroke-dasharray','3 3').attr('stroke-opacity',0);
+  link.transition().duration(1600).delay((_,i)=>i*25).attr('stroke-opacity',1);
   const node=svg.append('g').selectAll('g').data(nodes).enter().append('g')
     .attr('cursor','pointer')
     .call(d3.drag()
@@ -631,7 +640,7 @@ function buildGraph(){
   node.filter(d=>d.type==='director').append('text').attr('text-anchor','middle').attr('dy','40px').attr('fill','rgba(240,232,216,.6)').attr('font-family','DM Mono,monospace').attr('font-size','7.5').text(d=>d.name.split(' ').pop());
   node.filter(d=>d.type==='keyword').append('circle').attr('r',18).attr('fill','rgba(200,169,110,.04)').attr('stroke','rgba(200,169,110,.3)').attr('stroke-width',.8).attr('stroke-dasharray','4 2');
   node.filter(d=>d.type==='keyword').append('text').attr('text-anchor','middle').attr('dy','.35em').attr('fill','rgba(200,169,110,.7)').attr('font-family','DM Mono,monospace').attr('font-size','6.5').text(d=>d.name.substring(0,9).toUpperCase());
-  node.attr('opacity',0).transition().duration(900).delay((_,i)=>i*55).attr('opacity',1);
+  node.attr('opacity',0).transition().duration(900).delay((_,i)=>i*50).attr('opacity',1);
   sim.on('tick',()=>{
     link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
     node.attr('transform',d=>`translate(${Math.max(30,Math.min(W-30,d.x))},${Math.max(30,Math.min(H-30,d.y))})`);
@@ -640,9 +649,9 @@ function buildGraph(){
 
 function showTip(e,d){
   const t=document.getElementById('gtip');
-  document.getElementById('gt-label').textContent=d.type==='director'?'Regista':'Ossessione';
-  document.getElementById('gt-name').textContent=d.name;
-  document.getElementById('gt-sub2').textContent=d.type==='director'?d.origin:(d.desc||'').substring(0,75)+'…';
+  document.getElementById('gtl').textContent=d.type==='director'?'Regista':'Ossessione';
+  document.getElementById('gtn').textContent=d.name;
+  document.getElementById('gts').textContent=d.type==='director'?d.origin:(d.desc||'').substring(0,80)+'…';
   t.style.opacity='1';moveTip(e);
 }
 function moveTip(e){const t=document.getElementById('gtip');t.style.left=(e.clientX+16)+'px';t.style.top=(e.clientY-10)+'px';}
@@ -651,22 +660,22 @@ function hideTip(){document.getElementById('gtip').style.opacity='0';}
 function openPanel(id,type){
   const p=document.getElementById('graph-panel');p.classList.add('show');
   if(type==='keyword'){
-    const kw=KEYWORDS[id];if(!kw)return;
+    const kw=KW[id];if(!kw)return;
     document.getElementById('gp-title').textContent=kw.label;
     document.getElementById('gp-sub').textContent=`${kw.dirs.length} registi condividono questa ossessione`;
     document.getElementById('gp-desc').textContent=kw.desc;
     document.getElementById('gp-con-label').textContent='Registi collegati';
-    document.getElementById('gp-chips').innerHTML=kw.dirs.map(did=>{const d=DIRECTORS.find(x=>x.id===did);return d?`<span class="gp-chip" onclick="filterByDir('${d.id}')">${d.name}</span>`:''}).join('');
+    document.getElementById('gp-chips').innerHTML=kw.dirs.map(did=>{const d=DIRS.find(x=>x.id===did);return d?`<span class="gp-chip" onclick="filterByDir('${d.id}')">${d.name}</span>`:''}).join('');
     document.getElementById('gp-scenes').innerHTML=SCENES.filter(s=>s.kw&&s.kw.includes(id)).map(s=>`<div class="gp-scene" onclick="showScene(${s.id})"><div class="gp-s-film">${s.director.split(' ').pop()} · ${s.year}</div><div class="gp-s-name">${s.film}</div><div class="gp-s-scene">${s.scene}</div></div>`).join('');
   }else{
-    const d=DIRECTORS.find(x=>x.id===id);if(!d)return;
+    const d=DIRS.find(x=>x.id===id);if(!d)return;
     const ds=SCENES.filter(s=>s.did===id);
     const dkw=[...new Set(ds.flatMap(s=>s.kw||[]))];
     document.getElementById('gp-title').textContent=d.name;
     document.getElementById('gp-sub').textContent=d.origin;
     document.getElementById('gp-desc').textContent=d.obs.join(' · ');
     document.getElementById('gp-con-label').textContent='Ossessioni visive';
-    document.getElementById('gp-chips').innerHTML=dkw.map(k=>{const kw=KEYWORDS[k];return kw?`<span class="gp-chip" onclick="openPanel('${k}','keyword')">${kw.label}</span>`:''}).join('');
+    document.getElementById('gp-chips').innerHTML=dkw.map(k=>{const kw=KW[k];return kw?`<span class="gp-chip" onclick="openPanel('${k}','keyword')">${kw.label}</span>`:''}).join('');
     document.getElementById('gp-scenes').innerHTML=ds.map(s=>`<div class="gp-scene" onclick="showScene(${s.id})"><div class="gp-s-film">${s.film} · ${s.year}</div><div class="gp-s-scene">${s.scene}</div></div>`).join('');
   }
   p.scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -679,6 +688,7 @@ function nav(view){
   const el=document.getElementById('nl-'+view);if(el)el.classList.add('active');
   showView(view);window.scrollTo({top:0,behavior:'smooth'});
   if(view==='map')setTimeout(()=>buildGraph(),120);
+  gtag('event','page_view',{page_title:view});
 }
 function showView(view){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
@@ -691,7 +701,7 @@ function fTag(tag,el){
 function filterByDir(dirId){
   nav('home');
   setTimeout(()=>{
-    const d=DIRECTORS.find(x=>x.id===dirId);
+    const d=DIRS.find(x=>x.id===dirId);
     document.querySelectorAll('.filter-bar .ftag').forEach(t=>t.classList.remove('active'));
     const list=SCENES.filter(s=>s.did===dirId);
     document.getElementById('fc').textContent=`${list.length} scene di ${d?.name||dirId}`;
@@ -715,20 +725,19 @@ function filterByDir(dirId){
 
 // ── FORM ──
 function openAdd(){
-  document.getElementById('tag-sel-grid').innerHTML=ALL_TAGS.map(t=>`<span class="tsel" data-t="${t}" onclick="this.classList.toggle('on');document.getElementById('tags-hid').value=[...document.querySelectorAll('.tsel.on')].map(e=>e.dataset.t).join(', ')">#${t}</span>`).join('');
-  document.getElementById('f-success').classList.remove('show');
-  document.getElementById('scene-form').style.display='block';
+  document.getElementById('tsg').innerHTML=ATAGS.map(t=>`<span class="tsel" data-t="${t}" onclick="this.classList.toggle('on');document.getElementById('th').value=[...document.querySelectorAll('.tsel.on')].map(e=>e.dataset.t).join(', ')">#${t}</span>`).join('');
+  document.getElementById('f-ok').classList.remove('show');
+  document.getElementById('sf').style.display='block';
   document.getElementById('add-modal').classList.add('open');
 }
 function closeAdd(){document.getElementById('add-modal').classList.remove('open');}
 document.addEventListener('DOMContentLoaded',()=>{
-  const form=document.getElementById('scene-form');if(!form)return;
+  const form=document.getElementById('sf');if(!form)return;
   form.addEventListener('submit',async e=>{
     e.preventDefault();
     try{const r=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{Accept:'application/json'}});
-      if(r.ok){document.getElementById('f-success').classList.add('show');form.style.display='none';}
-      else alert('Errore. Riprova.');}
-    catch{alert('Errore di rete.');}
+      if(r.ok){document.getElementById('f-ok').classList.add('show');form.style.display='none';}
+      else alert('Errore. Riprova.');}catch{alert('Errore di rete.');}
   });
 });
 
@@ -736,12 +745,12 @@ document.addEventListener('DOMContentLoaded',()=>{
 const cur=document.getElementById('cur'),curR=document.getElementById('curRing');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-(function animC(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(animC);})();
+(function aC(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(aC);})();
 
-// ── INIT ──
 renderScenes();renderDirectors();
 </script>
 </body>
 </html>
+
 
 
