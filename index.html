@@ -75,7 +75,7 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 .scene-card{background:var(--bg);cursor:pointer;overflow:hidden;transition:background .3s;position:relative}
 .scene-card:hover{background:var(--bg2)}
 .sc-thumb{height:200px;position:relative;overflow:hidden;background:var(--bg3)}
-.sc-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;transition:opacity .5s var(--ease2),transform .7s var(--ease);display:block}
+.sc-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:.55;transition:opacity .5s var(--ease2),transform .7s var(--ease);display:block}
 .scene-card:hover .sc-thumb img{opacity:.8;transform:scale(1.07)}
 .sc-thumb-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
 .sc-ph-num{font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.12);line-height:1}
@@ -436,10 +436,10 @@ const SCENES=[
   {id:10,film:'Inception',              year:2010,did:'nolan',     director:'Christopher Nolan', scene:'Il corridoio a gravità zero',              ratio:'2.39:1',tmdb:27205,tags:['tempo','piano-sequenza','simmetria'],              tl:['#Tempo','#PianoSequenza','#Simmetria'],            kw:['tempo','piano-sequenza','simmetria'],             intro:'Arthur combatte in un corridoio che ruota su se stesso mentre la gravità collassa. Nolan costruisce una delle sequenze d\'azione più fisicamente impossibili mai realizzate — senza CGI.',an:{regia:'Nolan rifiuta il CGI. La mdp è montata sulla struttura rotante con gli attori: quello che vedi è reale.',sceneggiatura:'Come mostrare che la gravità è anomala senza spiegarlo? La risposta è nella regia, non nel dialogo.',simbologia:'Il corridoio che ruota è la mente di Fischer che resiste — metafora dell\'inconscio come campo di battaglia.',produzione:'Il corridoio rotante fu costruito a Cardington, UK. Pesava diverse tonnellate. Tre settimane di riprese.'}},
   {id:11,film:'Pulp Fiction',           year:1994,did:'tarantino', director:'Quentin Tarantino', scene:'La danza — Jack Rabbit Slim\'s',            ratio:'2.39:1',tmdb:680,  tags:['violenza-estetica','montaggio','colore-rosso'],  tl:['#ViolenzaEstetica','#Montaggio','#ColoreRosso'],   kw:['montaggio','violenza-estetica','colore-rosso'],   intro:'Vincent e Mia ballano il twist su Chuck Berry. Tarantino trasforma un momento banale in cinema puro: tensione sessuale, pericolo imminente, gioia genuina.',an:{regia:'Una mdp quasi immobile, come se non volesse disturbare il momento. La camera osserva, non interviene.',sceneggiatura:'La scena è una pausa nel ritmo della violenza — un respiro prima della tempesta.',simbologia:'Il twist degli anni \'60 in un ristorante anni \'50, nel 1994: Tarantino collassa il tempo pop.',produzione:'Il concorso di ballo era un vero concorso. Thurman e Travolta gareggiavano realmente.'}},
   {id:12,film:'8½',                     year:1963,did:'fellini',   director:'Federico Fellini',  scene:'La sequenza dell\'harem',                   ratio:'1.85:1',tmdb:421,  tags:['sogno','surrealismo','soggettiva'],               tl:['#Sogno','#Surrealismo','#Soggettiva'],             kw:['sogno','surrealismo'],                            intro:'Guido Anselmi sogna di essere il padrone di un harem dove tutte le donne della sua vita convivono in armonia. La sequenza più autobiograficamente onesta e visivamente sfarzosa del cinema italiano.',an:{regia:'Costumi senza tempo, epoche mescolate. La mdp segue il ritmo della musica di Rota, non la logica narrativa.',sceneggiatura:'La scena nacque da un sogno reale di Fellini, annotato sul suo taccuino.',simbologia:'L\'harem è la mente di un regista che vuole controllare tutto e che viene sommerso da ciò che ha creato.',produzione:'Mastroianni fu scelto come alter ego fisico di Fellini: stesso peso, stessa altezza.'}},
-  {id:13,film:'eXistenZ',               year:1999,did:'cronenberg',director:'David Cronenberg',  scene:'Il porto di gioco biologico',              ratio:'1.85:1',tmdb:2758, tags:['body-horror','surrealismo'],                    tl:['#BodyHorror','#Surrealismo'],                     kw:['body-horror','surrealismo'],                      intro:'Una console videoludica organica che si innesta nella spina dorsale. Cronenberg porta il «New Flesh» alle sue conseguenze logiche: la tecnologia è già carne.',an:{regia:'Grandangoli estremi per distorcere le proporzioni degli oggetti organici, rendendoli repellenti e sensuali insieme.',sceneggiatura:'Il copione esplora una domanda semplice: cosa succederebbe se i videogiochi fossero corpi?',simbologia:'Il porto di gioco non è una metafora: è la tesi. La tecnologia è un prolungamento biologico dell\'identità.',produzione:'Le console organiche furono costruite con silicone, intestini animali e componenti elettronici reali.'}},
+  {id:13,film:'eXistenZ',               year:1999,did:'cronenberg',director:'David Cronenberg',  scene:'Il porto di gioco biologico',              ratio:'1.85:1',tmdb:9338, tags:['body-horror','surrealismo'],                    tl:['#BodyHorror','#Surrealismo'],                     kw:['body-horror','surrealismo'],                      intro:'Una console videoludica organica che si innesta nella spina dorsale. Cronenberg porta il «New Flesh» alle sue conseguenze logiche: la tecnologia è già carne.',an:{regia:'Grandangoli estremi per distorcere le proporzioni degli oggetti organici, rendendoli repellenti e sensuali insieme.',sceneggiatura:'Il copione esplora una domanda semplice: cosa succederebbe se i videogiochi fossero corpi?',simbologia:'Il porto di gioco non è una metafora: è la tesi. La tecnologia è un prolungamento biologico dell\'identità.',produzione:'Le console organiche furono costruite con silicone, intestini animali e componenti elettronici reali.'}},
   {id:14,film:'A History of Violence',  year:2005,did:'cronenberg',director:'David Cronenberg',  scene:'La scena del sesso sulle scale',           ratio:'2.35:1',tmdb:9532, tags:['violenza-estetica','soggettiva'],               tl:['#ViolenzaEstetica','#Soggettiva'],                kw:['violenza-estetica','body-horror'],                intro:'Tom Stall e sua moglie fanno sesso violento sulle scale di casa, subito dopo la rivelazione della sua vera identità. Cronenberg usa l\'atto sessuale per esplorare l\'impossibilità di separare l\'uomo dalla violenza che porta dentro.',an:{regia:'La mdp rimane fissa dall\'alto. Nessuna intimità tradizionale — solo la meccanica di due persone che si sfidano attraverso il corpo.',sceneggiatura:'La scena non è nel fumetto originale. Cronenberg la aggiunse per esplicitare: può il desiderio sopravvivere alla verità?',simbologia:'Il sesso violento come rinegoziazione del potere. La violenza entra nella camera da letto e non ne uscirà più.',produzione:'Viggo Mortensen e Maria Bello girarono la scena in un solo giorno. Cronenberg volle che il disagio fosse reale.'}},
   {id:15,film:'La Promessa dell\'Assassino',year:2007,did:'cronenberg',director:'David Cronenberg',scene:'La scena del bagno turco',             ratio:'2.35:1',tmdb:4512, tags:['violenza-estetica','piano-sequenza'],            tl:['#ViolenzaEstetica','#PianoSequenza'],             kw:['violenza-estetica','body-horror'],                intro:'Nikolai, completamente nudo in una sauna, viene attaccato da due sicari. Il più elaborato studio sulla vulnerabilità fisica nel cinema d\'azione contemporaneo.',an:{regia:'La nudità totale non è provocazione: toglie allo spettatore il comfort del personaggio-corazza. Nikolai è carne, null\'altro.',sceneggiatura:'Steve Knight scrisse la scena sapendo che sarebbe stata girata senza stunt. Mortensen insistette per interpretarla interamente.',simbologia:'Il vapore, i corpi nudi, i coltelli: Cronenberg restituisce alla violenza la sua natura biologica. Non c\'è regia — c\'è sopravvivenza.',produzione:'Mortensen si allenò per mesi con lottatori. La scena fu girata in tre giorni in una sauna reale. Alcune ferite furono accidentali.'}},
-  {id:16,film:'Umberto D.',             year:1952,did:'desica',    director:'Vittorio De Sica',  scene:'La mattina di Maria',                      ratio:'1.37:1',tmdb:11838,tags:['neorealismo','soggettiva'],                       tl:['#Neorealismo','#Soggettiva'],                      kw:['neorealismo'],                                    intro:'La domestica Maria si alza al mattino, macina il caffè, schiaccia le formiche, scopre di essere incinta. De Sica filma il quotidiano con precisione documentaristica che trasforma l\'ordinario in poesia.',an:{regia:'Una serie di dettagli visivi — il piede che schiaccia le formiche, le mani che macinano — costruisce un ritratto senza parole. Cinema come osservazione pura.',sceneggiatura:'Zavattini disse che questa era la sequenza di cui era più orgoglioso. Non succede niente di narrativo — eppure è cinematograficamente perfetta.',simbologia:'Maria e Umberto condividono la stessa precarietà. La scena del mattino è il contraltare umano della storia del vecchio.',produzione:'Maria Pia Casilio fu trovata in una scuola di recitazione dove non aveva mai recitato. La sua naturalezza era totale.'}},
+  {id:16,film:'Umberto D.',             year:1952,did:'desica',    director:'Vittorio De Sica',  scene:'La mattina di Maria',                      ratio:'1.37:1',tmdb:14869,tags:['neorealismo','soggettiva'],                       tl:['#Neorealismo','#Soggettiva'],                      kw:['neorealismo'],                                    intro:'La domestica Maria si alza al mattino, macina il caffè, schiaccia le formiche, scopre di essere incinta. De Sica filma il quotidiano con precisione documentaristica che trasforma l\'ordinario in poesia.',an:{regia:'Una serie di dettagli visivi — il piede che schiaccia le formiche, le mani che macinano — costruisce un ritratto senza parole. Cinema come osservazione pura.',sceneggiatura:'Zavattini disse che questa era la sequenza di cui era più orgoglioso. Non succede niente di narrativo — eppure è cinematograficamente perfetta.',simbologia:'Maria e Umberto condividono la stessa precarietà. La scena del mattino è il contraltare umano della storia del vecchio.',produzione:'Maria Pia Casilio fu trovata in una scuola di recitazione dove non aveva mai recitato. La sua naturalezza era totale.'}},
   {id:17,film:'Alien',                  year:1979,did:'scott',     director:'Ridley Scott',      scene:'Il chestburster',                          ratio:'2.35:1',tmdb:348,  tags:['body-horror','surrealismo'],                    tl:['#BodyHorror','#Surrealismo'],                     kw:['body-horror','surrealismo'],                      intro:'La creatura esplode dal petto di Kane a tavola. Una delle scene di shock più studiate del cinema: il potere non deriva dal gore ma dalla violazione assoluta di ogni confine corporeo.',an:{regia:'Scott costruisce la scena come una cena normale, abbassando deliberatamente la guardia. Il ritmo è lento, quasi comico, poi il corpo si trasforma in campo di battaglia.',sceneggiatura:'Dan O\'Bannon scrisse la scena ispirandosi a un incubo ricorrente di violazione corporea.',simbologia:'Il chestburster è una nascita violenta, non richiesta. Alien come pura sessualità freudiana. Scott esplorò la paura maschile della maternità.',produzione:'Gli attori non sapevano cosa sarebbe successo. Il sangue fu sparato con una pompa nascosta. Le reazioni di orrore sono genuine.'}},
   {id:18,film:'Quei Bravi Ragazzi',     year:1990,did:'scorsese',  director:'Martin Scorsese',   scene:'Il piano sequenza del Copacabana',         ratio:'1.85:1',tmdb:769,  tags:['piano-sequenza','luce-urbana','montaggio'],      tl:['#PianoSequenza','#LuceUrbana','#Montaggio'],      kw:['piano-sequenza','luce-urbana','montaggio'],       intro:'Henry Hill entra nel Copacabana dal retro con Karen, percorre cucine e corridoi, supera decine di persone, fino al loro tavolo sul palco. Il piano sequenza come seduzione — dello spettatore insieme a Karen.',an:{regia:'Scorsese usa la steadicam in modo opposto a Kubrick: non per creare angoscia ma euforia. La macchina da presa è complice di Henry.',sceneggiatura:'Pileggi scrisse l\'ingresso come semplice descrizione. Scorsese la trasformò nel manifesto visivo dell\'attrazione per la vita criminale.',simbologia:'Il tavolo materializzato dal nulla è la promessa della mafia: il mondo si piega per te. Karen è sedotta non dall\'uomo ma dal <strong>potere</strong>.',produzione:'Ray Liotta e Lorraine Bracco girarono in un solo take. Il Copacabana reale fu usato per le riprese.'}},
   {id:19,film:'Il Padrino Parte II',    year:1974,did:'coppola',   director:'F.F. Coppola',      scene:'La giovinezza di Vito a New York',         ratio:'1.78:1',tmdb:242,  tags:['montaggio','tempo','soggettiva'],               tl:['#Montaggio','#Tempo','#Soggettiva'],              kw:['montaggio','tempo'],                             intro:'Il giovane Vito Corleone arriva a New York a inizio Novecento e compie il suo primo atto di violenza calcolata. Coppola costruisce il personaggio del Padrino attraverso le sue origini.',an:{regia:'Willis usa una palette seppia per le scene del passato, creando distanza temporale visiva. Il presente di Michael e il passato di Vito si rispondono per contrasto.',sceneggiatura:'La struttura parallela — Michael al presente, Vito al passato — era considerata infilmabile. Coppola la impose contro il parere della produzione.',simbologia:'Il giovane Vito uccide Fanucci durante la festa di quartiere: la violenza si nasconde nella celebrazione comunitaria.',produzione:'De Niro imparò il dialetto siciliano di Corleone. Recitare la giovinezza di un altro attore fu la sfida maggiore.'}},
@@ -463,7 +463,7 @@ async function getImg(type,id,sz){
   try{
     const r=await fetch(`https://api.themoviedb.org/3/${type==='movie'?'movie':'person'}/${id}?api_key=${TK}&language=it`);
     const d=await r.json();
-    const p=type==='movie'?(d.backdrop_path||d.poster_path):d.profile_path;
+    const p=type==='movie'?(d.poster_path||d.backdrop_path):d.profile_path;
     return IC[k]=p?`${IB}${sz}${p}`:null;
   }catch{return IC[k]=null;}
 }
@@ -543,12 +543,35 @@ async function showScene(id){
   const slinks=(STREAMING[s.id]||[]).map(n=>`<a class="stream-btn" href="${SU[n]||'#'}" target="_blank" rel="noopener">${n} ↗</a>`).join('');
   const kpills=(s.kw||[]).filter(k=>KW[k]).map(k=>`<span class="kw-pill" onclick="openGraphKw('${k}')"><span class="kw-pill-text">${KW[k].label}</span></span>`).join('');
   const ytSearch=`https://www.youtube.com/results?search_query=${encodeURIComponent(s.film+' '+s.scene+' clip')}`;
+  // YouTube IDs per scene — aggiorna questi con gli ID reali trovati su YouTube
+  const YT={'Oldboy':'x_TN_B3a1k4','Taxi Driver':'Gb-yPLvMEFg','Il Padrino':'WVJRyUMdDPc',
+    'Blade Runner':'NoAzpa1x7jU','Inception':'x9bqA1ZNfHc','Pulp Fiction':'VBqRJ0DUjFg',
+    'Alien':'51xBbO1EjHM','Quei Bravi Ragazzi':'UA6M2IKqhNQ','Se7en':'SrjVWBemGDQ',
+    'Shining':'OiPMagbZm00','Parasite':'lyZHPqg3MzQ','Sonatine':'ELDRdvRYKpo'};
+  const ytId=YT[s.film]||null;
+  const videoHtml=ytId
+    ? `<div class="video-section">
+      <div class="video-head">
+        <span class="video-label">▶ Guarda la scena</span>
+        <button class="video-toggle" onclick="toggleVid('vw_${s.id}',this)">Mostra video</button>
+      </div>
+      <div id="vw_${s.id}" class="video-embed-wrap">
+        <iframe data-src="https://www.youtube-nocookie.com/embed/${ytId}?rel=0&modestbranding=1&color=white" allowfullscreen allow="autoplay; encrypted-media" title="${s.film}"></iframe>
+      </div>
+    </div>`
+    : `<div class="video-section">
+      <div class="video-head">
+        <span class="video-label">▶ Cerca la scena</span>
+        <a class="video-toggle" href="${ytSearch}" target="_blank" rel="noopener">Cerca su YouTube ↗</a>
+      </div>
+      <div class="video-note">Clip non ancora disponibile nell'archivio — clicca per cercarla su YouTube.</div>
+    </div>`;
 
   document.getElementById('det').innerHTML=`
     <button class="back-btn" onclick="nav('home')">← Torna alle scene</button>
     <div class="detail-grid">
       <div class="detail-frame">
-        ${imgUrl?`<img src="${imgUrl}" alt="${s.film}"><div class="detail-frame-overlay"></div>`:`<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--bg3)"><span style="font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.1)">${String(s.id).padStart(2,'0')}</span></div>`}
+        ${imgUrl?`<img src="${imgUrl}" alt="${s.film}"><div class="detail-frame-overlay"></div>`:`<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--bg3)"><span style="font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.1)">${String(s.id).padStart(2,'00')}</span></div>`}
       </div>
       <div>
         <div class="det-eyebrow">${s.director.toUpperCase()} · ${s.year}</div>
@@ -563,13 +586,7 @@ async function showScene(id){
         </div>
       </div>
     </div>
-    <div class="video-section">
-      <div class="video-head">
-        <span class="video-label">▶ Cerca la scena</span>
-        <a class="video-toggle" href="${ytSearch}" target="_blank" rel="noopener">Cerca su YouTube ↗</a>
-      </div>
-      <div class="video-note">Cerca la scena su YouTube. Quando trovi il video, copia l'ID dall'URL (la parte dopo <strong style="color:var(--gold)">v=</strong>) e aggiungilo al campo <strong style="color:var(--gold)">ytId</strong> nel codice per embeddarla direttamente qui.</div>
-    </div>
+    ${videoHtml}
     <div class="anatomy-heading">Anatomia della scena</div>
     <div class="anatomy-grid">
       <div class="anatomy-cell"><div class="anatomy-num">01</div><div class="anatomy-label">Regia</div><div class="anatomy-text">${s.an.regia}</div></div>
@@ -597,6 +614,14 @@ async function showScene(id){
 }
 
 function openGraphKw(kw){nav('map');setTimeout(()=>openPanel(kw,'keyword'),400);}
+
+function toggleVid(wrapId,btn){
+  const w=document.getElementById(wrapId);
+  const show=!w.classList.contains('show');
+  w.classList.toggle('show',show);
+  btn.textContent=show?'Nascondi video':'Mostra video';
+  if(show){const f=w.querySelector('iframe');if(f&&!f.src)f.src=f.dataset.src;}
+}
 
 // ── D3 GRAPH ──
 let gBuilt=false;
@@ -751,6 +776,7 @@ renderScenes();renderDirectors();
 </script>
 </body>
 </html>
+
 
 
 
