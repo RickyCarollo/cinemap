@@ -478,13 +478,21 @@ async function searchMovieImg(title, year, sz) {
   } catch { return IC[k] = null; }
 }
 
-async function getPersonImg(pid, sz) {
-  const k = `person_${pid}`;
+async function getPersonImg(pid, sz, name) {
+  const k = `person_${name||pid}`;
   if (IC[k] !== undefined) return IC[k];
   try {
-    const r = await fetch(`https://api.themoviedb.org/3/person/${pid}?api_key=${TK}`);
-    const d = await r.json();
-    return IC[k] = d.profile_path ? `${IB}${sz}${d.profile_path}` : null;
+    // Search by name — much more reliable than hardcoded IDs
+    if (name) {
+      const r = await fetch(`https://api.themoviedb.org/3/search/person?api_key=${TK}&query=${encodeURIComponent(name)}&language=it`);
+      const d = await r.json();
+      const p = d.results && d.results[0] && d.results[0].profile_path;
+      if (p) return IC[k] = `${IB}${sz}${p}`;
+    }
+    // Fallback to ID
+    const r2 = await fetch(`https://api.themoviedb.org/3/person/${pid}?api_key=${TK}`);
+    const d2 = await r2.json();
+    return IC[k] = d2.profile_path ? `${IB}${sz}${d2.profile_path}` : null;
   } catch { return IC[k] = null; }
 }
 
@@ -500,9 +508,9 @@ function loadSceneImg(imgId, phId, film, year, sz) {
   searchMovieImg(film, year, sz).then(url => setImg(document.getElementById(imgId), document.getElementById(phId), url));
 }
 
-function loadImg(iId, pId, type, tmdbId, sz) {
+function loadImg(iId, pId, type, tmdbId, sz, name) {
   // Usato solo per i registi (type=person)
-  getPersonImg(tmdbId, sz).then(url => setImg(document.getElementById(iId), document.getElementById(pId), url));
+  getPersonImg(tmdbId, sz, name).then(url => setImg(document.getElementById(iId), document.getElementById(pId), url));
 }
 
 // ── RENDER SCENES ──
@@ -555,7 +563,7 @@ function renderDirectors(){
       </div>
     </div>`;
   }).join('');
-  DIRS.forEach(d=>loadImg(`di_${d.id}`,`dph_${d.id}`,'person',d.pid,'w185'));
+  DIRS.forEach(d=>loadImg(`di_${d.id}`,`dph_${d.id}`,'person',d.pid,'w185',d.name));
 }
 
 // ── SHOW SCENE DETAIL ──
