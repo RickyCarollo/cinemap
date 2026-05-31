@@ -456,31 +456,53 @@ const SCENES=[
   {id:30,film:'Se7en',                  year:1995,did:'fincher',   director:'David Fincher',     scene:'What\'s in the box',                       ratio:'2.35:1',tmdb:807,  tags:['soggettiva','luce-urbana','montaggio'],           tl:['#Soggettiva','#LuceUrbana','#Montaggio'],         kw:['luce-urbana','violenza-estetica'],                 intro:'Mills apre la scatola nel deserto al tramonto e il mondo crolla. Fincher costruisce il finale più devastante del cinema thriller degli anni \'90: la vera violenza non è mai mostrata — è nell\'immaginazione di Mills e dello spettatore.',an:{regia:'Fincher non mostra il contenuto della scatola. La scelta più radicale è ciò che non si vede. Il fuoricampo come massima potenza narrativa.',sceneggiatura:'Lo script originale aveva un finale diverso, meno estremo. La scritta «What\'s in the box?» divenne il simbolo del cinema che rifiuta la redenzione.',simbologia:'John Doe ha vinto: ha trasformato Mills nello strumento della sua opera. Il male come sistema — la tesi di tutto il cinema di Fincher.',produzione:'Fincher girò una versione alternativa con un finale diverso ma la distrusse. Disse che quella scatola doveva rimanere la risposta definitiva.'}},
 ];
 
-// ── IMAGE FETCH con fallback automatico ──
-async function getImg(type,id,sz){
-  const k=`${type}_${id}`;
-  if(IC[k]!==undefined)return IC[k];
-  try{
-    const r=await fetch(`https://api.themoviedb.org/3/${type==='movie'?'movie':'person'}/${id}?api_key=${TK}&language=it`);
-    const d=await r.json();
-    const p=type==='movie'?(d.poster_path||d.backdrop_path):d.profile_path;
-    return IC[k]=p?`${IB}${sz}${p}`:null;
-  }catch{return IC[k]=null;}
+// ── IMAGE FETCH — ricerca per titolo+anno (sempre corretta) ──
+async function searchMovieImg(title, year, sz) {
+  const k = `movie_${title}_${year}`;
+  if (IC[k] !== undefined) return IC[k];
+  try {
+    const q = encodeURIComponent(title);
+    const r = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TK}&query=${q}&year=${year}&language=it&include_adult=false`);
+    const d = await r.json();
+    if (d.results && d.results.length > 0) {
+      const m = d.results[0];
+      const p = m.poster_path || m.backdrop_path;
+      return IC[k] = p ? `${IB}${sz}${p}` : null;
+    }
+    // Prova senza anno se non trova nulla
+    const r2 = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TK}&query=${q}&language=it`);
+    const d2 = await r2.json();
+    const m2 = d2.results && d2.results[0];
+    const p2 = m2 ? (m2.poster_path || m2.backdrop_path) : null;
+    return IC[k] = p2 ? `${IB}${sz}${p2}` : null;
+  } catch { return IC[k] = null; }
 }
 
-function loadImg(iId,pId,type,tmdbId,sz){
-  getImg(type,tmdbId,sz).then(url=>{
-    if(!url)return;
-    const img=document.getElementById(iId);
-    const ph=document.getElementById(pId);
-    if(img){
-      img.src=url;
-      img.style.display='block';
-      // Se l'immagine carica con errore, nascondi e mostra placeholder
-      img.onerror=function(){this.style.display='none';if(ph)ph.style.display='flex';};
-      img.onload=function(){if(ph)ph.style.display='none';};
-    }
-  });
+async function getPersonImg(pid, sz) {
+  const k = `person_${pid}`;
+  if (IC[k] !== undefined) return IC[k];
+  try {
+    const r = await fetch(`https://api.themoviedb.org/3/person/${pid}?api_key=${TK}`);
+    const d = await r.json();
+    return IC[k] = d.profile_path ? `${IB}${sz}${d.profile_path}` : null;
+  } catch { return IC[k] = null; }
+}
+
+function setImg(imgEl, phEl, url) {
+  if (!url || !imgEl) return;
+  imgEl.onerror = () => { imgEl.style.display = 'none'; if (phEl) phEl.style.display = 'flex'; };
+  imgEl.onload  = () => { if (phEl) phEl.style.display = 'none'; };
+  imgEl.src = url;
+  imgEl.style.display = 'block';
+}
+
+function loadSceneImg(imgId, phId, film, year, sz) {
+  searchMovieImg(film, year, sz).then(url => setImg(document.getElementById(imgId), document.getElementById(phId), url));
+}
+
+function loadImg(iId, pId, type, tmdbId, sz) {
+  // Usato solo per i registi (type=person)
+  getPersonImg(tmdbId, sz).then(url => setImg(document.getElementById(iId), document.getElementById(pId), url));
 }
 
 // ── RENDER SCENES ──
@@ -505,7 +527,7 @@ function renderScenes(filter){
         <div class="sc-tags">${s.tl.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
       </div>
     </div>`).join('');
-  list.forEach(s=>loadImg(`si_${s.id}`,`sph_${s.id}`,'movie',s.tmdb,'w500'));
+  list.forEach(s=>loadSceneImg(`si_${s.id}`,`sph_${s.id}`,s.film,s.year,'w500'));
 }
 
 // ── RENDER DIRECTORS ──
@@ -539,15 +561,15 @@ function renderDirectors(){
 // ── SHOW SCENE DETAIL ──
 async function showScene(id){
   const s=SCENES.find(x=>x.id===id);if(!s)return;
-  const imgUrl=await getImg('movie',s.tmdb,'w780');
+  const imgUrl=await searchMovieImg(s.film,s.year,'w780');
   const slinks=(STREAMING[s.id]||[]).map(n=>`<a class="stream-btn" href="${SU[n]||'#'}" target="_blank" rel="noopener">${n} ↗</a>`).join('');
   const kpills=(s.kw||[]).filter(k=>KW[k]).map(k=>`<span class="kw-pill" onclick="openGraphKw('${k}')"><span class="kw-pill-text">${KW[k].label}</span></span>`).join('');
   const ytSearch=`https://www.youtube.com/results?search_query=${encodeURIComponent(s.film+' '+s.scene+' clip')}`;
-  // YouTube IDs per scene — aggiorna questi con gli ID reali trovati su YouTube
-  const YT={'Oldboy':'x_TN_B3a1k4','Taxi Driver':'Gb-yPLvMEFg','Il Padrino':'WVJRyUMdDPc',
-    'Blade Runner':'NoAzpa1x7jU','Inception':'x9bqA1ZNfHc','Pulp Fiction':'VBqRJ0DUjFg',
-    'Alien':'51xBbO1EjHM','Quei Bravi Ragazzi':'UA6M2IKqhNQ','Se7en':'SrjVWBemGDQ',
-    'Shining':'OiPMagbZm00','Parasite':'lyZHPqg3MzQ','Sonatine':'ELDRdvRYKpo'};
+  // Per aggiungere un video embed: trova il video su YouTube, copia l'ID dall'URL
+  // (la parte dopo v=) e aggiungilo nell'oggetto YT qui sotto con il nome del film
+  const YT={
+    // Esempio: 'Oldboy':'ID_qui', 'Taxi Driver':'ID_qui'
+  };
   const ytId=YT[s.film]||null;
   const videoHtml=ytId
     ? `<div class="video-section">
@@ -556,7 +578,7 @@ async function showScene(id){
         <button class="video-toggle" onclick="toggleVid('vw_${s.id}',this)">Mostra video</button>
       </div>
       <div id="vw_${s.id}" class="video-embed-wrap">
-        <iframe data-src="https://www.youtube-nocookie.com/embed/${ytId}?rel=0&modestbranding=1&color=white" allowfullscreen allow="autoplay; encrypted-media" title="${s.film}"></iframe>
+        <iframe data-src="https://www.youtube-nocookie.com/embed/${ytId}?rel=0&modestbranding=1" allowfullscreen allow="autoplay; encrypted-media" title="${s.film}"></iframe>
       </div>
     </div>`
     : `<div class="video-section">
@@ -564,7 +586,7 @@ async function showScene(id){
         <span class="video-label">▶ Cerca la scena</span>
         <a class="video-toggle" href="${ytSearch}" target="_blank" rel="noopener">Cerca su YouTube ↗</a>
       </div>
-      <div class="video-note">Clip non ancora disponibile nell'archivio — clicca per cercarla su YouTube.</div>
+      <div class="video-note">Cerca su YouTube e copia l'ID del video per abilitare l'embed diretto.</div>
     </div>`;
 
   document.getElementById('det').innerHTML=`
@@ -744,7 +766,7 @@ function filterByDir(dirId){
           <div class="sc-tags">${s.tl.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
         </div>
       </div>`).join('');
-    list.forEach(s=>loadImg(`si2_${s.id}`,`sp2_${s.id}`,'movie',s.tmdb,'w500'));
+    list.forEach(s=>loadSceneImg(`si2_${s.id}`,`sp2_${s.id}`,s.film,s.year,'w500'));
   },80);
 }
 
