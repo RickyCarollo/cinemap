@@ -711,7 +711,7 @@ async function showScene(id){
     </div>`;
   showView('scene');
   window.scrollTo({top:0,behavior:'smooth'});
-  gtag('event','view_scene',{scene_name:s.film,director:s.director});
+  if (typeof gtag === 'function') gtag('event','view_scene',{scene_name:s.film,director:s.director});
 }
 
 function openGraphKw(kw){nav('map');setTimeout(()=>openPanel(kw,'keyword'),400);}
@@ -814,7 +814,7 @@ function nav(view){
   const el=document.getElementById('nl-'+view);if(el)el.classList.add('active');
   showView(view);window.scrollTo({top:0,behavior:'smooth'});
   if(view==='map')setTimeout(()=>buildGraph(),120);
-  gtag('event','page_view',{page_title:view});
+  if (typeof gtag === 'function') gtag('event','page_view',{page_title:view});
 }
 function showView(view){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
@@ -871,12 +871,14 @@ document.addEventListener('DOMContentLoaded',()=>{
 let searchFocusIdx = -1;
 
 function openSearch() {
-  document.getElementById('search-overlay').classList.add('open');
+  const overlay = document.getElementById('search-overlay');
   const inp = document.getElementById('search-input');
+  if (!overlay || !inp) return;
+  overlay.classList.add('open');
   inp.value = '';
   renderSearchResults('');
   setTimeout(() => inp.focus(), 50);
-  gtag('event', 'search_open');
+  if (typeof gtag === 'function') gtag('event', 'search_open');
 }
 
 function closeSearch() {
@@ -996,6 +998,7 @@ renderScenes();renderDirectors();
 
 </body>
 </html>
+
 
 
 
