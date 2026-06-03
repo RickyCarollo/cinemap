@@ -301,6 +301,40 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
 .filmstrip{display:flex;gap:.3rem}
 .film-frame{width:18px;height:13px;border:.5px solid var(--border);background:var(--bg3)}
 .film-frame:nth-child(odd){background:var(--bg2)}
+
+/* ── SEARCH ── */
+.search-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,0);pointer-events:none;transition:background .35s;display:flex;align-items:flex-start;justify-content:center;padding-top:8vh}
+.search-overlay.open{background:rgba(0,0,0,.9);pointer-events:all}
+.search-box{width:min(680px,94vw);background:var(--bg);border:.5px solid var(--border2);transform:translateY(-20px) scale(.97);opacity:0;transition:all .4s var(--ease);max-height:80vh;display:flex;flex-direction:column;overflow:hidden}
+.search-overlay.open .search-box{transform:translateY(0) scale(1);opacity:1}
+.search-input-wrap{display:flex;align-items:center;gap:1rem;padding:1.2rem 1.5rem;border-bottom:.5px solid var(--border)}
+.search-input-wrap svg{flex-shrink:0;opacity:.5}
+.search-input{flex:1;background:transparent;border:none;outline:none;font-family:var(--fs);font-size:1.2rem;color:var(--cream);caret-color:var(--gold)}
+.search-input::placeholder{color:var(--muted);font-style:italic}
+.search-esc{font-family:var(--fm);font-size:.6rem;color:var(--muted);cursor:pointer;border:.5px solid var(--border);padding:.28rem .65rem;background:transparent;transition:all .25s;flex-shrink:0}
+.search-esc:hover{color:var(--cream)}
+.search-meta{padding:.7rem 1.5rem;border-bottom:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.search-count{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
+.search-hint{font-family:var(--fm);font-size:.52rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.search-results{overflow-y:auto;flex:1;max-height:60vh}
+.search-results::-webkit-scrollbar{width:2px}
+.search-results::-webkit-scrollbar-thumb{background:var(--border2)}
+.search-result{display:flex;align-items:center;gap:1.2rem;padding:1rem 1.5rem;cursor:pointer;transition:background .2s;border-bottom:.5px solid var(--border)}
+.search-result:hover,.search-result.focused{background:var(--bg2)}
+.search-result:last-child{border-bottom:none}
+.sr-num{font-family:var(--fd);font-size:1.6rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.2);flex-shrink:0;width:32px;text-align:center;line-height:1}
+.sr-body{flex:1;min-width:0}
+.sr-film{font-family:var(--fs);font-size:1rem;color:var(--cream);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sr-film mark,.sr-tag mark{background:transparent;color:var(--gold);font-weight:700}
+.sr-scene{font-family:var(--fs);font-size:.82rem;color:var(--muted2);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.15rem}
+.sr-dir{font-family:var(--fm);font-size:.52rem;letter-spacing:.16em;color:var(--gold);text-transform:uppercase;margin-top:.3rem}
+.sr-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.4rem}
+.sr-tag{font-family:var(--fm);font-size:.48rem;letter-spacing:.1em;padding:.18rem .5rem;border:.5px solid var(--border);color:var(--muted);text-transform:uppercase}
+.sr-arrow{font-family:var(--fm);font-size:.6rem;color:var(--muted);flex-shrink:0;transition:color .2s}
+.search-result:hover .sr-arrow,.search-result.focused .sr-arrow{color:var(--gold)}
+.search-empty{padding:3rem 1.5rem;text-align:center}
+.search-empty p{font-family:var(--fs);font-style:italic;color:var(--muted2);font-size:1rem}
+.search-empty span{font-family:var(--fm);font-size:.55rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;display:block;margin-top:.5rem}
 </style>
 </head>
 <body>
@@ -410,6 +444,22 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   <p>Beta — 59 scene in archivio</p>
 </footer>
 <div class="graph-tooltip" id="gtip"><div class="gt-label" id="gtl"></div><div class="gt-name" id="gtn"></div><div class="gt-sub" id="gts"></div></div>
+
+<div class="search-overlay" id="search-overlay" onclick="if(event.target===this)closeSearch()">
+  <div class="search-box" onclick="event.stopPropagation()">
+    <div class="search-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="search-input" id="search-input" type="text" placeholder="Cerca film, regista, scena, tag..." autocomplete="off" spellcheck="false">
+      <button class="search-esc" onclick="closeSearch()">ESC</button>
+    </div>
+    <div class="search-meta">
+      <span class="search-count" id="search-count">59 scene in archivio</span>
+      <span class="search-hint">↑↓ naviga &nbsp;·&nbsp; ↵ apri</span>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="add-modal" onclick="if(event.target===this)closeAdd()">
   <div class="modal-box">
     <div class="modal-head">
@@ -867,130 +917,95 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 
 // ── SEARCH ──
-let searchFocusIdx = -1;
+var searchFocusIdx = -1;
 
 function openSearch() {
-  const overlay = document.getElementById('search-overlay');
-  const inp = document.getElementById('search-input');
-  if (!overlay || !inp) return;
+  var overlay = document.getElementById('search-overlay');
+  var inp = document.getElementById('search-input');
+  if (!overlay || !inp) { alert('Search non disponibile'); return; }
   overlay.classList.add('open');
   inp.value = '';
   renderSearchResults('');
-  setTimeout(() => inp.focus(), 50);
-  if (typeof gtag === 'function') gtag('event', 'search_open');
+  setTimeout(function(){ inp.focus(); }, 80);
 }
 
 function closeSearch() {
-  document.getElementById('search-overlay').classList.remove('open');
+  var overlay = document.getElementById('search-overlay');
+  if (overlay) overlay.classList.remove('open');
   searchFocusIdx = -1;
 }
 
-function highlight(text, query) {
-  if (!query) return text;
-  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return text.replace(new RegExp(`(${escaped})`, 'gi'), '<mark>$1</mark>');
+function hlText(text, q) {
+  if (!q || !text) return text || '';
+  var esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.replace(new RegExp('(' + esc + ')', 'gi'), '<mark>$1</mark>');
 }
 
 function renderSearchResults(query) {
-  const q = query.trim().toLowerCase();
-  const results = document.getElementById('search-results');
-  const countEl = document.getElementById('search-count');
+  var q = query.trim().toLowerCase();
+  var results = document.getElementById('search-results');
+  var countEl = document.getElementById('search-count');
+  if (!results || !countEl) return;
   searchFocusIdx = -1;
 
-  const matches = q === '' ? SCENES : SCENES.filter(s => {
-    return (
-      s.film.toLowerCase().includes(q) ||
-      s.director.toLowerCase().includes(q) ||
-      s.scene.toLowerCase().includes(q) ||
-      s.tags.some(t => t.includes(q)) ||
-      s.intro.toLowerCase().includes(q) ||
-      (s.an && Object.values(s.an).some(v => v.toLowerCase().includes(q)))
-    );
+  var matches = q === '' ? SCENES : SCENES.filter(function(s) {
+    return s.film.toLowerCase().indexOf(q) > -1 ||
+      s.director.toLowerCase().indexOf(q) > -1 ||
+      s.scene.toLowerCase().indexOf(q) > -1 ||
+      s.tags.join(' ').indexOf(q) > -1 ||
+      (s.intro && s.intro.toLowerCase().indexOf(q) > -1);
   });
 
   countEl.textContent = q
-    ? `${matches.length} risultat${matches.length === 1 ? 'o' : 'i'} per "${query}"`
-    : `${SCENES.length} scene in archivio`;
+    ? matches.length + ' risultat' + (matches.length === 1 ? 'o' : 'i') + ' per "' + query + '"'
+    : SCENES.length + ' scene in archivio';
 
   if (matches.length === 0) {
-    results.innerHTML = `<div class="search-empty">
-      <p>Nessun risultato per "${query}"</p>
-      <span>Prova con un altro termine — regista, film o tag visivo</span>
-    </div>`;
+    results.innerHTML = '<div class="search-empty"><p>Nessun risultato per &quot;' + query + '&quot;</p><span>Prova regista, film o tag visivo</span></div>';
     return;
   }
 
-  results.innerHTML = matches.map((s, i) => {
-    const filmH = highlight(s.film, query);
-    const sceneH = highlight(s.scene, query);
-    const tagsH = s.tl.map(t => `<span class="sr-tag">${highlight(t, query)}</span>`).join('');
-    return `<div class="search-result" data-id="${s.id}" onclick="selectResult(${s.id})" onmouseenter="focusResult(${i})">
-      <div class="sr-num">${String(i+1).padStart(2,'0')}</div>
-      <div class="sr-body">
-        <div class="sr-film">${filmH}</div>
-        <div class="sr-scene">${sceneH}</div>
-        <div class="sr-dir">${s.director.toUpperCase()} · ${s.year}</div>
-        <div class="sr-tags">${tagsH}</div>
-      </div>
-      <div class="sr-arrow">→</div>
-    </div>`;
+  results.innerHTML = matches.map(function(s, i) {
+    return '<div class="search-result" onclick="closeSearch();showScene(' + s.id + ')" onmouseenter="searchFocusIdx=' + i + ';document.querySelectorAll(\'.search-result\').forEach(function(el,j){el.classList.toggle(\'focused\',j===' + i + ')})">' +
+      '<div class="sr-num">' + String(i+1).padStart(2,'0') + '</div>' +
+      '<div class="sr-body">' +
+        '<div class="sr-film">' + hlText(s.film, query) + '</div>' +
+        '<div class="sr-scene">' + hlText(s.scene, query) + '</div>' +
+        '<div class="sr-dir">' + s.director.toUpperCase() + ' · ' + s.year + '</div>' +
+      '</div>' +
+      '<div class="sr-arrow">→</div>' +
+    '</div>';
   }).join('');
 }
 
-function selectResult(id) {
-  closeSearch();
-  showScene(id);
-}
-
-function focusResult(idx) {
-  searchFocusIdx = idx;
-  document.querySelectorAll('.search-result').forEach((el, i) => {
-    el.classList.toggle('focused', i === idx);
-  });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Search input handler
-  const inp = document.getElementById('search-input');
-  if (inp) {
-    inp.addEventListener('input', e => renderSearchResults(e.target.value));
-    inp.addEventListener('keydown', e => {
-      const items = document.querySelectorAll('.search-result');
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        searchFocusIdx = Math.min(searchFocusIdx + 1, items.length - 1);
-        focusResult(searchFocusIdx);
-        items[searchFocusIdx]?.scrollIntoView({block:'nearest'});
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        searchFocusIdx = Math.max(searchFocusIdx - 1, 0);
-        focusResult(searchFocusIdx);
-        items[searchFocusIdx]?.scrollIntoView({block:'nearest'});
-      } else if (e.key === 'Enter' && searchFocusIdx >= 0) {
-        const focused = document.querySelector('.search-result.focused');
-        if (focused) selectResult(parseInt(focused.dataset.id));
-      } else if (e.key === 'Escape') {
-        closeSearch();
-      }
-    });
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    var overlay = document.getElementById('search-overlay');
+    if (overlay && overlay.classList.contains('open')) closeSearch();
+    else openSearch();
   }
-
-  // Keyboard shortcut Cmd+K / Ctrl+K
-  document.addEventListener('keydown', e => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-      e.preventDefault();
-      const overlay = document.getElementById('search-overlay');
-      overlay.classList.contains('open') ? closeSearch() : openSearch();
-    }
-    if (e.key === 'Escape') closeSearch();
-  });
+  if (e.key === 'Escape') closeSearch();
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    var items = document.querySelectorAll('.search-result');
+    if (!items.length) return;
+    if (e.key === 'ArrowDown') searchFocusIdx = Math.min(searchFocusIdx + 1, items.length - 1);
+    else searchFocusIdx = Math.max(searchFocusIdx - 1, 0);
+    items.forEach(function(el, i) { el.classList.toggle('focused', i === searchFocusIdx); });
+    if (items[searchFocusIdx]) items[searchFocusIdx].scrollIntoView({block:'nearest'});
+  }
+  if (e.key === 'Enter') {
+    var focused = document.querySelector('.search-result.focused');
+    if (focused) focused.click();
+  }
 });
 
-// ── CURSOR ──
-const cur=document.getElementById('cur'),curR=document.getElementById('curRing');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-(function aC(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(aC);})();
+// Input listener — added after DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+  var inp = document.getElementById('search-input');
+  if (inp) inp.addEventListener('input', function(e) { renderSearchResults(e.target.value); });
+});
 
 renderScenes();renderDirectors();
 
@@ -1003,6 +1018,7 @@ setTimeout(function(){
 
 </body>
 </html>
+
 
 
 
