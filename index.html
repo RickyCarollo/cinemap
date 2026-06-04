@@ -999,29 +999,29 @@ const PERCORSI = [
 ];
 
 function renderPercorsi() {
-  const grid = document.getElementById('percorsi-grid');
+  var grid = document.getElementById('percorsi-grid');
   if (!grid) return;
-  grid.innerHTML = PERCORSI.map(p => {
-    const films = p.sids.map((sid, i) => {
-      const s = SCENES.find(x => x.id === sid);
+  grid.innerHTML = PERCORSI.map(function(p) {
+    var films = p.sids.map(function(sid, i) {
+      var s = SCENES.find(function(x) { return x.id === sid; });
       if (!s) return '';
-      return `<div class="perc-film" onclick="showScene(\${s.id})">
-        <div class="perc-film-num">0\${i+1}</div>
-        <div class="perc-film-info">
-          <div class="perc-film-title">\${s.film} (\${s.year})</div>
-          <div class="perc-film-scene">\${s.scene}</div>
-          <div class="perc-film-dir">\${s.director}</div>
-        </div>
-        <div class="perc-arrow">→</div>
-      </div>`;
+      return '<div class="perc-film" onclick="showScene(' + s.id + ')">' +
+        '<div class="perc-film-num">0' + (i+1) + '</div>' +
+        '<div class="perc-film-info">' +
+          '<div class="perc-film-title">' + s.film + ' (' + s.year + ')</div>' +
+          '<div class="perc-film-scene">' + s.scene + '</div>' +
+          '<div class="perc-film-dir">' + s.director + '</div>' +
+        '</div>' +
+        '<div class="perc-arrow">→</div>' +
+      '</div>';
     }).join('');
-    return `<div class="percorso-card">
-      <div class="perc-num">Percorso \${p.num}</div>
-      <div class="perc-title">\${p.title}</div>
-      <div class="perc-subtitle">\${p.subtitle}</div>
-      <p class="perc-desc">\${p.desc}</p>
-      <div class="perc-films">\${films}</div>
-    </div>`;
+    return '<div class="percorso-card">' +
+      '<div class="perc-num">Percorso ' + p.num + '</div>' +
+      '<div class="perc-title">' + p.title + '</div>' +
+      '<div class="perc-subtitle">' + p.subtitle + '</div>' +
+      '<p class="perc-desc">' + p.desc + '</p>' +
+      '<div class="perc-films">' + films + '</div>' +
+    '</div>';
   }).join('');
 }
 
@@ -1127,6 +1127,7 @@ setTimeout(function(){
 
 </body>
 </html>
+
 
 
 
