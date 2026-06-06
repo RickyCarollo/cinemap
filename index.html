@@ -354,6 +354,44 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
 .perc-film-dir{font-family:var(--fm);font-size:.5rem;letter-spacing:.14em;color:var(--gold);text-transform:uppercase;margin-top:.15rem}
 .perc-arrow{font-family:var(--fm);font-size:.6rem;color:var(--muted);flex-shrink:0;transition:color .2s}
 .perc-film:hover .perc-arrow{color:var(--gold)}
+
+/* ── CARD GENERATOR ── */
+.card-modal-overlay{position:fixed;inset:0;z-index:700;background:rgba(0,0,0,0);pointer-events:none;transition:background .4s;display:flex;align-items:center;justify-content:center}
+.card-modal-overlay.open{background:rgba(0,0,0,.94);pointer-events:all}
+.card-modal-box{background:var(--bg);border:.5px solid var(--border2);width:min(820px,96vw);max-height:92vh;overflow-y:auto;transform:translateY(24px) scale(.97);opacity:0;transition:all .4s var(--ease);display:flex;flex-direction:column}
+.card-modal-overlay.open .card-modal-box{transform:translateY(0) scale(1);opacity:1}
+.card-modal-head{display:flex;align-items:flex-start;justify-content:space-between;padding:1.4rem 1.7rem;border-bottom:.5px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:10}
+.card-modal-body{padding:1.8rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+.card-preview-wrap{position:relative}
+.card-preview-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.28em;color:var(--muted);text-transform:uppercase;margin-bottom:.8rem}
+#card-canvas{width:100%;border:.5px solid var(--border);display:block;cursor:default}
+.card-options{display:flex;flex-direction:column;gap:1.4rem}
+.card-opt-label{font-family:var(--fm);font-size:.55rem;letter-spacing:.24em;color:var(--gold);text-transform:uppercase;margin-bottom:.6rem}
+.card-opt-row{display:flex;gap:.5rem;flex-wrap:wrap}
+.card-opt-btn{font-family:var(--fm);font-size:.55rem;letter-spacing:.14em;padding:.38rem .9rem;border:.5px solid var(--border);color:var(--muted2);cursor:pointer;background:transparent;transition:all .25s;text-transform:uppercase}
+.card-opt-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,.08)}
+.card-opt-btn:hover{border-color:var(--border2);color:var(--muted3)}
+.card-dl-btn{background:var(--gold);color:var(--bg);border:none;padding:1rem 2rem;font-family:var(--fm);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:all .3s;width:100%;margin-top:1rem}
+.card-dl-btn:hover{background:var(--gold2);transform:translateY(-1px)}
+.card-dl-note{font-family:var(--fs);font-style:italic;font-size:.82rem;color:var(--muted);line-height:1.5;margin-top:.8rem}
+
+.card-modal-overlay{position:fixed;inset:0;z-index:700;background:rgba(0,0,0,0);pointer-events:none;transition:background .4s;display:flex;align-items:center;justify-content:center;padding:1rem}
+.card-modal-overlay.open{background:rgba(0,0,0,.94);pointer-events:all}
+.card-modal-box{background:var(--bg);border:.5px solid var(--border2);width:min(820px,96vw);max-height:92vh;overflow-y:auto;transform:translateY(24px) scale(.97);opacity:0;transition:all .4s var(--ease)}
+.card-modal-overlay.open .card-modal-box{transform:translateY(0) scale(1);opacity:1}
+.card-modal-head{display:flex;align-items:flex-start;justify-content:space-between;padding:1.4rem 1.7rem;border-bottom:.5px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:10}
+.card-modal-body{padding:1.8rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start}
+.card-preview-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.28em;color:var(--muted);text-transform:uppercase;margin-bottom:.8rem}
+#card-canvas{width:100%;border:.5px solid var(--border);display:block}
+.card-options{display:flex;flex-direction:column;gap:1.5rem}
+.card-opt-label{font-family:var(--fm);font-size:.55rem;letter-spacing:.24em;color:var(--gold);text-transform:uppercase;margin-bottom:.6rem}
+.card-opt-row{display:flex;gap:.5rem;flex-wrap:wrap}
+.card-opt-btn{font-family:var(--fm);font-size:.55rem;letter-spacing:.14em;padding:.38rem .9rem;border:.5px solid var(--border);color:var(--muted2);cursor:pointer;background:transparent;transition:all .25s;text-transform:uppercase}
+.card-opt-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,.08)}
+.card-opt-btn:hover{border-color:var(--border2);color:var(--muted3)}
+.card-dl-btn{background:var(--gold);color:var(--bg);border:none;padding:1rem;font-family:var(--fm);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;cursor:pointer;transition:all .3s;width:100%;margin-top:.5rem}
+.card-dl-btn:hover{background:var(--gold2)}
+.card-dl-note{font-family:var(--fs);font-style:italic;font-size:.82rem;color:var(--muted);line-height:1.5;margin-top:.8rem}
 </style>
 </head>
 <body>
@@ -478,6 +516,48 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   <div class="percorsi-grid" id="percorsi-grid"></div>
 </div>
 
+
+<div class="card-modal-overlay" id="card-modal" onclick="if(event.target===this)closeCardModal()">
+  <div class="card-modal-box" onclick="event.stopPropagation()">
+    <div class="card-modal-head">
+      <div><div class="modal-title">Genera Card Instagram</div><div class="modal-subtitle">Formato 1080x1350 — pronta per i social</div></div>
+      <button class="modal-close" onclick="closeCardModal()">&#x2715; Chiudi</button>
+    </div>
+    <div class="card-modal-body">
+      <div>
+        <div class="card-preview-label">Anteprima</div>
+        <canvas id="card-canvas" width="1080" height="1350"></canvas>
+      </div>
+      <div class="card-options">
+        <div>
+          <div class="card-opt-label">Tema colore</div>
+          <div class="card-opt-row" id="card-theme-row">
+            <button class="card-opt-btn active" onclick="setCardTheme('dark',this)">Dark</button>
+            <button class="card-opt-btn" onclick="setCardTheme('noir',this)">Noir B&amp;N</button>
+            <button class="card-opt-btn" onclick="setCardTheme('red',this)">Rosso</button>
+          </div>
+        </div>
+        <div>
+          <div class="card-opt-label">Testo in evidenza</div>
+          <div class="card-opt-row" id="card-content-row">
+            <button class="card-opt-btn active" onclick="setCardContent('intro',this)">Intro</button>
+            <button class="card-opt-btn" onclick="setCardContent('regia',this)">Regia</button>
+            <button class="card-opt-btn" onclick="setCardContent('simbologia',this)">Simbologia</button>
+          </div>
+        </div>
+        <div>
+          <div class="card-opt-label">Formato</div>
+          <div class="card-opt-row" id="card-format-row">
+            <button class="card-opt-btn active" onclick="setCardFormat('post',this)">Post 4:5</button>
+            <button class="card-opt-btn" onclick="setCardFormat('story',this)">Story 9:16</button>
+          </div>
+        </div>
+        <button class="card-dl-btn" onclick="downloadCard()">&#x2193; Scarica PNG</button>
+        <p class="card-dl-note">Pubblicala su Instagram con il tag <strong>#cinemap</strong> e il link al sito in bio.</p>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="search-overlay" id="search-overlay" onclick="if(event.target===this)closeSearch()">
   <div class="search-box" onclick="event.stopPropagation()">
@@ -1115,6 +1195,56 @@ document.addEventListener('DOMContentLoaded', function() {
   var inp = document.getElementById('search-input');
   if (inp) inp.addEventListener('input', function(e) { renderSearchResults(e.target.value); });
 });
+
+
+// ── CARD GENERATOR ──
+var cardSceneId=null,cardTheme='dark',cardContent='intro',cardFormat='post';
+var CARD_THEMES={dark:{bg:'#0a0a0a',bg2:'#111',gold:'#c8a96e',cream:'#f0e8d8',muted:'#777',line:'rgba(200,169,110,0.3)'},noir:{bg:'#000',bg2:'#0a0a0a',gold:'#fff',cream:'#fff',muted:'#888',line:'rgba(255,255,255,0.2)'},red:{bg:'#0d0505',bg2:'#160808',gold:'#c84040',cream:'#f0e8d8',muted:'#777',line:'rgba(200,64,64,0.4)'}};
+function openCardModal(id){cardSceneId=id;document.getElementById('card-modal').classList.add('open');setTimeout(drawCard,150);}
+function closeCardModal(){document.getElementById('card-modal').classList.remove('open');}
+function setCardTheme(th,btn){cardTheme=th;document.querySelectorAll('#card-theme-row .card-opt-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');drawCard();}
+function setCardContent(ct,btn){cardContent=ct;document.querySelectorAll('#card-content-row .card-opt-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');drawCard();}
+function setCardFormat(fmt,btn){cardFormat=fmt;var c=document.getElementById('card-canvas');c.width=1080;c.height=fmt==='story'?1920:1350;document.querySelectorAll('#card-format-row .card-opt-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');drawCard();}
+function wrapText(ctx,text,x,y,maxW,lh,max){var words=text.split(' '),line='',lines=[];for(var i=0;i<words.length;i++){var t=line+words[i]+' ';if(ctx.measureText(t).width>maxW&&i>0){lines.push(line.trim());line=words[i]+' ';}else line=t;}lines.push(line.trim());if(lines.length>max){lines=lines.slice(0,max);lines[max-1]+='...';}for(var j=0;j<lines.length;j++)ctx.fillText(lines[j],x,y+j*lh);return lines.length*lh;}
+function drawCard(){
+  var s=SCENES.find(function(x){return x.id===cardSceneId;});if(!s)return;
+  var canvas=document.getElementById('card-canvas');var ctx=canvas.getContext('2d');
+  var W=canvas.width,H=canvas.height,t=CARD_THEMES[cardTheme],pad=Math.round(W*0.08);
+  ctx.fillStyle=t.bg;ctx.fillRect(0,0,W,H);
+  var gr=ctx.createLinearGradient(0,0,W,H);gr.addColorStop(0,'rgba(200,169,110,0.05)');gr.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
+  for(var i=0;i<5000;i++){ctx.fillStyle='rgba(200,169,110,'+(Math.random()*0.03)+')';ctx.fillRect(Math.random()*W,Math.random()*H,1,1);}
+  ctx.strokeStyle=t.gold;ctx.lineWidth=3;ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(pad,H*0.06);ctx.lineTo(W-pad,H*0.06);ctx.stroke();
+  var ly=H*0.06+H*0.055;ctx.font='bold '+Math.round(W*0.04)+'px "Bebas Neue",sans-serif';
+  ctx.fillStyle=t.gold;ctx.fillText('CINE',pad,ly);var cw=ctx.measureText('CINE').width;
+  ctx.fillStyle=t.cream;ctx.fillText('MAP',pad+cw,ly);
+  ctx.fillStyle=t.muted;ctx.font=Math.round(W*0.017)+'px "DM Mono",monospace';var tg="FRAME D'AUTORE";ctx.fillText(tg,W-pad-ctx.measureText(tg).width,ly);
+  var bY=Math.round(H*0.19),bH=Math.round(H*0.044);
+  ctx.fillStyle=t.bg2;ctx.fillRect(pad,bY,W*0.62,bH);ctx.strokeStyle=t.line;ctx.lineWidth=1;ctx.strokeRect(pad,bY,W*0.62,bH);
+  ctx.fillStyle=t.gold;ctx.font=Math.round(W*0.02)+'px "DM Mono",monospace';ctx.fillText(s.director.toUpperCase()+'  ·  '+s.year,pad+20,bY+bH*0.68);
+  var tY=bY+Math.round(H*0.085),tSz=Math.round(W*0.1);
+  ctx.font=tSz+'px "Bebas Neue",sans-serif';
+  while(ctx.measureText(s.film).width>W-pad*2&&tSz>36){tSz-=4;ctx.font=tSz+'px "Bebas Neue",sans-serif';}
+  ctx.fillStyle=t.cream;ctx.fillText(s.film,pad,tY);
+  var sY=tY+Math.round(H*0.052);ctx.fillStyle=t.muted;ctx.font='italic '+Math.round(W*0.03)+'px "Cormorant Garamond",Georgia,serif';
+  var sc=s.scene.length>52?s.scene.slice(0,52)+'...':s.scene;ctx.fillText(sc,pad,sY);
+  var dY=sY+Math.round(H*0.055);ctx.strokeStyle=t.line;ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(pad,dY);ctx.lineTo(W-pad,dY);ctx.stroke();ctx.setLineDash([]);
+  var qY=dY+Math.round(H*0.055),qTxt='';
+  if(cardContent==='intro')qTxt=s.intro||'';else if(cardContent==='regia')qTxt=(s.an&&s.an.regia)||s.intro;else qTxt=(s.an&&s.an.simbologia)||s.intro;
+  qTxt=qTxt.replace(/<[^>]*>/g,'');ctx.fillStyle=t.cream;ctx.font=Math.round(W*0.033)+'px "Cormorant Garamond",Georgia,serif';
+  wrapText(ctx,qTxt,pad,qY,W-pad*2,Math.round(H*0.054),4);
+  var taY=Math.round(H*0.735),tX=pad;ctx.font=Math.round(W*0.019)+'px "DM Mono",monospace';
+  s.tl.slice(0,3).forEach(function(tag){var tw=ctx.measureText(tag).width+24;ctx.fillStyle='rgba(200,169,110,0.08)';ctx.fillRect(tX,taY-H*0.025,tw,H*0.036);ctx.strokeStyle=t.line;ctx.lineWidth=1;ctx.strokeRect(tX,taY-H*0.025,tw,H*0.036);ctx.fillStyle=t.gold;ctx.fillText(tag,tX+12,taY+H*0.005);tX+=tw+12;});
+  ctx.font=Math.round(W*0.018)+'px "DM Mono",monospace';var rw=ctx.measureText(s.ratio).width+20,rx=W-pad-rw;
+  ctx.fillStyle=t.bg2;ctx.fillRect(rx,taY-H*0.025,rw,H*0.036);ctx.strokeStyle=t.line;ctx.strokeRect(rx,taY-H*0.025,rw,H*0.036);ctx.fillStyle=t.gold;ctx.fillText(s.ratio,rx+10,taY+H*0.005);
+  var botY=Math.round(H*0.92);ctx.strokeStyle=t.gold;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(pad,botY);ctx.lineTo(W-pad,botY);ctx.stroke();
+  var fW=Math.round((W-pad*2)/14);for(var f=0;f<13;f++){ctx.fillStyle=f%2===0?t.bg2:'rgba(200,169,110,0.04)';ctx.fillRect(pad+f*fW,botY+H*0.013,fW-3,H*0.022);}
+  ctx.fillStyle=t.muted;ctx.font=Math.round(W*0.017)+'px "DM Mono",monospace';ctx.fillText('cinemap-hazel.vercel.app',pad,H*0.972);
+}
+function downloadCard(){
+  var s=SCENES.find(function(x){return x.id===cardSceneId;});if(!s)return;
+  var a=document.createElement('a');a.download='cinemap_'+s.film.replace(/[^a-z0-9]/gi,'_').toLowerCase()+'.png';
+  a.href=document.getElementById('card-canvas').toDataURL('image/png');a.click();
+}
 
 renderScenes();renderDirectors();
 
