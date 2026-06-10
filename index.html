@@ -62,6 +62,7 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--cream);font-family:var(--fs);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 ::-webkit-scrollbar{width:2px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2)}
+.mob-menu-btn{display:none}
 .cursor{width:8px;height:8px;background:var(--gold);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s;mix-blend-mode:difference}
 .cursor-ring{width:32px;height:32px;border:1px solid rgba(200,169,110,.5);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%)}
 nav{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 2.8rem;border-bottom:.5px solid var(--border);position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(8,8,8,.94);backdrop-filter:blur(24px)}
@@ -394,13 +395,234 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
 #ig-card .card-site{font-family:var(--fm);font-size:.38rem;letter-spacing:.12em;color:rgba(200,169,110,.45);text-transform:uppercase}
 #ig-card .card-ratio{font-family:var(--fm);font-size:.38rem;letter-spacing:.1em;color:rgba(200,169,110,.5);border:.5px solid rgba(200,169,110,.25);padding:.12rem .4rem}
 
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — MOBILE & TABLET
+   ═══════════════════════════════════════════ */
+
+/* ── Tablet ── */
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.6rem; }
+  nav ul { gap: 1.4rem; }
+  .hero { padding: 4rem 1.6rem 3.5rem; min-height: 70vh; }
+  .sec-head { padding: 2.5rem 1.6rem 1.4rem; }
+  .filter-bar { padding: 1rem 1.6rem; top: 56px; }
+  .scene-grid { grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); margin: 0 1.6rem; }
+  .directors-grid { margin: 0 1.6rem; }
+  .percorsi-grid { grid-template-columns: 1fr; margin: 0 1.6rem; }
+  .graph-section { padding: 0 1.6rem 4rem; }
+  .detail-wrap { padding: 0 1.6rem 4rem; }
+  .detail-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .anatomy-grid { grid-template-columns: 1fr; }
+  .dir-cta-bar { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .card-modal-body { grid-template-columns: 1fr; }
+  .card-preview-wrap { width: 100%; max-width: 340px; margin: 0 auto; }
+  .graph-container { height: 420px; }
+}
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+
+  /* cursor nascosto su touch */
+  .cursor, .cursor-ring { display: none; }
+
+  /* NAV */
+  nav {
+    padding: .85rem 1.1rem;
+    gap: .8rem;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+  nav ul {
+    display: none; /* nascosto — hamburger sotto */
+  }
+  .logo { font-size: 1.35rem; }
+  .nav-cta { display: none; }
+  #app { padding-top: 52px; }
+
+  /* HAMBURGER MENU */
+  .mob-menu-btn {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+    padding: .4rem;
+    background: none;
+    border: none;
+  }
+  .mob-menu-btn span {
+    display: block;
+    width: 20px;
+    height: 1.5px;
+    background: var(--gold);
+    transition: all .3s;
+  }
+  .mob-nav {
+    position: fixed;
+    top: 52px;
+    left: 0;
+    right: 0;
+    background: rgba(8,8,8,.98);
+    border-bottom: .5px solid var(--border2);
+    z-index: 299;
+    padding: 1rem 0;
+    display: none;
+    backdrop-filter: blur(24px);
+  }
+  .mob-nav.open { display: block; }
+  .mob-nav ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .mob-nav ul li {
+    font-family: var(--fm);
+    font-size: .75rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--muted2);
+    padding: .9rem 1.5rem;
+    cursor: pointer;
+    border-bottom: .5px solid var(--border);
+    transition: color .2s, background .2s;
+  }
+  .mob-nav ul li:hover,
+  .mob-nav ul li.active {
+    color: var(--gold);
+    background: rgba(200,169,110,.04);
+  }
+
+  /* HERO */
+  .hero {
+    padding: 3rem 1.1rem 3rem;
+    min-height: 65vh;
+  }
+  .hero h1 { font-size: clamp(2.6rem, 11vw, 4rem); }
+  .hero-desc { font-size: .95rem; margin-top: 1.2rem; }
+  .hero-row { gap: .8rem; margin-top: 2rem; flex-wrap: wrap; }
+  .hero-stats { gap: 1.5rem; }
+  .hs-num { font-size: 1.8rem; }
+  .hero-divider { display: none; }
+  .btn-gold, .btn-outline { padding: .75rem 1.4rem; font-size: .6rem; }
+  .hero-bg-num { font-size: 50vw; }
+
+  /* SECTION HEADER */
+  .sec-head {
+    padding: 2rem 1.1rem 1.2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .sec-count { display: none; }
+
+  /* FILTER BAR */
+  .filter-bar {
+    padding: .7rem 1.1rem;
+    top: 52px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .ftag { white-space: nowrap; flex-shrink: 0; }
+
+  /* GRIDS */
+  .scene-grid {
+    grid-template-columns: 1fr;
+    margin: 0;
+    gap: 0;
+  }
+  .directors-grid {
+    grid-template-columns: repeat(2, 1fr);
+    margin: 0;
+    gap: 0;
+  }
+  .percorsi-grid {
+    grid-template-columns: 1fr;
+    margin: 0;
+    gap: 0;
+  }
+
+  /* SCENE CARD */
+  .sc-thumb { height: 170px; }
+  .sc-body { padding: 1rem 1.1rem 1.2rem; }
+  .sc-title { font-size: 1rem; }
+  .sc-scene { font-size: .8rem; }
+
+  /* DIRECTOR CARD */
+  .dir-img-wrap { height: 140px; }
+  .dir-body { padding: .9rem 1rem 1.2rem; }
+  .dir-name { font-size: 1rem; }
+  .dir-ph-letter { font-size: 3.5rem; }
+
+  /* SCENE DETAIL */
+  .detail-wrap { padding: 0 1.1rem 4rem; }
+  .back-btn { margin: 1.5rem 0; }
+  .detail-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .detail-frame { aspect-ratio: 16/9; }
+  .det-title { font-size: 2.2rem; }
+  .anatomy-grid { grid-template-columns: 1fr; }
+  .anatomy-cell { padding: 1.4rem; }
+  .dir-cta-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.2rem;
+  }
+
+  /* PERCORSI */
+  .percorso-card { padding: 1.6rem 1.1rem; }
+
+  /* GRAPH */
+  .graph-section { padding: 0 1.1rem 3rem; }
+  .graph-container { height: 320px; }
+  .graph-legend { gap: .8rem; padding: 1rem; }
+
+  /* MODALS */
+  .modal-box { width: 100vw; max-height: 100vh; border-left: none; border-right: none; }
+  .modal-head { padding: 1.1rem; }
+  .modal-title { font-size: 1.4rem; }
+  .modal-body { padding: 1.1rem; }
+  .form-grid2 { grid-template-columns: 1fr; }
+
+  /* CARD GENERATOR MODAL */
+  .card-modal-box { width: 100vw; max-height: 100vh; }
+  .card-modal-head { padding: 1rem 1.1rem; }
+  .card-modal-body {
+    grid-template-columns: 1fr;
+    padding: 1.1rem;
+    gap: 1.4rem;
+  }
+  .card-preview-wrap { width: 100%; max-width: 100%; }
+  #ig-card .card-film { font-size: 1.2rem; }
+  #ig-card .card-scene { font-size: .6rem; }
+  #ig-card .card-dir { font-size: .4rem; }
+
+  /* SEARCH */
+  .search-overlay { padding: 1rem; }
+  .search-box { width: 100%; }
+  .search-input { font-size: 1.2rem; }
+
+  /* TYPOGRAPHY ADJUSTMENTS */
+  .sec-label { font-size: .5rem; letter-spacing: .25em; }
+  .det-intro { font-size: .92rem; }
+}
+
+/* ── Small mobile (375px and below) ── */
+@media (max-width: 375px) {
+  .directors-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2.4rem; }
+  .sc-thumb { height: 150px; }
+}
 </style>
 </head>
 <body>
 <div class="cursor" id="cur"></div>
 <div class="cursor-ring" id="curRing"></div>
 <nav>
-  <div class="logo" onclick="nav('home')">CINE<span>MAP</span></div>
+  <div class="logo" onclick="nav('home');closeMobNav()">CINE<span>MAP</span></div>
   <ul>
     <li class="active" id="nl-home" onclick="nav('home')">Scene</li>
     <li id="nl-directors" onclick="nav('directors')">Registi</li>
@@ -408,13 +630,25 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
     <li id="nl-percorsi" onclick="nav('percorsi')">Percorsi</li>
   </ul>
   <div style="display:flex;align-items:center;gap:.8rem;flex-shrink:0">
-  <button style="display:flex;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);background:transparent;border:.5px solid var(--border);padding:.38rem .9rem;cursor:pointer;transition:all .3s" id="search-btn" onclick="openSearch()" title="Cerca (Cmd+K)">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <span>Cerca</span>
-  </button>
-  <button class="nav-cta" onclick="openAdd()"><span>+ Aggiungi scena</span></button>
-</div>
+    <button style="display:flex;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);background:transparent;border:.5px solid var(--border);padding:.38rem .9rem;cursor:pointer;transition:all .3s" id="search-btn" onclick="openSearch()" title="Cerca (Cmd+K)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <span id="search-btn-label">Cerca</span>
+    </button>
+    <button class="nav-cta" onclick="openAdd()"><span>+ Aggiungi scena</span></button>
+    <button class="mob-menu-btn" onclick="toggleMobNav()" id="mob-menu-btn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
+<div class="mob-nav" id="mob-nav">
+  <ul>
+    <li id="mnl-home" onclick="nav('home');closeMobNav()">Scene</li>
+    <li id="mnl-directors" onclick="nav('directors');closeMobNav()">Registi</li>
+    <li id="mnl-map" onclick="nav('map');closeMobNav()">Mappa Visiva</li>
+    <li id="mnl-percorsi" onclick="nav('percorsi');closeMobNav()">Percorsi di Visione</li>
+    <li onclick="openSearch();closeMobNav()" style="color:var(--gold)">Cerca</li>
+  </ul>
+</div>
 <div id="app">
 <div class="view active" id="view-home">
   <div class="hero">
@@ -1399,10 +1633,44 @@ setTimeout(function(){
   var btn=document.getElementById('search-btn');
   if(btn){btn.addEventListener('click',openSearch);btn.setAttribute('onclick','openSearch()');}
 }, 0);
+
+// ── MOBILE NAV ──
+function toggleMobNav(){
+  var mn=document.getElementById('mob-nav');
+  var btn=document.getElementById('mob-menu-btn');
+  var open=mn.classList.toggle('open');
+  // Animate hamburger → X
+  var spans=btn.querySelectorAll('span');
+  if(open){
+    spans[0].style.transform='rotate(45deg) translate(4px,4px)';
+    spans[1].style.opacity='0';
+    spans[2].style.transform='rotate(-45deg) translate(4px,-4px)';
+  } else {
+    spans[0].style.transform='';
+    spans[1].style.opacity='';
+    spans[2].style.transform='';
+  }
+}
+function closeMobNav(){
+  var mn=document.getElementById('mob-nav');
+  if(!mn)return;
+  mn.classList.remove('open');
+  var spans=document.querySelectorAll('.mob-menu-btn span');
+  spans.forEach(function(s){s.style.transform='';s.style.opacity='';});
+}
+// Close mob nav on outside tap
+document.addEventListener('click',function(e){
+  var mn=document.getElementById('mob-nav');
+  var btn=document.getElementById('mob-menu-btn');
+  if(mn&&mn.classList.contains('open')&&!mn.contains(e.target)&&!btn.contains(e.target)){
+    closeMobNav();
+  }
+});
 </script>
 
 </body>
 </html>
+
 
 
 
