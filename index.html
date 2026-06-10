@@ -1251,6 +1251,20 @@ var IG_THEMES={
   }
 };
 
+// Fetcha l'immagine come blob e la converte in dataURL — unico modo per aggirare
+// il blocco CORS di html2canvas sulle immagini esterne
+function fetchAsDataURL(url, cb){
+  fetch('https://corsproxy.io/?url='+encodeURIComponent(url))
+    .then(function(r){return r.blob();})
+    .then(function(blob){
+      var reader=new FileReader();
+      reader.onload=function(){cb(reader.result);};
+      reader.onerror=function(){cb(null);};
+      reader.readAsDataURL(blob);
+    })
+    .catch(function(){cb(null);});
+}
+
 function openCardModal(id){
   igSceneId=id;
   var s=SCENES.find(function(x){return x.id===id;});
@@ -1265,11 +1279,9 @@ function openCardModal(id){
   document.getElementById('ig-scene').textContent=s.scene;
   document.getElementById('ig-ratio').textContent=s.ratio;
   document.getElementById('ig-tags').innerHTML=s.tl.slice(0,3).map(function(t){return'<span class="card-tag">#'+t+'</span>';}).join('');
-  // Apply theme
   applyIgTheme(igTheme);
-  // Show modal
   document.getElementById('card-modal').classList.add('open');
-  // Load poster
+  // Load poster as dataURL so html2canvas can read it
   var poster=document.getElementById('ig-poster');
   var ph=document.getElementById('ig-poster-ph');
   poster.style.display='none';
@@ -1277,12 +1289,14 @@ function openCardModal(id){
   var loadEl=document.getElementById('ig-loading');
   loadEl.style.display='block';
   searchMovieImg(s.film,s.year,'w780').then(function(url){
-    loadEl.style.display='none';
-    if(url){
-      poster.onload=function(){poster.style.display='block';ph.style.display='none';};
-      poster.onerror=function(){poster.style.display='none';ph.style.display='flex';};
-      poster.src=url;
-    }
+    if(!url){loadEl.style.display='none';return;}
+    fetchAsDataURL(url,function(dataUrl){
+      loadEl.style.display='none';
+      if(dataUrl){
+        poster.onload=function(){poster.style.display='block';ph.style.display='none';};
+        poster.src=dataUrl; // dataURL: nessun blocco CORS
+      }
+    });
   });
 }
 
@@ -1328,29 +1342,28 @@ function downloadIgCard(){
   var card=document.getElementById('ig-card');
   var s=SCENES.find(function(x){return x.id===igSceneId;});
   var fname='cinemap_'+(s?s.film.replace(/[^a-z0-9]/gi,'_').toLowerCase():'card')+'.png';
-  // Use html2canvas (loaded below)
   if(typeof html2canvas==='undefined'){
-    // Fallback: open in new tab for manual save
-    alert('Per salvare: tasto destro sull\'anteprima → "Salva immagine come"');
+    alert('Libreria non caricata. Controlla la connessione e ricarica la pagina.');
     return;
   }
   var btn=document.querySelector('.card-dl-btn');
-  btn.textContent='Generazione…';btn.disabled=true;
+  btn.textContent='Generazione in corso…';btn.disabled=true;
   html2canvas(card,{
     scale:4,
-    useCORS:true,
-    allowTaint:true,
-    backgroundColor:null,
-    logging:false
+    backgroundColor:'#0a0a0a',
+    logging:false,
+    imageTimeout:0,
+    removeContainer:true
   }).then(function(canvas){
     var a=document.createElement('a');
     a.download=fname;
-    a.href=canvas.toDataURL('image/png');
-    a.click();
+    a.href=canvas.toDataURL('image/png',1.0);
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
     btn.textContent='↓ Scarica PNG';btn.disabled=false;
-  }).catch(function(){
+  }).catch(function(err){
+    console.error('html2canvas:',err);
     btn.textContent='↓ Scarica PNG';btn.disabled=false;
-    alert('Salva l\'immagine con tasto destro → "Salva immagine come"');
+    alert('Errore. Prova tasto destro \u2192 "Salva immagine come" sull\u0027anteprima.');
   });
 }
 
