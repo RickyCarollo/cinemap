@@ -647,7 +647,7 @@ const DIRS=[
   {id:'refn',       name:'N.W. Refn',           origin:'Danimarca · 1970',pid:56577,obs:['Violenza e silenzio','Neon e notte','Eroe senza parole','Stile sopra narrazione']},
   {id:'gondry',     name:'Michel Gondry',       origin:'Francia · 1963', pid:14384, obs:['Artigianato visivo','Memoria come spazio fisico','In-camera effects','Romanticismo surreale']},
   {id:'coen',       name:'Coen Brothers',       origin:'USA · 1954/57',  pid:1223,  obs:['Fato e caso','Midwest come inferno','Dialogo come ritmo','Il male banale']},
-  {id:'pta',        name:'Paul T. Anderson',    origin:'USA · 1970',     pid:4762,  obs:["L'America come religione","Piano sequenza emotivo","Padri e figli","Ossessione e grandiosità"]},
+  {id:'pta',        name:'Paul T. Anderson',    origin:'USA · 1970',     pid:4762,  obs:["L'America come religione","Piano sequenza emotivo","Padri e figli","Grandiosità controllata"]},
   {id:'boyle',      name:'Danny Boyle',         origin:'UK · 1956',      pid:5281,  obs:['Energia visiva','Soundtrack come motore','Eroina e adrenalina','Speranza e cinismo']},
   {id:'kassovitz',  name:'M. Kassovitz',        origin:'Francia · 1967', pid:13295, obs:['Banlieue come stato mentale','Bianco e nero sociale','Caduta libera','Gioventù e violenza']},
   {id:'sofiacoppola',name:'Sofia Coppola',      origin:'USA · 1971',     pid:4391,  obs:['Alienazione privilegiata','Silenzio eloquente','Femminilità e isolamento','Colori pastello']},
@@ -871,6 +871,13 @@ async function showScene(id){
         <div class="dir-cta-text-sub">Esplora i pattern visivi e le ossessioni del regista</div>
       </div>
       <button class="btn-outline" onclick="filterByDir('${s.did}')">Vai al regista →</button>
+    </div>
+    <div style="margin-top:1rem;padding:1.2rem 1.6rem;border:.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1.5rem;background:rgba(200,169,110,0.03)">
+      <div>
+        <div style="font-family:var(--fm);font-size:.52rem;letter-spacing:.24em;color:var(--gold);text-transform:uppercase;margin-bottom:.4rem">&#9654; Condividi su Instagram</div>
+        <div style="font-family:var(--fs);font-size:.88rem;color:var(--muted2);font-style:italic">Genera una card cinematografica pronta per i social</div>
+      </div>
+      <button class="btn-gold" onclick="openCardModal(${s.id})" style="flex-shrink:0;white-space:nowrap">Genera Card ↗</button>
     </div>`;
   showView('scene');
   window.scrollTo({top:0,behavior:'smooth'});
@@ -896,8 +903,8 @@ function buildGraph(){
   const nodes=[],links=[];
   DIRS.forEach(d=>nodes.push({id:d.id,name:d.name,type:'director',origin:d.origin}));
   Object.entries(KW).forEach(([key,kw])=>{
-    nodes.push({id:`kw_${key}`,name:kw.label,type:'keyword',key,desc:kw.desc,dirs:kw.dirs});
-    kw.dirs.forEach(did=>links.push({source:did,target:`kw_${key}`}));
+    nodes.push({id:'kw_'+key,name:kw.label,type:'keyword',key:key,desc:kw.desc,dirs:kw.dirs});
+    kw.dirs.forEach(function(did){links.push({source:did,target:'kw_'+key});});
   });
   const svg=d3.select('#graph-container').append('svg').attr('width',W).attr('height',H);
   const defs=svg.append('defs');
@@ -1257,6 +1264,7 @@ setTimeout(function(){
 
 </body>
 </html>
+
 
 
 
