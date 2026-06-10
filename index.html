@@ -1218,26 +1218,40 @@ var CARD_THEMES={
   red:{bg:'#0d0505',bg2:'#160808',gold:'#e05050',cream:'#f0e8d8',muted:'#999',line:'rgba(220,60,60,0.45)',overlay:'rgba(10,0,0,0.62)'}
 };
 
+function loadPosterBlob(url,cb){
+  var proxy='https://corsproxy.io/?url='+encodeURIComponent(url);
+  fetch(proxy).then(function(r){return r.blob();}).then(function(blob){
+    var burl=URL.createObjectURL(blob);
+    var img=new Image();
+    img.onload=function(){cb(img);};
+    img.onerror=function(){cb(null);};
+    img.src=burl;
+  }).catch(function(){cb(null);});
+}
+
 function openCardModal(id){
   cardSceneId=id;
   cardPosterImg=null;
+  var qi=document.getElementById('card-quote-input');if(qi)qi.value='';
+  var qf=document.getElementById('card-quote-field');if(qf)qf.style.display='none';
+  document.querySelectorAll('#card-layout-row .card-opt-btn').forEach(function(b){b.classList.remove('active')});
+  var lb=document.querySelector('#card-layout-row .card-opt-btn');if(lb)lb.classList.add('active');
+  cardLayout='poster';
   document.getElementById('card-modal').classList.add('open');
-  // load poster then draw
   var s=SCENES.find(function(x){return x.id===id;});
   if(!s)return;
   var loadEl=document.getElementById('card-loading');
+  drawCard();
   if(loadEl)loadEl.style.display='flex';
   searchMovieImg(s.film,s.year,'w780').then(function(url){
     if(url){
-      var img=new Image();
-      img.crossOrigin='anonymous';
-      img.onload=function(){cardPosterImg=img;if(loadEl)loadEl.style.display='none';drawCard();};
-      img.onerror=function(){cardPosterImg=null;if(loadEl)loadEl.style.display='none';drawCard();};
-      img.src=url;
+      loadPosterBlob(url,function(img){
+        cardPosterImg=img;
+        if(loadEl)loadEl.style.display='none';
+        drawCard();
+      });
     }else{
-      cardPosterImg=null;
       if(loadEl)loadEl.style.display='none';
-      drawCard();
     }
   });
 }
@@ -1267,128 +1281,144 @@ function drawCard(){
   var canvas=document.getElementById('card-canvas');var ctx=canvas.getContext('2d');
   var W=canvas.width,H=canvas.height,t=CARD_THEMES[cardTheme],pad=Math.round(W*0.08);
 
-  // ── BASE BG ──
+  // ─── CLEAR ───
+  ctx.clearRect(0,0,W,H);
   ctx.fillStyle=t.bg;ctx.fillRect(0,0,W,H);
 
-  if(cardLayout==='poster'||cardLayout==='split'){
-    if(cardPosterImg){
-      // Poster covers top portion
-      var ph=cardLayout==='split'?Math.round(H*0.58):H;
-      ctx.save();
-      ctx.beginPath();ctx.rect(0,0,W,ph);ctx.clip();
-      // cover-fit
-      var iw=cardPosterImg.width,ih=cardPosterImg.height;
-      var scale=Math.max(W/iw,ph/ih);
+  var hasPoster=!!(cardPosterImg&&cardPosterImg.complete&&cardPosterImg.naturalWidth>0);
+
+  // ─── BACKGROUNDS ───
+  if(hasPoster){
+    if(cardLayout==='poster'){
+      // Full bleed poster, bottom-crop to align top, then dark gradient over bottom 55%
+      var iw=cardPosterImg.naturalWidth,ih=cardPosterImg.naturalHeight;
+      var scale=Math.max(W/iw,H/ih);
       var dw=iw*scale,dh=ih*scale;
-      ctx.drawImage(cardPosterImg,(W-dw)/2,(ph-dh)/2,dw,dh);
-      ctx.restore();
-      // gradient overlay on poster
-      var ov=ctx.createLinearGradient(0,0,0,ph);
-      ov.addColorStop(0,cardLayout==='split'?'rgba(0,0,0,0.12)':'rgba(0,0,0,0.08)');
-      ov.addColorStop(cardLayout==='split'?0.6:0.55,t.overlay);
+      ctx.drawImage(cardPosterImg,(W-dw)/2,0,dw,dh);
+      // Dark gradient bottom 60%
+      var ov=ctx.createLinearGradient(0,H*0.38,0,H);
+      ov.addColorStop(0,'rgba(0,0,0,0)');
+      ov.addColorStop(0.38,'rgba(0,0,0,0.72)');
       ov.addColorStop(1,t.bg);
-      ctx.fillStyle=ov;ctx.fillRect(0,0,W,ph);
-      // subtle film-grain
-      ctx.save();ctx.globalAlpha=0.025;
-      for(var i=0;i<4000;i++){ctx.fillStyle='#fff';ctx.fillRect(Math.random()*W,Math.random()*ph,1,1);}
+      ctx.fillStyle=ov;ctx.fillRect(0,0,W,H);
+    } else if(cardLayout==='split'){
+      // Poster top half, solid bottom half
+      var ph=Math.round(H*0.5);
+      var iw2=cardPosterImg.naturalWidth,ih2=cardPosterImg.naturalHeight;
+      var scale2=Math.max(W/iw2,ph/ih2);
+      var dw2=iw2*scale2,dh2=ih2*scale2;
+      ctx.save();ctx.beginPath();ctx.rect(0,0,W,ph);ctx.clip();
+      ctx.drawImage(cardPosterImg,(W-dw2)/2,(ph-dh2)/2,dw2,dh2);
       ctx.restore();
-    }else{
-      // No poster: textured bg
-      var gr=ctx.createLinearGradient(0,0,W,H);gr.addColorStop(0,t.bg2);gr.addColorStop(1,t.bg);
-      ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
-      ctx.save();ctx.globalAlpha=0.04;
-      for(var i=0;i<3000;i++){ctx.fillStyle=t.gold;ctx.fillRect(Math.random()*W,Math.random()*H,1,1);}
+      // fade bottom of poster into bg
+      var ov2=ctx.createLinearGradient(0,ph*0.55,0,ph);
+      ov2.addColorStop(0,'rgba(0,0,0,0)');ov2.addColorStop(1,t.bg);
+      ctx.fillStyle=ov2;ctx.fillRect(0,0,W,ph);
+      // solid bottom area
+      ctx.fillStyle=t.bg;ctx.fillRect(0,ph,W,H-ph);
+      // separator line
+      ctx.strokeStyle=t.line;ctx.lineWidth=1;ctx.setLineDash([]);
+      ctx.beginPath();ctx.moveTo(pad,ph+2);ctx.lineTo(W-pad,ph+2);ctx.stroke();
+    } else {
+      // Quote layout: poster blurred as bg (simulate with low opacity)
+      var iw3=cardPosterImg.naturalWidth,ih3=cardPosterImg.naturalHeight;
+      var scale3=Math.max(W/iw3,H/ih3);
+      ctx.save();ctx.globalAlpha=0.12;
+      ctx.drawImage(cardPosterImg,(W-iw3*scale3)/2,(H-ih3*scale3)/2,iw3*scale3,ih3*scale3);
       ctx.restore();
+      ctx.fillStyle='rgba(8,8,8,0.85)';ctx.fillRect(0,0,W,H);
     }
   } else {
-    // Quote layout: dark gradient bg
-    var gr2=ctx.createRadialGradient(W*0.5,H*0.35,0,W*0.5,H*0.35,W*0.9);
-    gr2.addColorStop(0,t.bg2);gr2.addColorStop(1,t.bg);
-    ctx.fillStyle=gr2;ctx.fillRect(0,0,W,H);
-    ctx.save();ctx.globalAlpha=0.035;
-    for(var i=0;i<3000;i++){ctx.fillStyle=t.gold;ctx.fillRect(Math.random()*W,Math.random()*H,1,1);}
+    // No poster: elegant dark gradient
+    var gr=ctx.createLinearGradient(0,0,0,H);
+    gr.addColorStop(0,t.bg2);gr.addColorStop(0.6,t.bg);gr.addColorStop(1,'#000');
+    ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
+    // Subtle grid
+    ctx.save();ctx.globalAlpha=0.03;ctx.strokeStyle=t.gold;ctx.lineWidth=1;
+    for(var gi=0;gi<W;gi+=80){ctx.beginPath();ctx.moveTo(gi,0);ctx.lineTo(gi,H);ctx.stroke();}
+    for(var gj=0;gj<H;gj+=80){ctx.beginPath();ctx.moveTo(0,gj);ctx.lineTo(W,gj);ctx.stroke();}
     ctx.restore();
   }
 
-  // ── CONTENT AREA: starts at bottom ~40% ──
-  var contentY=cardLayout==='split'?(Math.round(H*0.56)):
-               cardLayout==='poster'?(Math.round(H*0.58)):
-               Math.round(H*0.12);
+  // subtle grain overlay on everything
+  ctx.save();ctx.globalAlpha=0.018;
+  for(var gi2=0;gi2<3500;gi2++){ctx.fillStyle='#fff';ctx.fillRect(Math.random()*W,Math.random()*H,1,1);}
+  ctx.restore();
 
-  // Director pill
-  var pillH=Math.round(H*0.042),pillY=contentY;
-  ctx.fillStyle='rgba(0,0,0,0.55)';ctx.fillRect(pad,pillY,Math.round(W*0.75),pillH);
-  ctx.strokeStyle=t.line;ctx.lineWidth=1;ctx.setLineDash([]);
-  ctx.strokeRect(pad,pillY,Math.round(W*0.75),pillH);
-  ctx.fillStyle=t.gold;ctx.font=Math.round(W*0.019)+'px "DM Mono",monospace';
-  ctx.fillText(s.director.toUpperCase()+'  ·  '+s.year,pad+18,pillY+pillH*0.67);
+  // ─── TEXT CONTENT ZONE ───
+  // For poster: text sits in bottom 45% over the dark gradient
+  // For split/quote: text below the poster half or centered
+  var textTop;
+  if(cardLayout==='poster') textTop=Math.round(H*0.56);
+  else if(cardLayout==='split') textTop=Math.round(H*0.52);
+  else textTop=Math.round(H*0.1);
 
-  // Film title
-  var titleY=pillY+pillH+Math.round(H*0.055);
-  var tSz=Math.round(W*0.11);ctx.font=tSz+'px "Bebas Neue",sans-serif';
-  while(ctx.measureText(s.film).width>W-pad*2&&tSz>30){tSz-=3;ctx.font=tSz+'px "Bebas Neue",sans-serif';}
-  ctx.fillStyle=t.cream;ctx.fillText(s.film,pad,titleY);
+  var cy=textTop;
 
-  // Scene name italic
-  var sceneY=titleY+Math.round(H*0.042);
-  ctx.fillStyle=t.muted;ctx.font='italic '+Math.round(W*0.028)+'px "Cormorant Garamond",Georgia,serif';
-  var scText=s.scene.length>55?s.scene.slice(0,55)+'…':s.scene;
-  ctx.fillText(scText,pad,sceneY);
+  // ── Director · Year label ──
+  ctx.font=Math.round(W*0.02)+'px "DM Mono",monospace';
+  ctx.fillStyle=t.gold;
+  ctx.fillText(s.director.toUpperCase()+'  ·  '+s.year,pad,cy);
+  cy+=Math.round(H*0.062);
 
-  // Separator line
-  var sepY=sceneY+Math.round(H*0.04);
-  ctx.strokeStyle=t.line;ctx.lineWidth=1;ctx.setLineDash([6,5]);
-  ctx.beginPath();ctx.moveTo(pad,sepY);ctx.lineTo(W-pad,sepY);ctx.stroke();
+  // ── Film title (big) ──
+  var tSz=Math.round(W*0.115);ctx.font=tSz+'px "Bebas Neue",sans-serif';
+  while(ctx.measureText(s.film).width>W-pad*2&&tSz>28){tSz-=3;ctx.font=tSz+'px "Bebas Neue",sans-serif';}
+  ctx.fillStyle=t.cream;ctx.fillText(s.film,pad,cy);
+  cy+=Math.round(tSz*0.3)+Math.round(H*0.025);
+
+  // ── Scene name ──
+  ctx.fillStyle=t.muted;
+  ctx.font='italic '+Math.round(W*0.026)+'px "Cormorant Garamond",Georgia,serif';
+  var scTxt=s.scene.length>58?s.scene.slice(0,58)+'…':s.scene;
+  ctx.fillText(scTxt,pad,cy);
+  cy+=Math.round(H*0.04);
+
+  // ── Divider ──
+  ctx.strokeStyle=t.line;ctx.lineWidth=1;ctx.setLineDash([5,4]);
+  ctx.beginPath();ctx.moveTo(pad,cy);ctx.lineTo(W-pad,cy);ctx.stroke();
   ctx.setLineDash([]);
+  cy+=Math.round(H*0.042);
 
-  // Quote or intro text
+  // ── Body text (quote or intro) ──
   var quoteInput=document.getElementById('card-quote-input');
   var quoteText=quoteInput&&quoteInput.value.trim()?quoteInput.value.trim():null;
-  var bodyTxt='';
-  if(quoteText){
-    bodyTxt='\u201C'+quoteText+'\u201D';
-  }else{
-    bodyTxt=(s.intro||'').replace(/<[^>]*>/g,'');
-  }
-  var bodyY=sepY+Math.round(H*0.048);
-  var bodyFont=quoteText?
-    ('italic '+Math.round(W*0.038)+'px "Cormorant Garamond",Georgia,serif'):
-    (Math.round(W*0.028)+'px "Cormorant Garamond",Georgia,serif');
-  ctx.font=bodyFont;ctx.fillStyle=quoteText?t.cream:t.muted;
-  var bodyMaxLines=quoteText?5:4;
-  wrapTextCard(ctx,bodyTxt,pad,bodyY,W-pad*2,Math.round(H*0.05),bodyMaxLines);
+  var bodyTxt=quoteText?('\u201C'+quoteText+'\u201D'):(s.intro||'').replace(/<[^>]*>/g,'');
+  var bFontSz=quoteText?Math.round(W*0.036):Math.round(W*0.026);
+  ctx.font=(quoteText?'italic ':'')+bFontSz+'px "Cormorant Garamond",Georgia,serif';
+  ctx.fillStyle=quoteText?t.cream:t.muted;
+  var maxLines=cardLayout==='quote'?8:4;
+  wrapTextCard(ctx,bodyTxt,pad,cy,W-pad*2,Math.round(bFontSz*1.6),maxLines);
 
-  // Tags row
-  var tagY=Math.round(H*0.875),tX=pad;
-  ctx.font=Math.round(W*0.018)+'px "DM Mono",monospace';
-  s.tl.slice(0,3).forEach(function(tag){
-    var tw=ctx.measureText('#'+tag).width+20;
-    ctx.fillStyle='rgba(0,0,0,0.45)';ctx.fillRect(tX,tagY-Math.round(H*0.022),tw,Math.round(H*0.033));
-    ctx.strokeStyle=t.line;ctx.lineWidth=1;ctx.strokeRect(tX,tagY-Math.round(H*0.022),tw,Math.round(H*0.033));
-    ctx.fillStyle=t.gold;ctx.fillText('#'+tag,tX+10,tagY+Math.round(H*0.005));
-    tX+=tw+10;
-  });
-  // Ratio badge right
+  // ── Tags ──
+  var tagY=Math.round(H*0.882),tX2=pad;
   ctx.font=Math.round(W*0.017)+'px "DM Mono",monospace';
-  var rw=ctx.measureText(s.ratio).width+18,rx=W-pad-rw;
-  ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(rx,tagY-Math.round(H*0.022),rw,Math.round(H*0.033));
-  ctx.strokeStyle=t.line;ctx.strokeRect(rx,tagY-Math.round(H*0.022),rw,Math.round(H*0.033));
-  ctx.fillStyle=t.gold;ctx.fillText(s.ratio,rx+9,tagY+Math.round(H*0.005));
-
-  // Bottom bar
-  var botY=Math.round(H*0.936);
-  ctx.strokeStyle=t.gold;ctx.lineWidth=1.5;ctx.setLineDash([]);
-  ctx.beginPath();ctx.moveTo(pad,botY);ctx.lineTo(W-pad,botY);ctx.stroke();
-  // Logo CINEMAP
-  ctx.font='bold '+Math.round(W*0.032)+'px "Bebas Neue",sans-serif';
-  ctx.fillStyle=t.gold;ctx.fillText('CINE',pad,botY+Math.round(H*0.038));
-  var cw2=ctx.measureText('CINE').width;
-  ctx.fillStyle=t.cream;ctx.fillText('MAP',pad+cw2,botY+Math.round(H*0.038));
-  // Site URL right
+  s.tl.slice(0,3).forEach(function(tag){
+    var tw=ctx.measureText('#'+tag).width+18;
+    var th2=Math.round(H*0.03);
+    ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(tX2,tagY-th2*0.72,tw,th2);
+    ctx.strokeStyle=t.line;ctx.lineWidth=.8;ctx.strokeRect(tX2,tagY-th2*0.72,tw,th2);
+    ctx.fillStyle=t.gold;ctx.fillText('#'+tag,tX2+9,tagY);
+    tX2+=tw+9;
+  });
+  // Ratio badge
   ctx.font=Math.round(W*0.016)+'px "DM Mono",monospace';
-  ctx.fillStyle=t.muted;
-  var site='cinemap-hazel.vercel.app';
-  ctx.fillText(site,W-pad-ctx.measureText(site).width,botY+Math.round(H*0.038));
+  var rw2=ctx.measureText(s.ratio).width+16,rx2=W-pad-rw2,th3=Math.round(H*0.03);
+  ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(rx2,tagY-th3*0.72,rw2,th3);
+  ctx.strokeStyle=t.line;ctx.lineWidth=.8;ctx.strokeRect(rx2,tagY-th3*0.72,rw2,th3);
+  ctx.fillStyle=t.gold;ctx.fillText(s.ratio,rx2+8,tagY);
+
+  // ── Bottom bar ──
+  var botY2=Math.round(H*0.935);
+  ctx.strokeStyle=t.gold;ctx.lineWidth=1;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(pad,botY2);ctx.lineTo(W-pad,botY2);ctx.stroke();
+  ctx.font='bold '+Math.round(W*0.028)+'px "Bebas Neue",sans-serif';
+  ctx.fillStyle=t.gold;ctx.fillText('CINE',pad,botY2+Math.round(H*0.038));
+  var cww=ctx.measureText('CINE').width;
+  ctx.fillStyle=t.cream;ctx.fillText('MAP',pad+cww,botY2+Math.round(H*0.038));
+  ctx.font=Math.round(W*0.015)+'px "DM Mono",monospace';ctx.fillStyle=t.muted;
+  var site2='cinemap-hazel.vercel.app';
+  ctx.fillText(site2,W-pad-ctx.measureText(site2).width,botY2+Math.round(H*0.038));
 }
 
 function downloadCard(){
@@ -1408,6 +1438,7 @@ setTimeout(function(){
 
 </body>
 </html>
+
 
 
 
