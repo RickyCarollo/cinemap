@@ -524,9 +524,10 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
       <button class="modal-close" onclick="closeCardModal()">&#x2715; Chiudi</button>
     </div>
     <div class="card-modal-body">
-      <div>
+      <div class="card-preview-wrap">
         <div class="card-preview-label">Anteprima</div>
         <canvas id="card-canvas" width="1080" height="1350"></canvas>
+        <div id="card-loading" style="display:none;position:absolute;inset:0;background:rgba(8,8,8,.7);display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:.55rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase">Caricamento locandina…</div>
       </div>
       <div class="card-options">
         <div>
@@ -538,12 +539,16 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
           </div>
         </div>
         <div>
-          <div class="card-opt-label">Testo in evidenza</div>
-          <div class="card-opt-row" id="card-content-row">
-            <button class="card-opt-btn active" onclick="setCardContent('intro',this)">Intro</button>
-            <button class="card-opt-btn" onclick="setCardContent('regia',this)">Regia</button>
-            <button class="card-opt-btn" onclick="setCardContent('simbologia',this)">Simbologia</button>
+          <div class="card-opt-label">Layout</div>
+          <div class="card-opt-row" id="card-layout-row">
+            <button class="card-opt-btn active" onclick="setCardLayout('poster',this)">Locandina</button>
+            <button class="card-opt-btn" onclick="setCardLayout('quote',this)">Citazione</button>
+            <button class="card-opt-btn" onclick="setCardLayout('split',this)">Split</button>
           </div>
+        </div>
+        <div id="card-quote-field" style="display:none">
+          <div class="card-opt-label">Citazione (opzionale)</div>
+          <textarea id="card-quote-input" placeholder="Inserisci una citazione dal film…" style="width:100%;background:var(--bg3);border:.5px solid var(--border2);color:var(--cream);font-family:var(--fs);font-style:italic;font-size:.9rem;padding:.7rem 1rem;resize:vertical;min-height:80px;outline:none;line-height:1.6" oninput="drawCard()"></textarea>
         </div>
         <div>
           <div class="card-opt-label">Formato</div>
@@ -1205,48 +1210,187 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // ── CARD GENERATOR ──
-var cardSceneId=null,cardTheme='dark',cardContent='intro',cardFormat='post';
-var CARD_THEMES={dark:{bg:'#0a0a0a',bg2:'#111',gold:'#c8a96e',cream:'#f0e8d8',muted:'#777',line:'rgba(200,169,110,0.3)'},noir:{bg:'#000',bg2:'#0a0a0a',gold:'#fff',cream:'#fff',muted:'#888',line:'rgba(255,255,255,0.2)'},red:{bg:'#0d0505',bg2:'#160808',gold:'#c84040',cream:'#f0e8d8',muted:'#777',line:'rgba(200,64,64,0.4)'}};
-function openCardModal(id){cardSceneId=id;document.getElementById('card-modal').classList.add('open');setTimeout(drawCard,150);}
+var cardSceneId=null,cardTheme='dark',cardLayout='poster',cardFormat='post';
+var cardPosterImg=null,cardPosterLoading=false;
+var CARD_THEMES={
+  dark:{bg:'#0a0a0a',bg2:'#111',gold:'#c8a96e',cream:'#f0e8d8',muted:'#888',line:'rgba(200,169,110,0.35)',overlay:'rgba(0,0,0,0.55)'},
+  noir:{bg:'#000',bg2:'#0a0a0a',gold:'#ffffff',cream:'#ffffff',muted:'#999',line:'rgba(255,255,255,0.25)',overlay:'rgba(0,0,0,0.6)'},
+  red:{bg:'#0d0505',bg2:'#160808',gold:'#e05050',cream:'#f0e8d8',muted:'#999',line:'rgba(220,60,60,0.45)',overlay:'rgba(10,0,0,0.62)'}
+};
+
+function openCardModal(id){
+  cardSceneId=id;
+  cardPosterImg=null;
+  document.getElementById('card-modal').classList.add('open');
+  // load poster then draw
+  var s=SCENES.find(function(x){return x.id===id;});
+  if(!s)return;
+  var loadEl=document.getElementById('card-loading');
+  if(loadEl)loadEl.style.display='flex';
+  searchMovieImg(s.film,s.year,'w780').then(function(url){
+    if(url){
+      var img=new Image();
+      img.crossOrigin='anonymous';
+      img.onload=function(){cardPosterImg=img;if(loadEl)loadEl.style.display='none';drawCard();};
+      img.onerror=function(){cardPosterImg=null;if(loadEl)loadEl.style.display='none';drawCard();};
+      img.src=url;
+    }else{
+      cardPosterImg=null;
+      if(loadEl)loadEl.style.display='none';
+      drawCard();
+    }
+  });
+}
 function closeCardModal(){document.getElementById('card-modal').classList.remove('open');}
 function setCardTheme(th,btn){cardTheme=th;document.querySelectorAll('#card-theme-row .card-opt-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');drawCard();}
-function setCardContent(ct,btn){cardContent=ct;document.querySelectorAll('#card-content-row .card-opt-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');drawCard();}
+function setCardLayout(ly,btn){
+  cardLayout=ly;
+  document.querySelectorAll('#card-layout-row .card-opt-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  var qf=document.getElementById('card-quote-field');
+  if(qf)qf.style.display=(ly==='quote'||ly==='split')?'block':'none';
+  drawCard();
+}
 function setCardFormat(fmt,btn){cardFormat=fmt;var c=document.getElementById('card-canvas');c.width=1080;c.height=fmt==='story'?1920:1350;document.querySelectorAll('#card-format-row .card-opt-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');drawCard();}
-function wrapText(ctx,text,x,y,maxW,lh,max){var words=text.split(' '),line='',lines=[];for(var i=0;i<words.length;i++){var t=line+words[i]+' ';if(ctx.measureText(t).width>maxW&&i>0){lines.push(line.trim());line=words[i]+' ';}else line=t;}lines.push(line.trim());if(lines.length>max){lines=lines.slice(0,max);lines[max-1]+='...';}for(var j=0;j<lines.length;j++)ctx.fillText(lines[j],x,y+j*lh);return lines.length*lh;}
+
+function wrapTextCard(ctx,text,x,y,maxW,lh,max){
+  var words=text.split(' '),line='',lines=[];
+  for(var i=0;i<words.length;i++){var tt=line+words[i]+' ';if(ctx.measureText(tt).width>maxW&&i>0){lines.push(line.trim());line=words[i]+' ';}else line=tt;}
+  lines.push(line.trim());
+  if(lines.length>max){lines=lines.slice(0,max);lines[max-1]+='…';}
+  for(var j=0;j<lines.length;j++)ctx.fillText(lines[j],x,y+j*lh);
+  return lines.length*lh;
+}
+
 function drawCard(){
   var s=SCENES.find(function(x){return x.id===cardSceneId;});if(!s)return;
   var canvas=document.getElementById('card-canvas');var ctx=canvas.getContext('2d');
   var W=canvas.width,H=canvas.height,t=CARD_THEMES[cardTheme],pad=Math.round(W*0.08);
+
+  // ── BASE BG ──
   ctx.fillStyle=t.bg;ctx.fillRect(0,0,W,H);
-  var gr=ctx.createLinearGradient(0,0,W,H);gr.addColorStop(0,'rgba(200,169,110,0.05)');gr.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
-  for(var i=0;i<5000;i++){ctx.fillStyle='rgba(200,169,110,'+(Math.random()*0.03)+')';ctx.fillRect(Math.random()*W,Math.random()*H,1,1);}
-  ctx.strokeStyle=t.gold;ctx.lineWidth=3;ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(pad,H*0.06);ctx.lineTo(W-pad,H*0.06);ctx.stroke();
-  var ly=H*0.06+H*0.055;ctx.font='bold '+Math.round(W*0.04)+'px "Bebas Neue",sans-serif';
-  ctx.fillStyle=t.gold;ctx.fillText('CINE',pad,ly);var cw=ctx.measureText('CINE').width;
-  ctx.fillStyle=t.cream;ctx.fillText('MAP',pad+cw,ly);
-  ctx.fillStyle=t.muted;ctx.font=Math.round(W*0.017)+'px "DM Mono",monospace';var tg="FRAME D'AUTORE";ctx.fillText(tg,W-pad-ctx.measureText(tg).width,ly);
-  var bY=Math.round(H*0.19),bH=Math.round(H*0.044);
-  ctx.fillStyle=t.bg2;ctx.fillRect(pad,bY,W*0.62,bH);ctx.strokeStyle=t.line;ctx.lineWidth=1;ctx.strokeRect(pad,bY,W*0.62,bH);
-  ctx.fillStyle=t.gold;ctx.font=Math.round(W*0.02)+'px "DM Mono",monospace';ctx.fillText(s.director.toUpperCase()+'  ·  '+s.year,pad+20,bY+bH*0.68);
-  var tY=bY+Math.round(H*0.085),tSz=Math.round(W*0.1);
-  ctx.font=tSz+'px "Bebas Neue",sans-serif';
-  while(ctx.measureText(s.film).width>W-pad*2&&tSz>36){tSz-=4;ctx.font=tSz+'px "Bebas Neue",sans-serif';}
-  ctx.fillStyle=t.cream;ctx.fillText(s.film,pad,tY);
-  var sY=tY+Math.round(H*0.052);ctx.fillStyle=t.muted;ctx.font='italic '+Math.round(W*0.03)+'px "Cormorant Garamond",Georgia,serif';
-  var sc=s.scene.length>52?s.scene.slice(0,52)+'...':s.scene;ctx.fillText(sc,pad,sY);
-  var dY=sY+Math.round(H*0.055);ctx.strokeStyle=t.line;ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(pad,dY);ctx.lineTo(W-pad,dY);ctx.stroke();ctx.setLineDash([]);
-  var qY=dY+Math.round(H*0.055),qTxt='';
-  if(cardContent==='intro')qTxt=s.intro||'';else if(cardContent==='regia')qTxt=(s.an&&s.an.regia)||s.intro;else qTxt=(s.an&&s.an.simbologia)||s.intro;
-  qTxt=qTxt.replace(/<[^>]*>/g,'');ctx.fillStyle=t.cream;ctx.font=Math.round(W*0.033)+'px "Cormorant Garamond",Georgia,serif';
-  wrapText(ctx,qTxt,pad,qY,W-pad*2,Math.round(H*0.054),4);
-  var taY=Math.round(H*0.735),tX=pad;ctx.font=Math.round(W*0.019)+'px "DM Mono",monospace';
-  s.tl.slice(0,3).forEach(function(tag){var tw=ctx.measureText(tag).width+24;ctx.fillStyle='rgba(200,169,110,0.08)';ctx.fillRect(tX,taY-H*0.025,tw,H*0.036);ctx.strokeStyle=t.line;ctx.lineWidth=1;ctx.strokeRect(tX,taY-H*0.025,tw,H*0.036);ctx.fillStyle=t.gold;ctx.fillText(tag,tX+12,taY+H*0.005);tX+=tw+12;});
-  ctx.font=Math.round(W*0.018)+'px "DM Mono",monospace';var rw=ctx.measureText(s.ratio).width+20,rx=W-pad-rw;
-  ctx.fillStyle=t.bg2;ctx.fillRect(rx,taY-H*0.025,rw,H*0.036);ctx.strokeStyle=t.line;ctx.strokeRect(rx,taY-H*0.025,rw,H*0.036);ctx.fillStyle=t.gold;ctx.fillText(s.ratio,rx+10,taY+H*0.005);
-  var botY=Math.round(H*0.92);ctx.strokeStyle=t.gold;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(pad,botY);ctx.lineTo(W-pad,botY);ctx.stroke();
-  var fW=Math.round((W-pad*2)/14);for(var f=0;f<13;f++){ctx.fillStyle=f%2===0?t.bg2:'rgba(200,169,110,0.04)';ctx.fillRect(pad+f*fW,botY+H*0.013,fW-3,H*0.022);}
-  ctx.fillStyle=t.muted;ctx.font=Math.round(W*0.017)+'px "DM Mono",monospace';ctx.fillText('cinemap-hazel.vercel.app',pad,H*0.972);
+
+  if(cardLayout==='poster'||cardLayout==='split'){
+    if(cardPosterImg){
+      // Poster covers top portion
+      var ph=cardLayout==='split'?Math.round(H*0.58):H;
+      ctx.save();
+      ctx.beginPath();ctx.rect(0,0,W,ph);ctx.clip();
+      // cover-fit
+      var iw=cardPosterImg.width,ih=cardPosterImg.height;
+      var scale=Math.max(W/iw,ph/ih);
+      var dw=iw*scale,dh=ih*scale;
+      ctx.drawImage(cardPosterImg,(W-dw)/2,(ph-dh)/2,dw,dh);
+      ctx.restore();
+      // gradient overlay on poster
+      var ov=ctx.createLinearGradient(0,0,0,ph);
+      ov.addColorStop(0,cardLayout==='split'?'rgba(0,0,0,0.12)':'rgba(0,0,0,0.08)');
+      ov.addColorStop(cardLayout==='split'?0.6:0.55,t.overlay);
+      ov.addColorStop(1,t.bg);
+      ctx.fillStyle=ov;ctx.fillRect(0,0,W,ph);
+      // subtle film-grain
+      ctx.save();ctx.globalAlpha=0.025;
+      for(var i=0;i<4000;i++){ctx.fillStyle='#fff';ctx.fillRect(Math.random()*W,Math.random()*ph,1,1);}
+      ctx.restore();
+    }else{
+      // No poster: textured bg
+      var gr=ctx.createLinearGradient(0,0,W,H);gr.addColorStop(0,t.bg2);gr.addColorStop(1,t.bg);
+      ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);
+      ctx.save();ctx.globalAlpha=0.04;
+      for(var i=0;i<3000;i++){ctx.fillStyle=t.gold;ctx.fillRect(Math.random()*W,Math.random()*H,1,1);}
+      ctx.restore();
+    }
+  } else {
+    // Quote layout: dark gradient bg
+    var gr2=ctx.createRadialGradient(W*0.5,H*0.35,0,W*0.5,H*0.35,W*0.9);
+    gr2.addColorStop(0,t.bg2);gr2.addColorStop(1,t.bg);
+    ctx.fillStyle=gr2;ctx.fillRect(0,0,W,H);
+    ctx.save();ctx.globalAlpha=0.035;
+    for(var i=0;i<3000;i++){ctx.fillStyle=t.gold;ctx.fillRect(Math.random()*W,Math.random()*H,1,1);}
+    ctx.restore();
+  }
+
+  // ── CONTENT AREA: starts at bottom ~40% ──
+  var contentY=cardLayout==='split'?(Math.round(H*0.56)):
+               cardLayout==='poster'?(Math.round(H*0.58)):
+               Math.round(H*0.12);
+
+  // Director pill
+  var pillH=Math.round(H*0.042),pillY=contentY;
+  ctx.fillStyle='rgba(0,0,0,0.55)';ctx.fillRect(pad,pillY,Math.round(W*0.75),pillH);
+  ctx.strokeStyle=t.line;ctx.lineWidth=1;ctx.setLineDash([]);
+  ctx.strokeRect(pad,pillY,Math.round(W*0.75),pillH);
+  ctx.fillStyle=t.gold;ctx.font=Math.round(W*0.019)+'px "DM Mono",monospace';
+  ctx.fillText(s.director.toUpperCase()+'  ·  '+s.year,pad+18,pillY+pillH*0.67);
+
+  // Film title
+  var titleY=pillY+pillH+Math.round(H*0.055);
+  var tSz=Math.round(W*0.11);ctx.font=tSz+'px "Bebas Neue",sans-serif';
+  while(ctx.measureText(s.film).width>W-pad*2&&tSz>30){tSz-=3;ctx.font=tSz+'px "Bebas Neue",sans-serif';}
+  ctx.fillStyle=t.cream;ctx.fillText(s.film,pad,titleY);
+
+  // Scene name italic
+  var sceneY=titleY+Math.round(H*0.042);
+  ctx.fillStyle=t.muted;ctx.font='italic '+Math.round(W*0.028)+'px "Cormorant Garamond",Georgia,serif';
+  var scText=s.scene.length>55?s.scene.slice(0,55)+'…':s.scene;
+  ctx.fillText(scText,pad,sceneY);
+
+  // Separator line
+  var sepY=sceneY+Math.round(H*0.04);
+  ctx.strokeStyle=t.line;ctx.lineWidth=1;ctx.setLineDash([6,5]);
+  ctx.beginPath();ctx.moveTo(pad,sepY);ctx.lineTo(W-pad,sepY);ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Quote or intro text
+  var quoteInput=document.getElementById('card-quote-input');
+  var quoteText=quoteInput&&quoteInput.value.trim()?quoteInput.value.trim():null;
+  var bodyTxt='';
+  if(quoteText){
+    bodyTxt='\u201C'+quoteText+'\u201D';
+  }else{
+    bodyTxt=(s.intro||'').replace(/<[^>]*>/g,'');
+  }
+  var bodyY=sepY+Math.round(H*0.048);
+  var bodyFont=quoteText?
+    ('italic '+Math.round(W*0.038)+'px "Cormorant Garamond",Georgia,serif'):
+    (Math.round(W*0.028)+'px "Cormorant Garamond",Georgia,serif');
+  ctx.font=bodyFont;ctx.fillStyle=quoteText?t.cream:t.muted;
+  var bodyMaxLines=quoteText?5:4;
+  wrapTextCard(ctx,bodyTxt,pad,bodyY,W-pad*2,Math.round(H*0.05),bodyMaxLines);
+
+  // Tags row
+  var tagY=Math.round(H*0.875),tX=pad;
+  ctx.font=Math.round(W*0.018)+'px "DM Mono",monospace';
+  s.tl.slice(0,3).forEach(function(tag){
+    var tw=ctx.measureText('#'+tag).width+20;
+    ctx.fillStyle='rgba(0,0,0,0.45)';ctx.fillRect(tX,tagY-Math.round(H*0.022),tw,Math.round(H*0.033));
+    ctx.strokeStyle=t.line;ctx.lineWidth=1;ctx.strokeRect(tX,tagY-Math.round(H*0.022),tw,Math.round(H*0.033));
+    ctx.fillStyle=t.gold;ctx.fillText('#'+tag,tX+10,tagY+Math.round(H*0.005));
+    tX+=tw+10;
+  });
+  // Ratio badge right
+  ctx.font=Math.round(W*0.017)+'px "DM Mono",monospace';
+  var rw=ctx.measureText(s.ratio).width+18,rx=W-pad-rw;
+  ctx.fillStyle='rgba(0,0,0,0.5)';ctx.fillRect(rx,tagY-Math.round(H*0.022),rw,Math.round(H*0.033));
+  ctx.strokeStyle=t.line;ctx.strokeRect(rx,tagY-Math.round(H*0.022),rw,Math.round(H*0.033));
+  ctx.fillStyle=t.gold;ctx.fillText(s.ratio,rx+9,tagY+Math.round(H*0.005));
+
+  // Bottom bar
+  var botY=Math.round(H*0.936);
+  ctx.strokeStyle=t.gold;ctx.lineWidth=1.5;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(pad,botY);ctx.lineTo(W-pad,botY);ctx.stroke();
+  // Logo CINEMAP
+  ctx.font='bold '+Math.round(W*0.032)+'px "Bebas Neue",sans-serif';
+  ctx.fillStyle=t.gold;ctx.fillText('CINE',pad,botY+Math.round(H*0.038));
+  var cw2=ctx.measureText('CINE').width;
+  ctx.fillStyle=t.cream;ctx.fillText('MAP',pad+cw2,botY+Math.round(H*0.038));
+  // Site URL right
+  ctx.font=Math.round(W*0.016)+'px "DM Mono",monospace';
+  ctx.fillStyle=t.muted;
+  var site='cinemap-hazel.vercel.app';
+  ctx.fillText(site,W-pad-ctx.measureText(site).width,botY+Math.round(H*0.038));
 }
+
 function downloadCard(){
   var s=SCENES.find(function(x){return x.id===cardSceneId;});if(!s)return;
   var a=document.createElement('a');a.download='cinemap_'+s.film.replace(/[^a-z0-9]/gi,'_').toLowerCase()+'.png';
@@ -1264,6 +1408,7 @@ setTimeout(function(){
 
 </body>
 </html>
+
 
 
 
