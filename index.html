@@ -531,7 +531,7 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
       <div class="card-preview-wrap">
         <div class="card-preview-label">Anteprima</div>
         <div id="ig-card">
-          <img id="ig-poster" class="card-poster" src="" alt="" crossorigin="anonymous" style="display:none">
+          <img id="ig-poster" class="card-poster" src="" alt="" style="display:none">
           <div class="card-poster-ph" id="ig-poster-ph"><span id="ig-ph-num">01</span></div>
           <div class="card-gradient" id="ig-gradient"></div>
           <div class="card-content" id="ig-content">
@@ -549,7 +549,7 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
             </div>
           </div>
         </div>
-        <div id="ig-loading" style="display:none;margin-top:.6rem;font-family:var(--fm);font-size:.52rem;letter-spacing:.18em;color:var(--gold);text-align:center;text-transform:uppercase">Caricamento locandina…</div>
+        <div id="ig-loading" style="display:none;margin-top:.6rem;font-family:var(--fm);font-size:.52rem;letter-spacing:.18em;color:var(--gold);text-align:center;text-transform:uppercase;padding:.5rem;animation:pulse 1.2s ease-in-out infinite">⬤ Caricamento locandina in corso…</div>
       </div>
 
       <!-- OPTIONS -->
@@ -1254,15 +1254,32 @@ var IG_THEMES={
 // Fetcha l'immagine come blob e la converte in dataURL — unico modo per aggirare
 // il blocco CORS di html2canvas sulle immagini esterne
 function fetchAsDataURL(url, cb){
-  fetch('https://corsproxy.io/?url='+encodeURIComponent(url))
-    .then(function(r){return r.blob();})
+  // weserv.nl è un image proxy pubblico affidabile che aggiunge CORS headers
+  // e non richiede chiavi API — usato da migliaia di siti
+  var proxyUrl='https://wsrv.nl/?url='+encodeURIComponent(url)+'&output=jpg&q=90';
+  fetch(proxyUrl)
+    .then(function(r){
+      if(!r.ok)throw new Error('proxy error '+r.status);
+      return r.blob();
+    })
     .then(function(blob){
       var reader=new FileReader();
       reader.onload=function(){cb(reader.result);};
       reader.onerror=function(){cb(null);};
       reader.readAsDataURL(blob);
     })
-    .catch(function(){cb(null);});
+    .catch(function(){
+      // Fallback: prova corsproxy.io
+      fetch('https://corsproxy.io/?url='+encodeURIComponent(url))
+        .then(function(r){return r.blob();})
+        .then(function(blob){
+          var reader=new FileReader();
+          reader.onload=function(){cb(reader.result);};
+          reader.onerror=function(){cb(null);};
+          reader.readAsDataURL(blob);
+        })
+        .catch(function(){cb(null);});
+    });
 }
 
 function openCardModal(id){
@@ -1288,13 +1305,20 @@ function openCardModal(id){
   ph.style.display='flex';
   var loadEl=document.getElementById('ig-loading');
   loadEl.style.display='block';
-  searchMovieImg(s.film,s.year,'w780').then(function(url){
+  searchMovieImg(s.film,s.year,'w500').then(function(url){
     if(!url){loadEl.style.display='none';return;}
+    // Timeout di sicurezza: dopo 8s mostra placeholder
+    var tmo=setTimeout(function(){loadEl.style.display='none';},8000);
     fetchAsDataURL(url,function(dataUrl){
+      clearTimeout(tmo);
       loadEl.style.display='none';
       if(dataUrl){
-        poster.onload=function(){poster.style.display='block';ph.style.display='none';};
-        poster.src=dataUrl; // dataURL: nessun blocco CORS
+        poster.onload=function(){
+          poster.style.display='block';
+          ph.style.display='none';
+        };
+        poster.onerror=function(){ph.style.display='flex';};
+        poster.src=dataUrl;
       }
     });
   });
@@ -1379,6 +1403,7 @@ setTimeout(function(){
 
 </body>
 </html>
+
 
 
 
