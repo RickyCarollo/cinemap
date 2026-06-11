@@ -117,12 +117,14 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 .scene-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:var(--border);margin:0 2.8rem}
 .scene-card{background:var(--bg);cursor:pointer;overflow:hidden;transition:background .3s;position:relative}
 .scene-card:hover{background:var(--bg2)}
-.sc-thumb{height:200px;position:relative;overflow:hidden;background:var(--bg3)}
-.sc-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:.55;transition:opacity .5s var(--ease2),transform .7s var(--ease);display:block}
-.scene-card:hover .sc-thumb img{opacity:.8;transform:scale(1.07)}
-.sc-thumb-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.sc-thumb{height:240px;position:relative;overflow:hidden;background:var(--bg3);display:flex;align-items:center;justify-content:center}
+.sc-thumb-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(18px) brightness(.35) saturate(1.4);transform:scale(1.08);transition:filter .5s}
+.scene-card:hover .sc-thumb-bg{filter:blur(14px) brightness(.45) saturate(1.6)}
+.sc-thumb img{position:relative;z-index:1;width:auto;height:100%;max-width:60%;object-fit:contain;opacity:.95;transition:opacity .4s,transform .5s var(--ease);display:block;box-shadow:0 8px 40px rgba(0,0,0,.7);transform:translateY(0)}
+.scene-card:hover .sc-thumb img{opacity:1;transform:translateY(-3px);box-shadow:0 16px 56px rgba(0,0,0,.8)}
+.sc-thumb-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1}
 .sc-ph-num{font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.12);line-height:1}
-.sc-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,1) 0%,rgba(8,8,8,.2) 50%,transparent 100%)}
+.sc-overlay{display:none}
 .sc-ratio{position:absolute;top:1rem;left:1rem;font-family:var(--fm);font-size:.5rem;letter-spacing:.18em;color:var(--gold);border:.5px solid rgba(200,169,110,.35);padding:.22rem .6rem;background:rgba(8,8,8,.85);z-index:2}
 .sc-year{position:absolute;bottom:1rem;right:1rem;font-family:var(--fm);font-size:.5rem;letter-spacing:.12em;color:rgba(200,169,110,.5);z-index:2}
 .sc-body{padding:1.2rem 1.4rem 1.5rem}
@@ -138,10 +140,11 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 .back-btn{display:inline-flex;align-items:center;gap:.7rem;font-family:var(--fm);font-size:.6rem;letter-spacing:.22em;color:var(--muted2);cursor:pointer;margin:2.5rem 0;text-transform:uppercase;transition:all .3s;background:none;border:none;padding:0}
 .back-btn:hover{color:var(--gold);gap:1rem}
 .detail-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:4rem;margin-bottom:3.5rem;align-items:start}
-.detail-frame{aspect-ratio:2.39/1;background:var(--bg3);border:.5px solid var(--border);overflow:hidden;position:relative}
-.detail-frame img{width:100%;height:100%;object-fit:cover;opacity:.9;transition:transform .7s var(--ease)}
-.detail-frame:hover img{transform:scale(1.03)}
-.detail-frame-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,.35),transparent)}
+.detail-frame{position:relative;background:var(--bg3);border:.5px solid var(--border);overflow:hidden;display:flex;align-items:flex-start;justify-content:center;min-height:320px}
+.detail-frame-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(22px) brightness(.3) saturate(1.5);transform:scale(1.06)}
+.detail-frame img{position:relative;z-index:1;width:auto;max-width:55%;height:auto;max-height:520px;object-fit:contain;opacity:1;transition:transform .7s var(--ease);box-shadow:0 20px 80px rgba(0,0,0,.8);margin:2rem auto}
+.detail-frame:hover img{transform:scale(1.02) translateY(-4px)}
+.detail-frame-overlay{position:absolute;inset:0;z-index:0;background:linear-gradient(to top,rgba(8,8,8,.5),transparent 60%)}
 .det-eyebrow{font-family:var(--fm);font-size:.57rem;letter-spacing:.32em;color:var(--gold);text-transform:uppercase;margin-bottom:1rem}
 .det-title{font-family:var(--fd);font-size:3.2rem;letter-spacing:.04em;color:var(--cream);line-height:.9;margin-bottom:.6rem}
 .det-scene{font-family:var(--fs);font-size:1rem;color:var(--muted2);font-style:italic;margin-bottom:.5rem}
@@ -561,7 +564,6 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   .detail-wrap { padding: 0 1.1rem 4rem; }
   .back-btn { margin: 1.5rem 0; }
   .detail-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-  .detail-frame { aspect-ratio: 16/9; }
   .det-title { font-size: 2.2rem; }
   .anatomy-grid { grid-template-columns: 1fr; }
   .anatomy-cell { padding: 1.4rem; }
@@ -1342,12 +1344,12 @@ function renderScenes(filter){
   document.getElementById('scene-grid').innerHTML=list.map((s,i)=>`
     <div class="scene-card${(window.compareList||[]).includes(s.id)?' in-compare':''}" id="scard_${s.id}" onclick="showScene(${s.id})">
       <div class="sc-thumb">
+        <div class="sc-thumb-bg" id="sbg_${s.id}"></div>
         <div class="sc-thumb-ph" id="sph_${s.id}"><span class="sc-ph-num">${String(i+1).padStart(2,'0')}</span></div>
         <img id="si_${s.id}" src="" alt="${s.film}" style="display:none">
-        <div class="sc-overlay"></div>
         <div class="sc-ratio">${s.ratio}</div>
         <div class="sc-year">${s.year}</div>
-        <button class="sc-compare-btn${(window.compareList||[]).includes(s.id)?' selected':''}" onclick="toggleCompare(event,${s.id})">${(window.compareList||[]).includes(s.id)?'✓ Selezionata':'+ Confronta'}</button>
+        <button class="sc-compare-btn${(window.compareList||[]).includes(s.id)?' selected':''}" onclick="toggleCompare(event,${s.id})" style="z-index:4">${(window.compareList||[]).includes(s.id)?'✓ Selezionata':'+ Confronta'}</button>
       </div>
       <div class="sc-body">
         <div class="sc-director">${s.director.toUpperCase()}</div>
@@ -1356,7 +1358,18 @@ function renderScenes(filter){
         <div class="sc-tags">${s.tl.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
       </div>
     </div>`).join('');
-  list.forEach(s=>loadSceneImg(`si_${s.id}`,`sph_${s.id}`,s.film,s.year,'w500'));
+  list.forEach(s=>{
+    loadSceneImg(`si_${s.id}`,`sph_${s.id}`,s.film,s.year,'w342');
+    // Also set blur bg when image loads
+    const img=document.getElementById('si_'+s.id);
+    if(img){
+      const origOnload=img.onload;
+      img.addEventListener('load',function(){
+        const bg=document.getElementById('sbg_'+s.id);
+        if(bg) bg.style.backgroundImage='url('+this.src+')';
+      });
+    }
+  });
 }
 
 // ── RENDER DIRECTORS ──
@@ -1475,7 +1488,7 @@ async function showScene(id, pushState=true){
     <button class="back-btn" onclick="history.back()">← Torna alle scene</button>
     <div class="detail-grid">
       <div class="detail-frame">
-        ${imgUrl?`<img src="${imgUrl}" alt="${s.film}"><div class="detail-frame-overlay"></div>`:`<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--bg3)"><span style="font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.1)">${String(s.id).padStart(2,'00')}</span></div>`}
+        ${imgUrl?`<div class="detail-frame-bg" style="background-image:url(${imgUrl})"></div><img src="${imgUrl}" alt="${s.film}"><div class="detail-frame-overlay"></div>`:`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:320px"><span style="font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.1)">${String(s.id).padStart(2,'00')}</span></div>`}
       </div>
       <div>
         <div class="det-eyebrow">${s.director.toUpperCase()} · ${s.year}</div>
@@ -2430,6 +2443,7 @@ const _origNav = nav;
 </div>
 </body>
 </html>
+
 
 
 
