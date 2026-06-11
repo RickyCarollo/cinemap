@@ -724,6 +724,214 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   .compare-view-wrap{padding:0 1.1rem 5rem}
   .compare-header{flex-direction:column;align-items:flex-start;gap:.8rem}
 }
+
+/* ═══════════════════════════════════
+   TIMELINE
+   ═══════════════════════════════════ */
+#view-timeline { min-height:100vh; }
+
+.timeline-hero {
+  padding: 5rem 2.8rem 3rem;
+  border-bottom: .5px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.tl-hero-label {
+  font-family: var(--fm); font-size: .55rem; letter-spacing: .28em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: .8rem;
+}
+.tl-hero-title {
+  font-family: var(--fd); font-size: clamp(3.5rem, 8vw, 7rem);
+  color: var(--cream); line-height: .9; letter-spacing: .04em;
+}
+.tl-hero-sub {
+  font-family: var(--fm); font-size: .58rem; letter-spacing: .2em;
+  color: var(--muted); text-transform: uppercase; margin-top: 1.2rem;
+}
+
+.timeline-wrap {
+  padding: 0 2.8rem 6rem;
+  position: relative;
+}
+
+/* Central vertical line */
+.timeline-wrap::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--border2) 5%, var(--border2) 95%, transparent);
+  transform: translateX(-50%);
+}
+
+/* Decade marker */
+.tl-decade {
+  text-align: center;
+  position: relative;
+  padding: 3.5rem 0 1.5rem;
+  z-index: 2;
+}
+.tl-decade-num {
+  font-family: var(--fd);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: transparent;
+  -webkit-text-stroke: .5px rgba(200,169,110,.25);
+  letter-spacing: .1em;
+  display: inline-block;
+  position: relative;
+}
+.tl-decade-num::before {
+  content: '';
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 10px; height: 10px;
+  background: var(--gold);
+  border-radius: 50%;
+  transform: translate(-50%,-50%);
+}
+
+/* Year group */
+.tl-year-group { margin-bottom: .5rem; }
+
+/* Year label on the line */
+.tl-year-label {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  padding: 1.2rem 0 .6rem;
+}
+.tl-year-badge {
+  display: inline-block;
+  font-family: var(--fm); font-size: .55rem; letter-spacing: .2em;
+  color: var(--gold); text-transform: uppercase;
+  background: var(--bg);
+  border: .5px solid var(--border2);
+  padding: .28rem .9rem;
+}
+
+/* Scene items row — alternating left/right */
+.tl-items { display: flex; flex-direction: column; gap: 0; }
+
+.tl-item {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  align-items: center;
+  gap: 0;
+  padding: .5rem 0;
+}
+.tl-item.left .tl-card { grid-column: 1; justify-self: end; }
+.tl-item.left .tl-dot  { grid-column: 2; }
+.tl-item.left .tl-spacer { grid-column: 3; }
+.tl-item.right .tl-spacer { grid-column: 1; }
+.tl-item.right .tl-dot    { grid-column: 2; }
+.tl-item.right .tl-card   { grid-column: 3; justify-self: start; }
+
+/* Dot on the line */
+.tl-dot {
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 2;
+}
+.tl-dot-inner {
+  width: 8px; height: 8px;
+  background: var(--bg2);
+  border: 1.5px solid var(--border2);
+  border-radius: 50%;
+  transition: all .3s;
+  cursor: pointer;
+}
+.tl-item:hover .tl-dot-inner {
+  background: var(--gold);
+  border-color: var(--gold);
+  transform: scale(1.4);
+  box-shadow: 0 0 12px rgba(200,169,110,.4);
+}
+
+/* Connector line from dot to card */
+.tl-item.left  .tl-dot::after,
+.tl-item.right .tl-dot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 22px; height: 1px;
+  background: var(--border2);
+}
+.tl-item.left  .tl-dot::after  { right: 50%; margin-right: 4px; }
+.tl-item.right .tl-dot::before { left: 50%; margin-left: 4px; }
+
+/* Timeline card */
+.tl-card {
+  background: var(--bg);
+  border: .5px solid var(--border);
+  display: flex;
+  gap: .9rem;
+  padding: .8rem;
+  cursor: pointer;
+  transition: all .3s var(--ease);
+  max-width: 340px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.tl-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(200,169,110,.04), transparent);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.tl-card:hover {
+  border-color: var(--border2);
+  background: var(--bg2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+}
+.tl-card:hover::before { opacity: 1; }
+
+.tl-card-poster {
+  width: 52px;
+  height: 78px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--bg3);
+  display: block;
+}
+.tl-card-poster-ph {
+  width: 52px; height: 78px;
+  background: var(--bg3);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--fd); font-size: 1.4rem;
+  color: var(--gold); opacity: .3;
+}
+.tl-card-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: .25rem; }
+.tl-card-dir  { font-family: var(--fm); font-size: .46rem; letter-spacing: .18em; color: var(--gold); text-transform: uppercase; }
+.tl-card-film { font-family: var(--fd); font-size: 1rem; color: var(--cream); line-height: 1.1; }
+.tl-card-scene { font-family: var(--fs); font-size: .75rem; color: var(--muted); font-style: italic; line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.tl-card-ratio { font-family: var(--fm); font-size: .42rem; letter-spacing: .12em; color: var(--muted2); margin-top: .2rem; }
+
+/* Mobile timeline — single column */
+@media (max-width: 700px) {
+  .timeline-wrap { padding: 0 1.1rem 5rem; }
+  .timeline-wrap::before { left: 1.6rem; }
+  .tl-decade { text-align: left; padding-left: 3rem; }
+  .tl-year-label { text-align: left; padding-left: 3rem; }
+  .tl-item {
+    grid-template-columns: 32px 1fr;
+    grid-template-rows: auto;
+  }
+  .tl-item.left .tl-dot,
+  .tl-item.right .tl-dot { grid-column: 1; grid-row: 1; }
+  .tl-item.left .tl-card,
+  .tl-item.right .tl-card { grid-column: 2; grid-row: 1; justify-self: stretch; max-width: 100%; }
+  .tl-item.left .tl-spacer,
+  .tl-item.right .tl-spacer { display: none; }
+  .tl-item.left .tl-dot::after,
+  .tl-item.right .tl-dot::before { display: none; }
+  .timeline-hero { padding: 3rem 1.1rem 2rem; }
+}
 </style>
 </head>
 <body>
@@ -736,6 +944,7 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
     <li id="nl-directors" onclick="nav('directors')">Registi</li>
     <li id="nl-map" onclick="nav('map')">Mappa Visiva</li>
     <li id="nl-percorsi" onclick="nav('percorsi')">Percorsi</li>
+    <li id="nl-timeline" onclick="nav('timeline')">Timeline</li>
   </ul>
   <div style="display:flex;align-items:center;gap:.8rem;flex-shrink:0">
     <button style="display:flex;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);background:transparent;border:.5px solid var(--border);padding:.38rem .9rem;cursor:pointer;transition:all .3s" id="search-btn" onclick="openSearch()" title="Cerca (Cmd+K)">
@@ -754,6 +963,7 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
     <li id="mnl-directors" onclick="nav('directors');closeMobNav()">Registi</li>
     <li id="mnl-map" onclick="nav('map');closeMobNav()">Mappa Visiva</li>
     <li id="mnl-percorsi" onclick="nav('percorsi');closeMobNav()">Percorsi di Visione</li>
+    <li id="mnl-timeline" onclick="nav('timeline');closeMobNav()">Timeline</li>
     <li onclick="openSearch();closeMobNav()" style="color:var(--gold)">Cerca</li>
   </ul>
 </div>
@@ -1428,6 +1638,7 @@ function nav(view, pushState=true){
   if(view==='home') resetMeta();
   showView(view);window.scrollTo({top:0,behavior:'smooth'});
   if(view==='map')setTimeout(()=>buildGraph(),120);
+  if(view==='timeline')setTimeout(()=>buildTimeline(),80);
   if(view==='percorsi')renderPercorsi();
   if(pushState){
     const url = view==='home' ? '/' : '/'+view;
@@ -1867,7 +2078,7 @@ function routeFromURL(){
       if(s){ showScene(id, false); return; }
     }
   }
-  const views = ['directors','map','percorsi'];
+  const views = ['directors','map','percorsi','timeline'];
   for(const v of views){
     if(path === '/'+v || path.startsWith('/'+v+'/')){ nav(v, false); return; }
   }
@@ -2065,6 +2276,113 @@ window.addEventListener('popstate', function(e){
     openCompare();
   }
 });
+
+// ══════════════════════════════════════════
+// TIMELINE
+// ══════════════════════════════════════════
+var timelineBuilt = false;
+
+function buildTimeline(){
+  if(timelineBuilt) return;
+  timelineBuilt = true;
+
+  const wrap = document.getElementById('timeline-wrap');
+  if(!wrap) return;
+
+  // Sort scenes by year
+  const sorted = [...SCENES].sort((a,b) => a.year - b.year);
+
+  // Group by decade then by year
+  const decades = {};
+  sorted.forEach(s => {
+    const dec = Math.floor(s.year / 10) * 10;
+    if(!decades[dec]) decades[dec] = {};
+    if(!decades[dec][s.year]) decades[dec][s.year] = [];
+    decades[dec][s.year].push(s);
+  });
+
+  let html = '';
+  let globalIdx = 0;
+
+  const decadeKeys = Object.keys(decades).sort((a,b) => +a - +b);
+
+  decadeKeys.forEach(dec => {
+    html += `<div class="tl-decade">
+      <div class="tl-decade-num">${dec}s</div>
+    </div>`;
+
+    const yearKeys = Object.keys(decades[dec]).sort((a,b) => +a - +b);
+    yearKeys.forEach(year => {
+      html += `<div class="tl-year-group">
+        <div class="tl-year-label"><span class="tl-year-badge">${year}</span></div>
+        <div class="tl-items">`;
+
+      decades[dec][year].forEach(s => {
+        const side = globalIdx % 2 === 0 ? 'left' : 'right';
+        const cardHtml = `
+          <div class="tl-card" onclick="showScene(${s.id})">
+            <div class="tl-card-poster-ph" id="tlph_${s.id}">${s.film.charAt(0)}</div>
+            <img class="tl-card-poster" id="tlimg_${s.id}" src="" alt="${s.film}"
+              style="display:none"
+              onload="this.style.display='block';document.getElementById('tlph_${s.id}').style.display='none'"
+              onerror="this.style.display='none'">
+            <div class="tl-card-info">
+              <div class="tl-card-dir">${s.director.toUpperCase()}</div>
+              <div class="tl-card-film">${s.film}</div>
+              <div class="tl-card-scene">${s.scene}</div>
+              <div class="tl-card-ratio">${s.ratio}</div>
+            </div>
+          </div>`;
+
+        if(side === 'left'){
+          html += `<div class="tl-item left">
+            ${cardHtml}
+            <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+            <div class="tl-spacer"></div>
+          </div>`;
+        } else {
+          html += `<div class="tl-item right">
+            <div class="tl-spacer"></div>
+            <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+            ${cardHtml}
+          </div>`;
+        }
+        globalIdx++;
+      });
+
+      html += `</div></div>`; // close tl-items + tl-year-group
+    });
+  });
+
+  wrap.innerHTML = html;
+
+  // Lazy load poster images with IntersectionObserver
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const img = entry.target;
+        const id = parseInt(img.id.replace('tlimg_',''));
+        const s = SCENES.find(x=>x.id===id);
+        if(s && !img.dataset.loaded){
+          img.dataset.loaded = '1';
+          searchMovieImg(s.film, s.year, 'w185').then(url => {
+            if(url){ img.src = url; }
+          });
+        }
+        observer.unobserve(img);
+      }
+    });
+  }, {rootMargin: '200px'});
+
+  document.querySelectorAll('[id^="tlimg_"]').forEach(img => observer.observe(img));
+
+  // Update hero subtitle with actual count
+  const subEl = document.querySelector('.tl-hero-sub');
+  if(subEl) subEl.textContent = SCENES.length+' scene · '+sorted[0].year+'–'+sorted[sorted.length-1].year+' · ordinate per anno';
+}
+
+// Hook into nav
+const _origNav = nav;
 </script>
 
 
@@ -2095,8 +2413,21 @@ window.addEventListener('popstate', function(e){
     <div class="compare-grid" id="compare-grid"></div>
   </div>
 </div>
+
+<!-- ── TIMELINE VIEW ── -->
+<div id="view-timeline" class="view">
+  <div class="timeline-hero">
+    <div class="tl-hero-label">Archivio cronologico</div>
+    <div class="tl-hero-title">TIMELINE</div>
+    <div class="tl-hero-sub">79 scene · 1948–2023 · ordinate per anno</div>
+  </div>
+  <div class="timeline-wrap" id="timeline-wrap">
+    <!-- rendered by JS -->
+  </div>
+</div>
 </body>
 </html>
+
 
 
 
