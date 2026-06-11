@@ -2320,7 +2320,7 @@ function buildTimeline(){
       decades[dec][year].forEach(s => {
         const side = globalIdx % 2 === 0 ? 'left' : 'right';
         const cardHtml = `
-          <div class="tl-card" onclick="showScene(${s.id})">
+          <div class="tl-card" data-sid="${s.id}" onclick="showScene(${s.id})">
             <div class="tl-card-poster-ph" id="tlph_${s.id}">${s.film.charAt(0)}</div>
             <img class="tl-card-poster" id="tlimg_${s.id}" src="" alt="${s.film}"
               style="display:none"
@@ -2356,25 +2356,28 @@ function buildTimeline(){
 
   wrap.innerHTML = html;
 
-  // Lazy load poster images with IntersectionObserver
+  // Lazy load: osserva le .tl-card (visibili) invece delle img (display:none)
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if(entry.isIntersecting){
-        const img = entry.target;
-        const id = parseInt(img.id.replace('tlimg_',''));
+        const card = entry.target;
+        const id = parseInt(card.dataset.sid);
         const s = SCENES.find(x=>x.id===id);
-        if(s && !img.dataset.loaded){
-          img.dataset.loaded = '1';
+        if(s && !card.dataset.loaded){
+          card.dataset.loaded = '1';
           searchMovieImg(s.film, s.year, 'w185').then(url => {
-            if(url){ img.src = url; }
+            if(url){
+              const img = document.getElementById('tlimg_'+id);
+              if(img) img.src = url;
+            }
           });
         }
-        observer.unobserve(img);
+        observer.unobserve(card);
       }
     });
-  }, {rootMargin: '200px'});
+  }, {rootMargin: '300px'});
 
-  document.querySelectorAll('[id^="tlimg_"]').forEach(img => observer.observe(img));
+  document.querySelectorAll('.tl-card[data-sid]').forEach(card => observer.observe(card));
 
   // Update hero subtitle with actual count
   const subEl = document.querySelector('.tl-hero-sub');
@@ -2427,6 +2430,7 @@ const _origNav = nav;
 </div>
 </body>
 </html>
+
 
 
 
