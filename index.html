@@ -616,6 +616,114 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   .hero h1 { font-size: 2.4rem; }
   .sc-thumb { height: 150px; }
 }
+
+/* ═══════════════════════════════
+   MODALITÀ CONFRONTO
+   ═══════════════════════════════ */
+.compare-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:500;
+  background:rgba(8,8,8,.97);border-top:.5px solid var(--border2);
+  backdrop-filter:blur(24px);
+  transform:translateY(100%);opacity:0;
+  transition:transform .4s var(--ease),opacity .4s;
+  padding:.9rem 2.8rem;
+  display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;
+}
+.compare-bar.visible{transform:translateY(0);opacity:1}
+.compare-bar-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.22em;color:var(--muted);text-transform:uppercase;flex-shrink:0}
+.compare-slots{display:flex;gap:.8rem;flex:1;min-width:0}
+.compare-slot{
+  display:flex;align-items:center;gap:.7rem;
+  background:var(--bg2);border:.5px solid var(--border);
+  padding:.45rem .9rem .45rem .45rem;
+  min-width:180px;max-width:260px;flex:1;
+  position:relative;
+}
+.compare-slot.empty{border-style:dashed;opacity:.5;justify-content:center}
+.compare-slot-thumb{width:38px;height:38px;object-fit:cover;flex-shrink:0;background:var(--bg3)}
+.compare-slot-thumb-ph{width:38px;height:38px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.9rem;color:var(--gold);opacity:.4;flex-shrink:0}
+.compare-slot-info{min-width:0;flex:1}
+.compare-slot-film{font-family:var(--fd);font-size:.82rem;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.compare-slot-scene{font-family:var(--fm);font-size:.45rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.15rem}
+.compare-slot-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.9rem;padding:0 0 0 .3rem;flex-shrink:0;transition:color .2s}
+.compare-slot-remove:hover{color:var(--gold)}
+.compare-empty-text{font-family:var(--fm);font-size:.5rem;letter-spacing:.15em;color:var(--muted);text-transform:uppercase}
+.compare-actions{display:flex;gap:.6rem;flex-shrink:0}
+.btn-compare-go{
+  background:var(--gold);color:var(--bg);border:none;
+  font-family:var(--fm);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;
+  padding:.6rem 1.4rem;cursor:pointer;transition:all .25s;
+}
+.btn-compare-go:hover{background:var(--gold2)}
+.btn-compare-go:disabled{opacity:.35;cursor:not-allowed}
+.btn-compare-clear{
+  background:transparent;color:var(--muted);border:.5px solid var(--border);
+  font-family:var(--fm);font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;
+  padding:.6rem 1rem;cursor:pointer;transition:all .25s;
+}
+.btn-compare-clear:hover{color:var(--cream);border-color:var(--border2)}
+
+/* Scene card compare toggle button */
+.sc-compare-btn{
+  position:absolute;top:.6rem;right:.6rem;z-index:5;
+  background:rgba(8,8,8,.75);border:.5px solid var(--border);
+  color:var(--muted);font-family:var(--fm);font-size:.45rem;letter-spacing:.12em;
+  text-transform:uppercase;padding:.28rem .55rem;cursor:pointer;
+  transition:all .25s;opacity:0;
+  backdrop-filter:blur(8px);
+}
+.scene-card:hover .sc-compare-btn{opacity:1}
+.sc-compare-btn.selected{
+  opacity:1 !important;
+  background:rgba(200,169,110,.15);
+  border-color:var(--gold);color:var(--gold);
+}
+.scene-card.in-compare{outline:.5px solid var(--gold);outline-offset:-1px}
+
+/* ── COMPARE VIEW ── */
+
+.compare-view-wrap{padding:0 2.8rem 6rem}
+.compare-header{padding:2.5rem 0 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid var(--border);margin-bottom:2.5rem}
+.compare-header-title{font-family:var(--fd);font-size:2rem;letter-spacing:.06em;color:var(--cream)}
+.compare-header-title span{color:var(--gold)}
+.compare-vs{font-family:var(--fd);font-size:1.2rem;color:var(--muted);margin:0 1rem}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border)}
+.compare-col{background:var(--bg);padding:0}
+.compare-col-head{padding:1.6rem;border-bottom:.5px solid var(--border);display:flex;gap:1rem;align-items:flex-start}
+.compare-col-poster{width:70px;height:100px;object-fit:cover;flex-shrink:0;background:var(--bg3)}
+.compare-col-poster-ph{width:70px;height:100px;background:var(--bg3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.compare-col-meta{flex:1}
+.compare-col-dir{font-family:var(--fm);font-size:.52rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:.3rem}
+.compare-col-film{font-family:var(--fd);font-size:1.4rem;color:var(--cream);line-height:1;margin-bottom:.3rem}
+.compare-col-scene{font-family:var(--fs);font-size:.82rem;color:var(--muted);font-style:italic}
+.compare-col-year{font-family:var(--fm);font-size:.5rem;letter-spacing:.18em;color:var(--muted2);margin-top:.4rem}
+.compare-section{padding:1.4rem 1.6rem;border-bottom:.5px solid var(--border)}
+.compare-section-label{font-family:var(--fm);font-size:.5rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:.7rem}
+.compare-section-text{font-family:var(--fs);font-size:.88rem;color:var(--muted2);line-height:1.7}
+.compare-tags-row{display:flex;flex-wrap:wrap;gap:.4rem}
+.compare-tag{font-family:var(--fm);font-size:.48rem;letter-spacing:.1em;padding:.2rem .6rem;border:.5px solid var(--border2);color:var(--muted2);text-transform:uppercase}
+.compare-stat-row{display:flex;flex-direction:column;gap:.5rem}
+.compare-stat{display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;border-bottom:.5px solid var(--border)}
+.compare-stat-key{font-family:var(--fm);font-size:.5rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.compare-stat-val{font-family:var(--fm);font-size:.55rem;letter-spacing:.08em;color:var(--cream)}
+.compare-highlight{background:rgba(200,169,110,.06);border-left:2px solid var(--gold)}
+.compare-highlight .compare-stat-val{color:var(--gold)}
+.compare-shared-box{
+  grid-column:1/-1;background:var(--bg2);border:.5px solid var(--border2);
+  padding:1.4rem 1.6rem;margin-top:2px;
+}
+.compare-shared-label{font-family:var(--fm);font-size:.5rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;margin-bottom:.7rem}
+.compare-shared-tags{display:flex;flex-wrap:wrap;gap:.5rem}
+.compare-shared-tag{font-family:var(--fm);font-size:.52rem;letter-spacing:.1em;padding:.25rem .7rem;background:rgba(200,169,110,.1);border:.5px solid rgba(200,169,110,.35);color:var(--gold)}
+
+@media(max-width:700px){
+  .compare-bar{padding:.8rem 1.1rem;gap:.8rem}
+  .compare-grid{grid-template-columns:1fr}
+  .compare-slots{flex-direction:column}
+  .compare-slot{max-width:100%}
+  .compare-view-wrap{padding:0 1.1rem 5rem}
+  .compare-header{flex-direction:column;align-items:flex-start;gap:.8rem}
+}
 </style>
 </head>
 <body>
@@ -1016,18 +1124,20 @@ function loadImg(iId, pId, type, tmdbId, sz, name) {
 
 // ── RENDER SCENES ──
 function renderScenes(filter){
-  const list=filter?SCENES.filter(s=>s.tags.includes(filter)):SCENES;
+  const list=filter?SCENES.filter(s=>(s.tags||s.tl||[]).includes(filter)):SCENES;
+  // compareList is global — defined in compare section
   document.getElementById('fc').textContent=`${list.length} scene${filter?' filtrate':' in archivio'}`;
   document.getElementById('hss').textContent=SCENES.length;
   document.getElementById('hbn').textContent=SCENES.length;
   document.getElementById('scene-grid').innerHTML=list.map((s,i)=>`
-    <div class="scene-card" onclick="showScene(${s.id})">
+    <div class="scene-card${(window.compareList||[]).includes(s.id)?' in-compare':''}" id="scard_${s.id}" onclick="showScene(${s.id})">
       <div class="sc-thumb">
         <div class="sc-thumb-ph" id="sph_${s.id}"><span class="sc-ph-num">${String(i+1).padStart(2,'0')}</span></div>
         <img id="si_${s.id}" src="" alt="${s.film}" style="display:none">
         <div class="sc-overlay"></div>
         <div class="sc-ratio">${s.ratio}</div>
         <div class="sc-year">${s.year}</div>
+        <button class="sc-compare-btn${(window.compareList||[]).includes(s.id)?' selected':''}" onclick="toggleCompare(event,${s.id})">${(window.compareList||[]).includes(s.id)?'✓ Selezionata':'+ Confronta'}</button>
       </div>
       <div class="sc-body">
         <div class="sc-director">${s.director.toUpperCase()}</div>
@@ -1071,22 +1181,53 @@ function renderDirectors(){
 async function showScene(id, pushState=true){
   const s=SCENES.find(x=>x.id===id);if(!s)return;
   if(pushState) history.pushState({scene:id}, '', '/scena/'+id+'-'+s.film.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
-  // Aggiorna meta tag dinamicamente per SEO e condivisione social
+  // ── Meta tag dinamici per SEO e condivisione social ──
+  const sceneSlug = id+'-'+s.film.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+  const sceneUrl  = 'https://thecinemap.it/scena/'+sceneSlug;
   const sceneDesc = s.intro.replace(/<[^>]*>/g,'').slice(0,155)+'…';
-  document.title = s.film+' — '+s.scene+' | CineMap';
+  const sceneTitle = s.film+' — '+s.scene+' | CineMap';
+
+  document.title = sceneTitle;
   document.querySelector('meta[name="description"]').setAttribute('content', sceneDesc);
   document.querySelector('meta[property="og:title"]').setAttribute('content', s.film+' — '+s.scene);
   document.querySelector('meta[property="og:description"]').setAttribute('content', sceneDesc);
-  document.querySelector('meta[property="og:url"]').setAttribute('content', 'https://thecinemap.it/scena/'+id+'-'+s.film.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
-  document.querySelector('link[rel="canonical"]').setAttribute('href', 'https://thecinemap.it/scena/'+id+'-'+s.film.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
+  document.querySelector('meta[property="og:url"]').setAttribute('content', sceneUrl);
+  document.querySelector('meta[property="og:type"]').setAttribute('content', 'article');
+  document.querySelector('link[rel="canonical"]').setAttribute('href', sceneUrl);
+  document.querySelector('meta[name="twitter:card"]').setAttribute('content', 'summary_large_image');
   document.querySelector('meta[name="twitter:title"]').setAttribute('content', s.film+' — '+s.scene);
   document.querySelector('meta[name="twitter:description"]').setAttribute('content', sceneDesc);
-  // og:image — usa locandina TMDB se disponibile
+
+  // Schema.org Article per ogni scena
+  let ldEl = document.getElementById('scene-ld');
+  if(!ldEl){ ldEl=document.createElement('script'); ldEl.type='application/ld+json'; ldEl.id='scene-ld'; document.head.appendChild(ldEl); }
+  const ldData = {
+    "@context":"https://schema.org",
+    "@type":"Article",
+    "headline": s.film+' — '+s.scene,
+    "description": sceneDesc,
+    "url": sceneUrl,
+    "author": {"@type":"Person","name":"Riccardo Carollo","url":"https://thecinemap.it"},
+    "publisher": {"@type":"Organization","name":"CineMap","url":"https://thecinemap.it"},
+    "inLanguage": "it",
+    "datePublished": s.year+"-01-01",
+    "about": [
+      {"@type":"Movie","name":s.film,"dateCreated":s.year,"director":{"@type":"Person","name":s.director}},
+      {"@type":"Thing","name":"Analisi cinematografica"}
+    ],
+    "keywords": (s.kw||[]).concat([s.director, s.film, 'cinema d autore', 'analisi scena']).join(', ')
+  };
+  ldEl.textContent = JSON.stringify(ldData);
+
+  // og:image e twitter:image — locandina TMDB
   searchMovieImg(s.film, s.year, 'w780').then(function(url){
     if(url){
       let ogImg = document.querySelector('meta[property="og:image"]');
       if(!ogImg){ ogImg=document.createElement('meta'); ogImg.setAttribute('property','og:image'); document.head.appendChild(ogImg); }
       ogImg.setAttribute('content', url);
+      let ogImgW = document.querySelector('meta[property="og:image:width"]');
+      if(!ogImgW){ ogImgW=document.createElement('meta'); ogImgW.setAttribute('property','og:image:width'); document.head.appendChild(ogImgW); }
+      ogImgW.setAttribute('content','780');
       let twImg = document.querySelector('meta[name="twitter:image"]');
       if(!twImg){ twImg=document.createElement('meta'); twImg.setAttribute('name','twitter:image'); document.head.appendChild(twImg); }
       twImg.setAttribute('content', url);
@@ -1272,8 +1413,12 @@ function resetMeta(){
   document.title = "CineMap — Frame d'Autore";
   document.querySelector('meta[name="description"]').setAttribute('content',"CineMap analizza le scene iconiche del cinema d'autore: regia, simbologia, sceneggiatura e curiosità produttive.");
   document.querySelector('meta[property="og:title"]').setAttribute('content',"CineMap — Frame d'Autore");
+  document.querySelector('meta[property="og:description"]').setAttribute('content',"L'anatomia del fotogramma. Analisi delle scene iconiche del cinema d'autore.");
   document.querySelector('meta[property="og:url"]').setAttribute('content','https://thecinemap.it/');
+  document.querySelector('meta[property="og:type"]').setAttribute('content','website');
   document.querySelector('link[rel="canonical"]').setAttribute('href','https://thecinemap.it/');
+  const ldEl = document.getElementById('scene-ld');
+  if(ldEl) ldEl.remove();
 }
 function nav(view, pushState=true){
   document.querySelectorAll('nav ul li').forEach(l=>l.classList.remove('active'));
@@ -1745,10 +1890,214 @@ document.addEventListener('DOMContentLoaded', function(){
   // Replace default init with routing
   routeFromURL();
 });
+
+// ══════════════════════════════════════════
+// MODALITÀ CONFRONTO
+// ══════════════════════════════════════════
+window.compareList = window.compareList || []; var compareList = window.compareList; // max 2 scene IDs
+
+function toggleCompare(e, id){
+  e.stopPropagation();
+  const idx = compareList.indexOf(id);
+  if(idx >= 0){
+    compareList.splice(idx,1);
+  } else {
+    if(compareList.length >= 2){
+      // Sostituisce la seconda
+      compareList[1] = id;
+    } else {
+      compareList.push(id);
+    }
+  }
+  updateCompareBar();
+  updateCompareCardStates();
+}
+
+function updateCompareCardStates(){
+  // Aggiorna lo stato visivo di tutte le card
+  document.querySelectorAll('.scene-card').forEach(card => {
+    const btn = card.querySelector('.sc-compare-btn');
+    if(!btn) return;
+    const cardId = parseInt(card.id.replace('scard_',''));
+    const sel = compareList.includes(cardId);
+    card.classList.toggle('in-compare', sel);
+    btn.classList.toggle('selected', sel);
+    btn.textContent = sel ? '✓ Selezionata' : '+ Confronta';
+  });
+}
+
+function updateCompareBar(){
+  const bar = document.getElementById('compare-bar');
+  const btn = document.getElementById('btn-compare-go');
+
+  // Show bar if at least one selected
+  bar.classList.toggle('visible', compareList.length > 0);
+
+  // Update slots
+  for(let i=0; i<2; i++){
+    const slot = document.getElementById('cslot-'+i);
+    const id = compareList[i];
+    if(id){
+      const s = SCENES.find(x=>x.id===id);
+      const thumbSrc = document.getElementById('si_'+id);
+      const imgSrc = thumbSrc && thumbSrc.src && !thumbSrc.src.endsWith('/') ? thumbSrc.src : '';
+      slot.classList.remove('empty');
+      slot.innerHTML = imgSrc
+        ? `<img class="compare-slot-thumb" src="${imgSrc}">`
+        : `<div class="compare-slot-thumb-ph">${s.film.charAt(0)}</div>`;
+      slot.innerHTML += `
+        <div class="compare-slot-info">
+          <div class="compare-slot-film">${s.film}</div>
+          <div class="compare-slot-scene">${s.scene.slice(0,40)}${s.scene.length>40?'…':''}</div>
+        </div>
+        <button class="compare-slot-remove" onclick="removeFromCompare(${id})">✕</button>`;
+    } else {
+      slot.classList.add('empty');
+      slot.innerHTML = '<span class="compare-empty-text">+ Seleziona scena</span>';
+    }
+  }
+
+  btn.disabled = compareList.length < 2;
+}
+
+function removeFromCompare(id){
+  compareList = compareList.filter(x=>x!==id);
+  updateCompareBar();
+  updateCompareCardStates();
+}
+
+function clearCompare(){
+  compareList = [];
+  updateCompareBar();
+  updateCompareCardStates();
+}
+
+async function openCompare(){
+  if(compareList.length < 2) return;
+  const [idA, idB] = compareList;
+  const a = SCENES.find(x=>x.id===idA);
+  const b = SCENES.find(x=>x.id===idB);
+  if(!a||!b) return;
+
+  // Update URL
+  history.pushState({compare:[idA,idB]}, '', '/confronto/'+idA+'-vs-'+idB);
+
+  // Header titles
+  document.getElementById('cmp-title-a').textContent = a.film;
+  document.getElementById('cmp-title-a').querySelector && null;
+  document.getElementById('cmp-title-a').innerHTML = '<span>'+a.film+'</span>';
+  document.getElementById('cmp-title-b').innerHTML = '<span>'+b.film+'</span>';
+
+  // Find shared tags
+  const sharedTags = a.tl.filter(t => b.tl.includes(t));
+  const sharedKw   = (a.kw||[]).filter(k => (b.kw||[]).includes(k));
+
+  // Fetch poster images
+  const [imgA, imgB] = await Promise.all([
+    searchMovieImg(a.film, a.year, 'w342'),
+    searchMovieImg(b.film, b.year, 'w342')
+  ]);
+
+  function makeCol(s, img){
+    const anKeys = s.an ? Object.keys(s.an) : [];
+    const sections = anKeys.map(k => `
+      <div class="compare-section">
+        <div class="compare-section-label">${k.charAt(0).toUpperCase()+k.slice(1)}</div>
+        <div class="compare-section-text">${s.an[k]}</div>
+      </div>`).join('');
+
+    // Stats to compare
+    const stats = [
+      {key:'Anno', val:s.year},
+      {key:'Formato', val:s.ratio},
+      {key:'Regista', val:s.director},
+    ];
+
+    return `
+      <div class="compare-col">
+        <div class="compare-col-head">
+          ${img
+            ? `<img class="compare-col-poster" src="${img}" alt="${s.film}">`
+            : `<div class="compare-col-poster-ph">${s.film.charAt(0)}</div>`}
+          <div class="compare-col-meta">
+            <div class="compare-col-dir">${s.director.toUpperCase()}</div>
+            <div class="compare-col-film">${s.film}</div>
+            <div class="compare-col-scene">${s.scene}</div>
+            <div class="compare-col-year">${s.year} · ${s.ratio}</div>
+          </div>
+        </div>
+        <div class="compare-section">
+          <div class="compare-section-label">Intro</div>
+          <div class="compare-section-text">${(s.intro||'').replace(/<[^>]*>/g,'')}</div>
+        </div>
+        ${sections}
+        <div class="compare-section">
+          <div class="compare-section-label">Tag</div>
+          <div class="compare-tags-row">
+            ${s.tl.map(t=>`<span class="compare-tag${sharedTags.includes(t)?' compare-highlight':''}">${t}</span>`).join('')}
+          </div>
+        </div>
+      </div>`;
+  }
+
+  const sharedBox = (sharedTags.length > 0 || sharedKw.length > 0) ? `
+    <div class="compare-shared-box">
+      <div class="compare-shared-label">🔗 Temi in comune</div>
+      <div class="compare-shared-tags">
+        ${sharedTags.map(t=>`<span class="compare-shared-tag">${t}</span>`).join('')}
+        ${sharedKw.filter(k=>!sharedTags.includes(k)).map(k=>`<span class="compare-shared-tag">${k}</span>`).join('')}
+      </div>
+    </div>` : '';
+
+  document.getElementById('compare-grid').innerHTML =
+    makeCol(a, imgA) + makeCol(b, imgB) + sharedBox;
+
+  showView('compare');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// Support popstate for compare
+const _origPopstate = window.onpopstate;
+window.addEventListener('popstate', function(e){
+  if(e.state && e.state.compare){
+    const [idA,idB] = e.state.compare;
+    compareList = [idA, idB];
+    openCompare();
+  }
+});
 </script>
 
+
+<!-- ── COMPARE BAR (fixed bottom) ── -->
+<div class="compare-bar" id="compare-bar">
+  <div class="compare-bar-label">Confronta</div>
+  <div class="compare-slots">
+    <div class="compare-slot empty" id="cslot-0"><span class="compare-empty-text">+ Seleziona scena</span></div>
+    <div class="compare-slot empty" id="cslot-1"><span class="compare-empty-text">+ Seleziona scena</span></div>
+  </div>
+  <div class="compare-actions">
+    <button class="btn-compare-go" id="btn-compare-go" onclick="openCompare()" disabled>Confronta ↗</button>
+    <button class="btn-compare-clear" onclick="clearCompare()">✕ Svuota</button>
+  </div>
+</div>
+
+<!-- ── COMPARE VIEW ── -->
+<div id="view-compare" class="view">
+  <div class="compare-view-wrap">
+    <div class="compare-header">
+      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+        <div class="compare-header-title" id="cmp-title-a">—</div>
+        <div class="compare-vs">VS</div>
+        <div class="compare-header-title" id="cmp-title-b">—</div>
+      </div>
+      <button class="back-btn" onclick="history.back()">← Torna alle scene</button>
+    </div>
+    <div class="compare-grid" id="compare-grid"></div>
+  </div>
+</div>
 </body>
 </html>
+
 
 
 
