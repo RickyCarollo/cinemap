@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://thecinemap.it/sitemap.xml
+
+# CineMap — thecinemap.it
