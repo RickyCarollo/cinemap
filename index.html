@@ -1054,81 +1054,9 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   to   { background-position: 0 80px; }
 }
 
-/* ── SCENE CARD ENTER ANIMATION ── */
-.scene-card {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease), background 0.3s;
-}
-.scene-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
 
-/* ── SCROLL REVEAL ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
 
-/* ── HERO TITLE GLITCH EFFECT ── */
-@keyframes glitchX {
-  0%,100% { clip-path: inset(0 0 98% 0); transform: translate(-3px,0); }
-  20%      { clip-path: inset(30% 0 60% 0); transform: translate(3px,0); }
-  40%      { clip-path: inset(60% 0 20% 0); transform: translate(-2px,0); }
-  60%      { clip-path: inset(80% 0 5% 0); transform: translate(2px,0); }
-  80%      { clip-path: inset(10% 0 80% 0); transform: translate(-1px,0); }
-}
-.hero h1 { position: relative; }
-.hero h1::before,
-.hero h1::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  opacity: 0;
-}
-.hero h1.glitching::before {
-  opacity: 0.6;
-  color: rgba(200,169,110,.7);
-  animation: glitchX 0.25s steps(2) forwards;
-}
-.hero h1.glitching::after {
-  opacity: 0.4;
-  color: rgba(255,80,80,.5);
-  animation: glitchX 0.25s steps(2) reverse forwards;
-  animation-delay: 0.05s;
-}
 
-/* ── STICKY NAV SCROLL INDICATOR ── */
-.nav-progress {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 1px;
-  background: var(--gold);
-  width: 0%;
-  transition: width 0.1s linear;
-  opacity: 0.6;
-}
-
-/* ── TIMELINE FADE-IN ITEMS ── */
-.tl-card {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease),
-              border-color 0.3s, background 0.3s, box-shadow 0.3s;
-}
-.tl-card.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
 
 </style>
 </head>
@@ -1654,27 +1582,24 @@ async function showScene(id, pushState=true){
   const ytSearch=`https://www.youtube.com/results?search_query=${encodeURIComponent(s.film+' '+s.scene+' clip')}`;
   // Per aggiungere un video embed: trova il video su YouTube, copia l'ID dall'URL
   // (la parte dopo v=) e aggiungilo nell'oggetto YT qui sotto con il nome del film
-  const YT={
-    // Esempio: 'Oldboy':'ID_qui', 'Taxi Driver':'ID_qui'
-  };
-  const ytId=YT[s.film]||null;
-  const videoHtml=ytId
-    ? `<div class="video-section">
-      <div class="video-head">
-        <span class="video-label">▶ Guarda la scena</span>
-        <button class="video-toggle" onclick="toggleVid('vw_${s.id}',this)">Mostra video</button>
+  // Auto video search via YouTube oEmbed + noembed fallback
+  const videoHtml = `<div class="video-section" id="vsec_${s.id}">
+    <div class="video-head">
+      <span class="video-label">▶ Guarda la scena</span>
+      <span class="video-status" id="vstatus_${s.id}" style="font-family:var(--fm);font-size:.5rem;letter-spacing:.14em;color:var(--muted2);text-transform:uppercase"></span>
+    </div>
+    <div id="vplayer_${s.id}" class="video-player-wrap">
+      <div class="video-searching" id="vsearch_${s.id}">
+        <div class="vs-inner">
+          <div class="vs-spinner"></div>
+          <div class="vs-label">Ricerca clip in corso…</div>
+        </div>
       </div>
-      <div id="vw_${s.id}" class="video-embed-wrap">
-        <iframe data-src="https://www.youtube-nocookie.com/embed/${ytId}?rel=0&modestbranding=1" allowfullscreen allow="autoplay; encrypted-media" title="${s.film}"></iframe>
-      </div>
-    </div>`
-    : `<div class="video-section">
-      <div class="video-head">
-        <span class="video-label">▶ Cerca la scena</span>
-        <a class="video-toggle" href="${ytSearch}" target="_blank" rel="noopener">Cerca su YouTube ↗</a>
-      </div>
-      <div class="video-note">Cerca su YouTube e copia l'ID del video per abilitare l'embed diretto.</div>
-    </div>`;
+    </div>
+    <div class="video-results-row" id="vresults_${s.id}"></div>
+  </div>`;
+  // Kick off auto-search after render
+  setTimeout(() => autoSearchVideo(s.id, s.film, s.scene, s.director), 400);
 
   document.getElementById('det').innerHTML=`
     <button class="back-btn" onclick="history.back()">← Torna alle scene</button>
@@ -2888,19 +2813,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })();
 
-// ── 7. HERO H1 GLITCH ──
-(function initGlitch() {
-  const h1 = document.querySelector('.hero h1');
-  if (!h1) return;
-  h1.setAttribute('data-text', h1.textContent);
-  // Trigger glitch randomly
-  setInterval(() => {
-    if (Math.random() > 0.7) {
-      h1.classList.add('glitching');
-      setTimeout(() => h1.classList.remove('glitching'), 280);
-    }
-  }, 4000);
-})();
+
 
 // ── 8. NAV SCROLL PROGRESS ──
 (function initScrollProgress() {
@@ -2913,59 +2826,103 @@ document.addEventListener('DOMContentLoaded', () => {
   }, { passive: true });
 })();
 
-// ── 9. SCROLL REVEAL ──
-(function initReveal() {
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        obs.unobserve(e.target);
+
+
+
+
+// ── AUTO VIDEO SEARCH ──
+// Uses YouTube's unofficial search via a CORS proxy + noembed for validation
+const _videoCache = {};
+
+async function autoSearchVideo(sceneId, film, scene, director) {
+  const searchEl   = document.getElementById('vsearch_' + sceneId);
+  const playerEl   = document.getElementById('vplayer_' + sceneId);
+  const resultsEl  = document.getElementById('vresults_' + sceneId);
+  const statusEl   = document.getElementById('vstatus_' + sceneId);
+  if (!searchEl || !playerEl) return;
+
+  const cacheKey = 'vid_' + sceneId;
+  if (_videoCache[cacheKey]) {
+    embedVideo(sceneId, _videoCache[cacheKey].id, _videoCache[cacheKey].title, playerEl, searchEl);
+    return;
+  }
+
+  // Build search query
+  const query = `${film} ${scene} clip scena`;
+  const encodedQ = encodeURIComponent(query);
+  
+  // Use the Invidious public API (open-source YouTube frontend, no key needed)
+  const invidiousInstances = [
+    'https://invidious.privacydev.net',
+    'https://yewtu.be',
+    'https://inv.tux.pizza'
+  ];
+
+  let results = null;
+  for (const inst of invidiousInstances) {
+    try {
+      const r = await fetch(`${inst}/api/v1/search?q=${encodedQ}&type=video&fields=videoId,title,lengthSeconds`, {signal: AbortSignal.timeout(4000)});
+      if (r.ok) {
+        const data = await r.json();
+        if (data && data.length > 0) {
+          results = data.slice(0, 4).map(v => ({id: v.videoId, title: v.title}));
+          break;
+        }
       }
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-
-  function revealAll() {
-    // Scene cards
-    document.querySelectorAll('.scene-card:not(.visible)').forEach((el, i) => {
-      el.style.transitionDelay = (i % 6) * 0.07 + 's';
-      obs.observe(el);
-    });
-    // Director cards
-    document.querySelectorAll('.dir-card:not(.reveal)').forEach((el, i) => {
-      el.classList.add('reveal');
-      el.style.transitionDelay = (i % 4) * 0.08 + 's';
-      obs.observe(el);
-    });
-    // Timeline cards
-    document.querySelectorAll('.tl-card:not(.visible)').forEach((el, i) => {
-      el.style.transitionDelay = (i % 5) * 0.06 + 's';
-      obs.observe(el);
-    });
-    // Section heads
-    document.querySelectorAll('.sec-head:not(.reveal)').forEach(el => {
-      el.classList.add('reveal');
-      obs.observe(el);
-    });
+    } catch(e) { /* try next */ }
   }
 
-  // Run on DOM ready and after any nav change
-  document.addEventListener('DOMContentLoaded', revealAll);
-  // Also hook into nav to re-run after view changes
-  const _origShow = window.showView;
-  if (typeof _origShow === 'function') {
-    window.showView = function(v) {
-      _origShow(v);
-      setTimeout(revealAll, 100);
-    };
+  // Fallback: if all Invidious fail, use a direct YouTube search link
+  if (!results) {
+    showVideoFallback(sceneId, film, scene, playerEl, searchEl, statusEl);
+    return;
   }
-  // Fallback: MutationObserver on #app
-  const appEl = document.getElementById('app');
-  if (appEl) {
-    const mo = new MutationObserver(() => setTimeout(revealAll, 150));
-    mo.observe(appEl, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
-  }
-})();
 
+  // Embed the first result automatically
+  _videoCache[cacheKey] = results[0];
+  embedVideo(sceneId, results[0].id, results[0].title, playerEl, searchEl);
+  if (statusEl) statusEl.textContent = '';
+
+  // Show alternative results if more than 1
+  if (results.length > 1 && resultsEl) {
+    resultsEl.innerHTML = '<span style="font-family:var(--fm);font-size:.48rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;align-self:center;flex-shrink:0">Non è il clip giusto?</span>' +
+      results.map((v, i) => 
+        `<button class="video-result-btn${i===0?' active':''}" onclick="switchVideo(${sceneId},'${v.id}',this)" title="${v.title.replace(/'/g,'\'')}">
+          ${i === 0 ? '✓ ' : ''}${i+1}. ${v.title.substring(0,38)}${v.title.length > 38 ? '…' : ''}
+        </button>`
+      ).join('');
+  }
+}
+
+function embedVideo(sceneId, ytId, title, playerEl, searchEl) {
+  if (searchEl) searchEl.style.display = 'none';
+  playerEl.innerHTML = `<div class="video-embed-active">
+    <iframe src="https://www.youtube-nocookie.com/embed/${ytId}?rel=0&modestbranding=1&color=white" 
+      title="${(title||'').replace(/"/g,'&quot;')}"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen loading="lazy"></iframe>
+  </div>`;
+}
+
+function switchVideo(sceneId, ytId, btn) {
+  const playerEl = document.getElementById('vplayer_' + sceneId);
+  const searchEl = document.getElementById('vsearch_' + sceneId);
+  if (!playerEl) return;
+  document.querySelectorAll('#vresults_' + sceneId + ' .video-result-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  btn.textContent = '✓ ' + btn.textContent.replace(/^[✓\d]+\. /, '').replace(/^\d+\. /, '');
+  embedVideo(sceneId, ytId, btn.title, playerEl, searchEl);
+  _videoCache['vid_' + sceneId] = {id: ytId, title: btn.title};
+}
+
+function showVideoFallback(sceneId, film, scene, playerEl, searchEl, statusEl) {
+  if (searchEl) searchEl.style.display = 'none';
+  const ytUrl = 'https://www.youtube.com/results?search_query=' + encodeURIComponent(film + ' ' + scene + ' scena clip');
+  playerEl.innerHTML = `<div class="video-error-msg">
+    <span>Nessun video trovato automaticamente.</span>
+    <a href="${ytUrl}" target="_blank" rel="noopener">Cerca su YouTube ↗</a>
+  </div>`;
+}
 
 </script>
 </body>
