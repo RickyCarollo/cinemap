@@ -160,6 +160,18 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 .stream-btn{font-family:var(--fm);font-size:.52rem;letter-spacing:.14em;padding:.4rem 1rem;border:.5px solid var(--border);color:var(--muted2);text-decoration:none;transition:all .28s;text-transform:uppercase}
 .stream-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,.06)}
 .video-section{margin:2.5rem 0;border:.5px solid var(--border);overflow:hidden}
+.video-thumb-wrap{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;cursor:pointer;display:block;background:#000}
+.video-thumb-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.55);transition:filter .4s,transform .6s cubic-bezier(0.16,1,0.3,1)}
+.video-thumb-wrap:hover img{filter:brightness(.38);transform:scale(1.03)}
+.video-play-btn{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;z-index:2}
+.video-play-circle{width:72px;height:72px;border:.5px solid rgba(200,169,110,.7);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .35s cubic-bezier(0.16,1,0.3,1);background:rgba(8,8,8,.45);backdrop-filter:blur(8px)}
+.video-thumb-wrap:hover .video-play-circle{background:rgba(200,169,110,.15);border-color:var(--gold);transform:scale(1.08)}
+.video-play-triangle{width:0;height:0;border-top:11px solid transparent;border-bottom:11px solid transparent;border-left:19px solid var(--gold);margin-left:4px}
+.video-play-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.28em;color:rgba(200,169,110,.8);text-transform:uppercase}
+.video-thumb-wrap:hover .video-play-label{color:var(--gold)}
+.video-scene-info{position:absolute;bottom:0;left:0;right:0;padding:1.4rem 1.8rem;background:linear-gradient(to top,rgba(8,8,8,.95) 0%,rgba(8,8,8,.6) 60%,transparent 100%);z-index:2}
+.video-scene-film{font-family:var(--fd);font-size:1.3rem;letter-spacing:.06em;color:var(--cream);line-height:1}
+.video-scene-name{font-family:var(--fs);font-size:.82rem;color:rgba(200,169,110,.7);font-style:italic;margin-top:.3rem}
 .video-head{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;background:var(--bg2);border-bottom:.5px solid var(--border)}
 .video-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase}
 .video-toggle{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(--cream);cursor:pointer;border:.5px solid var(--border2);padding:.3rem .8rem;background:transparent;transition:all .3s;text-decoration:none;display:inline-block}
@@ -1583,25 +1595,35 @@ async function showScene(id, pushState=true){
   // Per aggiungere un video embed: trova il video su YouTube, copia l'ID dall'URL
   const ytId = YT_SCENE_IDS[s.id] || null;
   const ytSearch=`https://www.youtube.com/results?search_query=${encodeURIComponent(s.film+' '+s.scene+' clip')}`;
-  const videoHtml = ytId
-    ? `<div class="video-section">
-        <div class="video-head">
-          <span class="video-label">▶ Guarda la scena</span>
-          <a class="video-toggle" href="https://www.youtube.com/watch?v=${ytId}" target="_blank" rel="noopener" style="font-size:.5rem;letter-spacing:.14em;color:var(--muted);border:.5px solid var(--border);padding:.28rem .7rem;text-decoration:none;font-family:var(--fm);text-transform:uppercase">YouTube ↗</a>
-        </div>
-        <div class="video-embed-active">
-          <iframe src="https://www.youtube-nocookie.com/embed/${ytId}?rel=0&modestbranding=1&color=white"
-            title="${s.film}"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen loading="lazy"></iframe>
-        </div>
-      </div>`
-    : `<div class="video-section">
-        <div class="video-head"><span class="video-label">▶ Cerca la scena</span>
-          <a class="video-toggle" href="${ytSearch}" target="_blank" rel="noopener">Cerca su YouTube ↗</a>
-        </div>
-        <div class="video-note">Video non ancora disponibile.</div>
-      </div>`;
+  const ytUrl = ytId
+    ? `https://www.youtube.com/watch?v=${ytId}`
+    : ytSearch;
+  const videoHtml = `<div class="video-section">
+    <div class="video-head">
+      <span class="video-label">▶ Guarda la scena</span>
+      <a href="${ytUrl}" target="_blank" rel="noopener" style="font-family:var(--fm);font-size:.5rem;letter-spacing:.2em;color:var(--muted2);text-transform:uppercase;text-decoration:none;border:.5px solid var(--border);padding:.28rem .8rem;transition:all .25s" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='';this.style.borderColor=''">Apri su YouTube ↗</a>
+    </div>
+    <a class="video-thumb-wrap" href="${ytUrl}" target="_blank" rel="noopener" id="vthumb_${s.id}">
+      <img id="vthumb_img_${s.id}" src="" alt="${s.film}" style="opacity:0;transition:opacity .5s">
+      <div class="video-play-btn">
+        <div class="video-play-circle"><div class="video-play-triangle"></div></div>
+        <div class="video-play-label">Guarda su YouTube</div>
+      </div>
+      <div class="video-scene-info">
+        <div class="video-scene-film">${s.film}</div>
+        <div class="video-scene-name">${s.scene}</div>
+      </div>
+    </a>
+  </div>`;
+  // Load thumbnail: use TMDB poster (already fetched) as background
+  setTimeout(() => {
+    const tImg = document.getElementById('vthumb_img_${s.id}');
+    if (tImg && imgUrl) { tImg.onload = () => tImg.style.opacity = '1'; tImg.src = imgUrl; }
+    else if (tImg) {
+      // fallback: YouTube thumbnail
+      if (ytId) { tImg.onload = () => tImg.style.opacity = '1'; tImg.src = 'https://img.youtube.com/vi/${ytId}/maxresdefault.jpg'; }
+    }
+  }, 100);
 
   document.getElementById('det').innerHTML=`
     <button class="back-btn" onclick="history.back()">← Torna alle scene</button>
@@ -2930,8 +2952,6 @@ function showVideoFallback(sceneId, film, scene, playerEl, searchEl, statusEl) {
 </script>
 </body>
 </html>
-
-
 
 
 
