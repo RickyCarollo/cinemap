@@ -2729,44 +2729,39 @@ const _origNav = nav;
   tick();
 })();
 
-// ── 4. PARALLAX HERO ──
+// ── 4. PARALLAX HERO (solo home, solo background) ──
 (function initParallax() {
-  const hero = document.querySelector('.hero');
-  const parallaxBg = document.querySelector('.hero-parallax-bg');
+  const homeView = document.getElementById('view-home');
+  if (!homeView) return;
+  const hero = homeView.querySelector('.hero');
+  const parallaxBg = homeView.querySelector('.hero-parallax-bg');
   const heroBgNum = document.getElementById('hbn');
-  const heroH1 = document.querySelector('.hero h1');
-  const heroDesc = document.querySelector('.hero-desc');
   if (!hero) return;
 
   let ticking = false;
   window.addEventListener('scroll', () => {
     if (!ticking) {
       requestAnimationFrame(() => {
+        // Solo se la home è visibile
+        if (!homeView.classList.contains('active')) { ticking = false; return; }
         const scrollY = window.scrollY;
         const heroH = hero.offsetHeight;
         if (scrollY > heroH) { ticking = false; return; }
-        const pct = scrollY / heroH;
-
         if (parallaxBg) parallaxBg.style.transform = `translateY(${scrollY * 0.25}px)`;
-        if (heroBgNum) heroBgNum.style.transform = `translateY(calc(-50% + ${scrollY * 0.15}px)) translateX(0)`;
-        if (heroH1) heroH1.style.transform = `translateY(${scrollY * 0.08}px)`;
-        if (heroDesc) heroDesc.style.transform = `translateY(${scrollY * 0.05}px)`;
+        if (heroBgNum) heroBgNum.style.transform = `translateY(calc(-50% + ${scrollY * 0.12}px)) translateX(0)`;
         ticking = false;
       });
       ticking = true;
     }
   }, { passive: true });
 
-  // Subtle mouse parallax
+  // Mouse parallax solo sul bg
   hero.addEventListener('mousemove', e => {
     const rect = hero.getBoundingClientRect();
     const mx = (e.clientX - rect.left) / rect.width - 0.5;
     const my = (e.clientY - rect.top) / rect.height - 0.5;
     if (parallaxBg) parallaxBg.style.transform = `translate(${mx * 14}px, ${my * 8}px)`;
-    if (heroBgNum) {
-      const base = `translateY(-50%) translateX(0)`;
-      heroBgNum.style.transform = `translateY(-50%) translateX(${mx * -20}px)`;
-    }
+    if (heroBgNum) heroBgNum.style.transform = `translateY(-50%) translateX(${mx * -20}px)`;
   });
   hero.addEventListener('mouseleave', () => {
     if (parallaxBg) parallaxBg.style.transform = '';
