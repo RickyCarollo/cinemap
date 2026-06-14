@@ -76,7 +76,7 @@ body{background:var(--bg);color:var(--cream);font-family:var(--fs);min-height:10
 nav{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 2.8rem;border-bottom:.5px solid var(--border);position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(8,8,8,.94);backdrop-filter:blur(24px)}
 .logo{font-family:var(--fd);font-size:1.65rem;letter-spacing:.14em;color:var(--gold);cursor:pointer}
 .logo span{color:var(--cream)}
-nav ul{display:flex;gap:1.6rem;list-style:none;flex-wrap:nowrap}
+nav ul{display:flex;gap:2.2rem;list-style:none}
 nav ul li{font-family:var(--fm);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);cursor:pointer;transition:color .3s;position:relative;padding-bottom:4px}
 nav ul li::after{content:'';position:absolute;bottom:0;left:0;width:0;height:.5px;background:var(--gold);transition:width .4s var(--ease)}
 nav ul li:hover,nav ul li.active{color:var(--gold)}
@@ -119,7 +119,7 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 .sec-label{font-family:var(--fm);font-size:.57rem;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;white-space:nowrap}
 .sec-line{flex:1;height:.5px;background:linear-gradient(to right,var(--border2),transparent)}
 .sec-count{font-family:var(--fm);font-size:.57rem;color:var(--muted);white-space:nowrap}
-.filter-bar{padding:1.2rem 2.8rem;display:flex;gap:.5rem;flex-wrap:wrap;border-bottom:.5px solid var(--border);position:relative;background:var(--bg)}
+.filter-bar{padding:1.2rem 2.8rem;display:flex;gap:.5rem;flex-wrap:wrap;border-bottom:.5px solid var(--border);position:sticky;top:64px;z-index:100;background:rgba(8,8,8,.95);backdrop-filter:blur(12px)}
 .ftag{font-family:var(--fm);font-size:.52rem;letter-spacing:.13em;padding:.32rem .8rem;border:.5px solid var(--border);color:var(--muted2);cursor:pointer;transition:all .25s;text-transform:uppercase;user-select:none}
 .ftag:hover{border-color:rgba(200,169,110,.4);color:var(--muted3)}
 .ftag.active{border-color:var(--gold);color:var(--gold);background:rgba(200,169,110,.07)}
@@ -127,7 +127,7 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 .scene-card{background:var(--bg);cursor:pointer;overflow:hidden;transition:background .3s,box-shadow .3s,transform .3s;position:relative}
 .scene-card:hover{background:var(--bg2);box-shadow:0 8px 40px rgba(0,0,0,.5)}
 .sc-thumb{height:340px;position:relative;overflow:hidden;background:var(--bg3)}
-.sc-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;opacity:1;transition:opacity .5s var(--ease2),transform .7s var(--ease);display:block}
+.sc-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:.9;transition:opacity .5s var(--ease2),transform .7s var(--ease);display:block}
 .scene-card:hover .sc-thumb img{opacity:1;transform:scale(1.04)}
 .sc-thumb-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
 .sc-ph-num{font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.12);line-height:1}
@@ -208,15 +208,15 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 /* DIRECTORS */
 .directors-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--border);margin:0 2.8rem}
 .director-detail-wrap{padding:0 0 6rem}
-.dd-hero{position:relative;height:500px;overflow:hidden;background:var(--bg3);display:flex;align-items:flex-end}
-.dd-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;filter:brightness(.35)}
-.dd-hero-grad{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,rgba(8,8,8,.5) 35%,rgba(8,8,8,.1) 65%,transparent 100%)}
-.dd-hero-body{position:relative;z-index:2;padding:2.5rem 2.8rem;width:100%}
+.dd-hero{position:relative;min-height:380px;overflow:hidden;background:var(--bg);display:flex;align-items:stretch}
+.dd-hero-img{position:absolute;right:0;top:0;width:42%;height:100%;object-fit:cover;object-position:center top;filter:brightness(.6) contrast(1.05);display:block !important}
+.dd-hero-grad{position:absolute;inset:0;background:linear-gradient(to right,var(--bg) 45%,rgba(8,8,8,.85) 65%,transparent 100%)}
+.dd-hero-body{position:relative;z-index:2;padding:3rem 2.8rem;width:58%;display:flex;flex-direction:column;justify-content:flex-end}
 .dd-hero-origin{font-family:var(--fm);font-size:.52rem;letter-spacing:.25em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem}
-.dd-hero-name{font-family:var(--fd);font-size:clamp(2.8rem,5vw,5rem);letter-spacing:.04em;color:var(--cream);line-height:.95;margin-bottom:1rem}
+.dd-hero-name{font-family:var(--fd);font-size:clamp(2.8rem,5vw,4.5rem);letter-spacing:.04em;color:var(--cream);line-height:.95;margin-bottom:1rem}
 .dd-hero-obs{display:flex;gap:.5rem;flex-wrap:wrap}
 .dd-obs-pill{font-family:var(--fm);font-size:.48rem;letter-spacing:.18em;color:var(--muted);border:.5px solid var(--border);padding:.28rem .7rem;text-transform:uppercase}
-.dd-back{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--fm);font-size:.52rem;letter-spacing:.2em;color:var(--muted);cursor:pointer;padding:1rem 2.8rem;text-transform:uppercase;background:none;border:none;transition:color .2s}
+.dd-back{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--fm);font-size:.52rem;letter-spacing:.2em;color:var(--muted);cursor:pointer;padding:1.4rem 2.8rem;text-transform:uppercase;background:none;border:none;transition:color .2s}
 .dd-back:hover{color:var(--gold)}
 .dd-scenes-head{font-family:var(--fm);font-size:.52rem;letter-spacing:.25em;color:var(--muted);text-transform:uppercase;padding:.8rem 2.8rem;border-bottom:.5px solid var(--border);border-top:.5px solid var(--border)}
 .dd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--border)}
@@ -1102,7 +1102,7 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   <ul>
     <li class="active" id="nl-home" onclick="nav('home')">Scene</li>
     <li id="nl-directors" onclick="nav('directors')">Registi</li>
-    <li id="nl-map" onclick="nav('map')">Mappa</li>
+    <li id="nl-map" onclick="nav('map')">Mappa Visiva</li>
     <li id="nl-percorsi" onclick="nav('percorsi')">Percorsi</li>
     <li id="nl-timeline" onclick="nav('timeline')">Timeline</li>
   </ul>
@@ -1151,7 +1151,7 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
     </div>
   </div>
   <div id="sa" class="sec-head"><span class="sec-label">Archivio scene</span><div class="sec-line"></div><span class="sec-count" id="fc">93 scene</span></div>
-  <div id="combo-filters" style="display:flex;align-items:center;gap:.8rem;padding:.65rem 2.8rem;border-bottom:.5px solid var(--border);background:var(--bg2);flex-wrap:wrap">
+  <div id="combo-filters" style="display:flex;align-items:center;gap:.8rem;padding:.65rem 2.8rem;border-bottom:.5px solid var(--border);background:rgba(8,8,8,.98);flex-wrap:wrap">
     <select id="fdir" onchange="applyComboFilters()" style="font-family:var(--fm);font-size:.5rem;letter-spacing:.1em;background:var(--bg2);border:.5px solid var(--border);color:var(--cream);padding:.32rem 1.8rem .32rem .7rem;cursor:pointer;text-transform:uppercase;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23c8a96e'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .5rem center">
       <option value="">Tutti i registi</option>
     </select>
@@ -1539,9 +1539,9 @@ function showDirectorPage(dirId){
   content.innerHTML=`
     <button class="dd-back" onclick="nav('directors')">← Tutti i registi</button>
     <div class="dd-hero" id="ddh_${d.id}">
-      <img id="ddimg_${d.id}" src="" alt="${d.name}" class="dd-hero-img" style="display:none"
-        onload="this.style.display='block';document.getElementById('ddph_${d.id}').style.display='none'">
-      <div class="dd-hero-ph" id="ddph_${d.id}" style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1a1a,#0a0a0a)"></div>
+      <img id="ddimg_${d.id}" src="" alt="${d.name}" class="dd-hero-img" style="opacity:0;transition:opacity .6s"
+        onload="this.style.opacity='1'">
+      <div class="dd-hero-ph" id="ddph_${d.id}" style="position:absolute;right:0;top:0;width:42%;height:100%;background:linear-gradient(135deg,#1a1a1a,#0a0a0a)"></div>
       <div class="dd-hero-grad"></div>
       <div class="dd-hero-body">
         <div class="dd-hero-origin">${d.origin}</div>
@@ -1568,7 +1568,7 @@ function showDirectorPage(dirId){
     </div>`;
 
   // Load director image
-  loadImg(`ddimg_${d.id}`,`ddph_${d.id}`,'person',d.pid,'w780',d.name);
+  loadImg(`ddimg_${d.id}`,`ddph_${d.id}`,'person',d.pid,'w500',d.name);
   // Load scene images
   scenes.forEach(s=>loadSceneImg(`ddsi_${s.id}`,`ddsp_${s.id}`,s.film,s.year,'w500'));
 
@@ -3097,6 +3097,7 @@ function showVideoFallback(sceneId, film, scene, playerEl, searchEl, statusEl) {
 </footer>
 </body>
 </html>
+
 
 
 
