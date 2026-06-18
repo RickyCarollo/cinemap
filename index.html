@@ -76,8 +76,8 @@ body{background:var(--bg);color:var(--cream);font-family:var(--fs);min-height:10
 nav{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 2.8rem;border-bottom:.5px solid var(--border);position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(8,8,8,.94);backdrop-filter:blur(24px)}
 .logo{font-family:var(--fd);font-size:1.65rem;letter-spacing:.14em;color:var(--gold);cursor:pointer}
 .logo span{color:var(--cream)}
-nav ul{display:flex;gap:2.2rem;list-style:none}
-nav ul li{font-family:var(--fm);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted2);cursor:pointer;transition:color .3s;position:relative;padding-bottom:4px}
+nav ul{display:flex;gap:1.4rem;list-style:none;flex-wrap:nowrap}
+nav ul li{font-family:var(--fm);font-size:.57rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);cursor:pointer;transition:color .3s;position:relative;padding-bottom:4px}
 nav ul li::after{content:'';position:absolute;bottom:0;left:0;width:0;height:.5px;background:var(--gold);transition:width .4s var(--ease)}
 nav ul li:hover,nav ul li.active{color:var(--gold)}
 nav ul li.active::after,nav ul li:hover::after{width:100%}
@@ -208,10 +208,10 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 /* DIRECTORS */
 .directors-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--border);margin:0 2.8rem}
 .director-detail-wrap{padding:0 0 6rem}
-.dd-hero{position:relative;height:420px;overflow:hidden;background:var(--bg3);display:flex;align-items:flex-end}
-.dd-hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;filter:brightness(.35)}
-.dd-hero-grad{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,rgba(8,8,8,.6) 40%,transparent 100%)}
-.dd-hero-body{position:relative;z-index:2;padding:2.5rem 2.8rem;width:100%}
+.dd-hero{position:relative;min-height:420px;overflow:hidden;background:var(--bg);display:grid;grid-template-columns:1fr 360px}
+.dd-hero-img{width:100%;height:100%;min-height:420px;object-fit:cover;object-position:center 20%;filter:brightness(.6) contrast(1.05);display:block}
+.dd-hero-grad{display:none}
+.dd-hero-body{padding:3rem 2.8rem;display:flex;flex-direction:column;justify-content:flex-end;background:var(--bg)}
 .dd-hero-origin{font-family:var(--fm);font-size:.52rem;letter-spacing:.25em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem}
 .dd-hero-name{font-family:var(--fd);font-size:clamp(2.8rem,5vw,5rem);letter-spacing:.04em;color:var(--cream);line-height:.95;margin-bottom:1rem}
 .dd-hero-obs{display:flex;gap:.5rem;flex-wrap:wrap}
@@ -1087,6 +1087,23 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
 
 
 
+
+@media (max-width: 600px) {
+  .scene-grid { grid-template-columns: 1fr 1fr !important; margin: 0 !important; gap: 1px !important; }
+  .sc-thumb { height: 200px !important; }
+  .sc-title { font-size: 1rem !important; }
+  .usp-grid { grid-template-columns: 1fr !important; gap: 2rem; }
+  .fs-inner { grid-template-columns: 1fr !important; }
+  .hero h1 { font-size: clamp(2.8rem,12vw,5rem) !important; }
+  .hero-stats { display: none; }
+  .dd-hero { grid-template-columns: 1fr !important; }
+  .dd-hero-img { min-height: 260px !important; }
+  .detail-grid { grid-template-columns: 1fr !important; }
+  #combo-filters { padding: .5rem 1rem !important; }
+  .filter-bar { padding: .8rem 1rem !important; }
+}
+
+.dir-bio{font-family:var(--fs);font-size:.78rem;color:var(--muted);font-style:italic;line-height:1.55;margin:.3rem 0 .6rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 </style>
 </head>
 <body>
@@ -1102,7 +1119,7 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   <ul>
     <li class="active" id="nl-home" onclick="nav('home')">Scene</li>
     <li id="nl-directors" onclick="nav('directors')">Registi</li>
-    <li id="nl-map" onclick="nav('map')">Mappa Visiva</li>
+    <li id="nl-map" onclick="nav('map')">Mappa</li>
     <li id="nl-percorsi" onclick="nav('percorsi')">Percorsi</li>
     <li id="nl-timeline" onclick="nav('timeline')">Timeline</li>
   </ul>
@@ -1123,7 +1140,7 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   <ul>
     <li id="mnl-home" onclick="nav('home');closeMobNav()">Scene</li>
     <li id="mnl-directors" onclick="nav('directors');closeMobNav()">Registi</li>
-    <li id="mnl-map" onclick="nav('map');closeMobNav()">Mappa Visiva</li>
+    <li id="mnl-map" onclick="nav('map');closeMobNav()">Mappa</li>
     <li id="mnl-percorsi" onclick="nav('percorsi');closeMobNav()">Percorsi di Visione</li>
     <li id="mnl-timeline" onclick="nav('timeline');closeMobNav()">Timeline</li>
     <li onclick="openSearch();closeMobNav()" style="color:var(--gold)">Cerca</li>
@@ -1317,11 +1334,11 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   <div class="search-box" onclick="event.stopPropagation()">
     <div class="search-input-wrap">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input class="search-input" id="search-input" type="text" placeholder="Cerca film, regista, scena, tag..." autocomplete="off" spellcheck="false">
+      <input class="search-input" id="search-input" type="text" placeholder="Cerca film, regista, scena, tag..." autocomplete="off" spellcheck="false" oninput="renderSearchResults(this.value)">
       <button class="search-esc" onclick="closeSearch()">ESC</button>
     </div>
     <div class="search-meta">
-      <span class="search-count" id="search-count">79 scene in archivio</span>
+      <span class="search-count" id="search-count">93 scene in archivio</span>
       <span class="search-hint">↑↓ naviga &nbsp;·&nbsp; ↵ apri</span>
     </div>
     <div class="search-results" id="search-results"></div>
@@ -1377,38 +1394,38 @@ const GRADS=[
 ];
 
 const DIRS=[
-  {id:'cronenberg', name:'David Cronenberg',  origin:'Canada · 1943', pid:11090, obs:['New Flesh','Body Horror','Media come organismo','Metamorfosi']},
-  {id:'kubrick',    name:'Stanley Kubrick',   origin:'USA · 1928',    pid:240,   obs:['Simmetria assiale','Prospettiva centrale','Steadicam','Psicosi dello spazio']},
-  {id:'lynch',      name:'David Lynch',       origin:'USA · 1946',    pid:5765,  obs:['Sogno dentro il sogno','Industrial sublime','Rosso e velluto','Rottura narrativa']},
-  {id:'park',       name:'Park Chan-wook',    origin:'Corea · 1963',  pid:10099, obs:['Vendetta come struttura','Violenza coreografata','Simmetria narrativa','Shock estetico']},
-  {id:'scorsese',   name:'Martin Scorsese',   origin:'USA · 1942',    pid:1032,  obs:['Luce urbana notturna','Soggettiva come psiche','Rosso come stato emotivo','Mascolinità tossica']},
-  {id:'fulci',      name:'Lucio Fulci',       origin:'Italia · 1927', pid:14023, obs:['Gore come poesia','L\'occhio come bersaglio','Soglia tra i mondi','Logica onirica']},
-  {id:'coppola',    name:'F.F. Coppola',      origin:'USA · 1939',    pid:1776,  obs:['Potere e famiglia','Montaggio parallelo','Luce chiaroscurale','Tragedia americana']},
+  {id:'cronenberg', name:'David Cronenberg',  origin:'Canada · 1943', pid:11090, obs:['New Flesh','Body Horror','Media come organismo','Metamorfosi'],bio:"Padre del \"body horror\": il corpo come campo di battaglia tra biologia e tecnologia."},
+  {id:'kubrick',    name:'Stanley Kubrick',   origin:'USA · 1928',    pid:240,   obs:['Simmetria assiale','Prospettiva centrale','Steadicam','Psicosi dello spazio'],bio:"Il regista più controllato della storia. Ogni film un genere diverso, ogni film un capolavoro."},
+  {id:'lynch',      name:'David Lynch',       origin:'USA · 1946',    pid:5765,  obs:['Sogno dentro il sogno','Industrial sublime','Rosso e velluto','Rottura narrativa'],bio:"Il surrealismo reso domestico. I sogni americani come incubi logici."},
+  {id:'park',       name:'Park Chan-wook',    origin:'Corea · 1963',  pid:10099, obs:['Vendetta come struttura','Violenza coreografata','Simmetria narrativa','Shock estetico'],bio:"Il maestro coreano della vendetta come tragedia greca."},
+  {id:'scorsese',   name:'Martin Scorsese',   origin:'USA · 1942',    pid:1032,  obs:['Luce urbana notturna','Soggettiva come psiche','Rosso come stato emotivo','Mascolinità tossica'],bio:"Il poeta della violenza americana. Dal Lower East Side a Hollywood, sempre fuori dal sistema."},
+  {id:'fulci',      name:'Lucio Fulci',       origin:'Italia · 1927', pid:14023, obs:['Gore come poesia','L\'occhio come bersaglio','Soglia tra i mondi','Logica onirica'],bio:"Il sogno lucido dell'orrore italiano. La logica come ostacolo."},
+  {id:'coppola',    name:'F.F. Coppola',      origin:'USA · 1939',    pid:1776,  obs:['Potere e famiglia','Montaggio parallelo','Luce chiaroscurale','Tragedia americana'],bio:"L'epica americana della famiglia e del potere. Il cinema come affresco storico."},
   {id:'scott',      name:'Ridley Scott',      origin:'UK · 1937',     pid:10429, obs:['World building visivo','Luce industriale','Il futuro come passato','Epica del quotidiano']},
-  {id:'desica',     name:'Vittorio De Sica',  origin:'Italia · 1901', pid:4429,  obs:['Attori non professionisti','Roma come personaggio','L\'infanzia come specchio','Dignità nella miseria']},
-  {id:'nolan',      name:'Christopher Nolan', origin:'UK · 1970',     pid:525,   obs:['Tempo non lineare','Pratico vs digitale','La mente come labirinto','Grandiosità controllata']},
-  {id:'tarantino',  name:'Quentin Tarantino', origin:'USA · 1963',    pid:138,   obs:['Dialogo come azione','Citazione che supera l\'originale','Violenza pop','Struttura non lineare']},
-  {id:'fellini',    name:'Federico Fellini',  origin:'Italia · 1920', pid:7415,  obs:['Autobiografia come universo','Circo e carnevale','Donna come archetipo','Sogno e memoria']},
-  {id:'tarkovsky',  name:'Andrei Tarkovsky',  origin:'URSS · 1932',   pid:11607, obs:['Tempo come materia','Acqua e fuoco','Nostalgia e esilio','Il sacro nel quotidiano']},
-  {id:'wongkarwai', name:'Wong Kar-wai',      origin:'HK · 1958',     pid:12453, obs:['Memoria e desiderio','Step-printing','Colore come emozione','Tempo sfuggente']},
-  {id:'bergman',    name:'Ingmar Bergman',    origin:'Svezia · 1918', pid:6648,  obs:['Volto come paesaggio','Silenzio e Dio','Dualismo psicologico','Il primo piano assoluto']},
-  {id:'leone',      name:'Sergio Leone',      origin:'Italia · 1929', pid:4385,  obs:['Tempo dilatato','Primo piano VS campo lungo','Operistico e brutale','America come mito']},
+  {id:'desica',     name:'Vittorio De Sica',  origin:'Italia · 1901', pid:4429,  obs:['Attori non professionisti','Roma come personaggio','L\'infanzia come specchio','Dignità nella miseria'],bio:"Il neorealismo come amore. La dignità umana come resistenza."},
+  {id:'nolan',      name:'Christopher Nolan', origin:'UK · 1970',     pid:525,   obs:['Tempo non lineare','Pratico vs digitale','La mente come labirinto','Grandiosità controllata'],bio:"Il tempo come struttura narrativa. Il blockbuster come cinema d'autore."},
+  {id:'tarantino',  name:'Quentin Tarantino', origin:'USA · 1963',    pid:138,   obs:['Dialogo come azione','Citazione che supera l\'originale','Violenza pop','Struttura non lineare'],bio:"Cinefilo ossessivo che ha trasformato la citazione in linguaggio originale."},
+  {id:'fellini',    name:'Federico Fellini',  origin:'Italia · 1920', pid:7415,  obs:['Autobiografia come universo','Circo e carnevale','Donna come archetipo','Sogno e memoria'],bio:"L'autobiografia come mito. La vita italiana come circo onirico."},
+  {id:'tarkovsky',  name:'Andrei Tarkovsky',  origin:'URSS · 1932',   pid:11607, obs:['Tempo come materia','Acqua e fuoco','Nostalgia e esilio','Il sacro nel quotidiano'],bio:"Il tempo come materia. Il cinema come poesia visiva dell'anima."},
+  {id:'wongkarwai', name:'Wong Kar-wai',      origin:'HK · 1958',     pid:12453, obs:['Memoria e desiderio','Step-printing','Colore come emozione','Tempo sfuggente'],bio:"Il cinema come memoria sensoriale: tempo, desiderio, perdita."},
+  {id:'bergman',    name:'Ingmar Bergman',    origin:'Svezia · 1918', pid:6648,  obs:['Volto come paesaggio','Silenzio e Dio','Dualismo psicologico','Il primo piano assoluto'],bio:"Il silenzio di Dio e il rumore dell'identità. Il cinema come confessione."},
+  {id:'leone',      name:'Sergio Leone',      origin:'Italia · 1929', pid:4385,  obs:['Tempo dilatato','Primo piano VS campo lungo','Operistico e brutale','America come mito'],bio:"Il western come opera lirica. Il tempo dilatato come forma d'arte."},
   {id:'bongjoonho', name:'Bong Joon-ho',      origin:'Corea · 1969',  pid:21684, obs:['Classe sociale','Spazio architettonico','Genere ibrido','Satira e orrore']},
-  {id:'kitano',     name:'Takeshi Kitano',    origin:'Giappone · 1947',pid:10918,obs:['Violenza e silenzio','Yakuza come filosofia','Gag e morte','Tempo morto']},
-  {id:'eggers',     name:'Robert Eggers',     origin:'USA · 1983',    pid:1590045,obs:['Folklore e terrore','Bianco e nero estremo','Lingua arcaica','Isolamento cosmico']},
-  {id:'fincher',    name:'David Fincher',     origin:'USA · 1962',    pid:7467,  obs:['Luce industriale fredda','Perfezione ossessiva','Protagonista come detective','Il male come sistema']},
-  {id:'depalma',   name:'Brian De Palma',    origin:'USA · 1940',    pid:11476, obs:['Split screen','Ralenti come tensione','Hitchcock reinterpretato','La macchina da presa come protagonista']},
-  {id:'sorrentino',name:'Paolo Sorrentino',    origin:'Italia · 1970',  pid:57266, obs:['Estetica del potere','Ironia e malinconia','Andreotti come archetipo','Roma come mito']},
-  {id:'refn',       name:'N.W. Refn',           origin:'Danimarca · 1970',pid:56577,obs:['Violenza e silenzio','Neon e notte','Eroe senza parole','Stile sopra narrazione']},
-  {id:'gondry',     name:'Michel Gondry',       origin:'Francia · 1963', pid:14384, obs:['Artigianato visivo','Memoria come spazio fisico','In-camera effects','Romanticismo surreale']},
-  {id:'coen',       name:'Coen Brothers',       origin:'USA · 1954/57',  pid:1223,  obs:['Fato e caso','Midwest come inferno','Dialogo come ritmo','Il male banale']},
-  {id:'pta',        name:'Paul T. Anderson',    origin:'USA · 1970',     pid:4762,  obs:["L'America come religione","Piano sequenza emotivo","Padri e figli","Grandiosità controllata"]},
-  {id:'boyle',      name:'Danny Boyle',         origin:'UK · 1956',      pid:5281,  obs:['Energia visiva','Soundtrack come motore','Eroina e adrenalina','Speranza e cinismo']},
-  {id:'kassovitz',  name:'M. Kassovitz',        origin:'Francia · 1967', pid:13295, obs:['Banlieue come stato mentale','Bianco e nero sociale','Caduta libera','Gioventù e violenza']},
-  {id:'sofiacoppola',name:'Sofia Coppola',      origin:'USA · 1971',     pid:4391,  obs:['Alienazione privilegiata','Silenzio eloquente','Femminilità e isolamento','Colori pastello']},
-  {id:'allen',      name:'Woody Allen',         origin:'USA · 1935',     pid:1243,  obs:['Nevrotico come eroe','New York come terapia','Metanarrazione','Amore impossibile']},
-  {id:'garland',    name:'Alex Garland',        origin:'UK · 1970',      pid:68408, obs:['AI e coscienza','Minimalismo inquietante','Il futuro come specchio','Claustrofobia concettuale']},
-  {id:'villeneuve', name:'Denis Villeneuve',    origin:'Canada · 1967',  pid:137427,obs:['Silenzio visivo','Fantascienza filosofica','Il tempo come tema','Grandiosità controllata']},
+  {id:'kitano',     name:'Takeshi Kitano',    origin:'Giappone · 1947',pid:10918,obs:['Violenza e silenzio','Yakuza come filosofia','Gag e morte','Tempo morto'],bio:"La violenza come gioco. La morte come liberazione serena."},
+  {id:'eggers',     name:'Robert Eggers',     origin:'USA · 1983',    pid:1590045,obs:['Folklore e terrore','Bianco e nero estremo','Lingua arcaica','Isolamento cosmico'],bio:"Il folklore come horror. Il passato come territorio dell'inconscio."},
+  {id:'fincher',    name:'David Fincher',     origin:'USA · 1962',    pid:7467,  obs:['Luce industriale fredda','Perfezione ossessiva','Protagonista come detective','Il male come sistema'],bio:"Il perfezionista del cinema digitale. Ogni frame calcolato, ogni emozione pianificata."},
+  {id:'depalma',   name:'Brian De Palma',    origin:'USA · 1940',    pid:11476, obs:['Split screen','Ralenti come tensione','Hitchcock reinterpretato','La macchina da presa come protagonista'],bio:"Hitchcock riletto con la fedeltà di un discepolo. Il cinema come sistema di sguardi."},
+  {id:'sorrentino',name:'Paolo Sorrentino',    origin:'Italia · 1970',  pid:57266, obs:['Estetica del potere','Ironia e malinconia','Andreotti come archetipo','Roma come mito'],bio:"La bellezza italiana come trappola e salvezza. L'ironia come pietà."},
+  {id:'refn',       name:'N.W. Refn',           origin:'Danimarca · 1970',pid:56577,obs:['Violenza e silenzio','Neon e notte','Eroe senza parole','Stile sopra narrazione'],bio:"Il cinema come superficie: colori primari, violenza estetica, silenzio."},
+  {id:'gondry',     name:'Michel Gondry',       origin:'Francia · 1963', pid:14384, obs:['Artigianato visivo','Memoria come spazio fisico','In-camera effects','Romanticismo surreale'],bio:"L'artigianato visivo come emozione. La memoria come architettura."},
+  {id:'coen',       name:'Coen Brothers',       origin:'USA · 1954/57',  pid:1223,  obs:['Fato e caso','Midwest come inferno','Dialogo come ritmo','Il male banale'],bio:"Il caso come destino. L'America come commedia nera senza redenzione."},
+  {id:'pta',        name:'Paul T. Anderson',    origin:'USA · 1970',     pid:4762,  obs:["L'America come religione","Piano sequenza emotivo","Padri e figli","Grandiosità controllata"],bio:"Il capitalismo come tragedia shakespeariana. Il corpo come documento."},
+  {id:'boyle',      name:'Danny Boyle',         origin:'UK · 1956',      pid:5281,  obs:['Energia visiva','Soundtrack come motore','Eroina e adrenalina','Speranza e cinismo'],bio:"L'energia punk del cinema digitale. La gioia come resistenza."},
+  {id:'kassovitz',  name:'M. Kassovitz',        origin:'Francia · 1967', pid:13295, obs:['Banlieue come stato mentale','Bianco e nero sociale','Caduta libera','Gioventù e violenza'],bio:"La banlieue come specchio dell'Europa. La rabbia come poesia."},
+  {id:'sofiacoppola',name:'Sofia Coppola',      origin:'USA · 1971',     pid:4391,  obs:['Alienazione privilegiata','Silenzio eloquente','Femminilità e isolamento','Colori pastello'],bio:"Il jet lag esistenziale. La solitudine nei non-luoghi del lusso."},
+  {id:'allen',      name:'Woody Allen',         origin:'USA · 1935',     pid:1243,  obs:['Nevrotico come eroe','New York come terapia','Metanarrazione','Amore impossibile'],bio:"La nevrosi come filosofia. New York come terapia infinita."},
+  {id:'garland',    name:'Alex Garland',        origin:'UK · 1970',      pid:68408, obs:['AI e coscienza','Minimalismo inquietante','Il futuro come specchio','Claustrofobia concettuale'],bio:"Intelligenza artificiale e coscienza: la fantascienza come domanda filosofica."},
+  {id:'villeneuve', name:'Denis Villeneuve',    origin:'Canada · 1967',  pid:137427,obs:['Silenzio visivo','Fantascienza filosofica','Il tempo come tema','Grandiosità controllata'],bio:"La fantascienza come filosofia. Il silenzio come linguaggio."},
 ];
 
 const KW={
@@ -1498,8 +1515,29 @@ function loadSceneImg(imgId, phId, film, year, sz) {
 }
 
 function loadImg(iId, pId, type, tmdbId, sz, name) {
-  // Usato solo per i registi (type=person)
-  getPersonImg(tmdbId, sz, name).then(url => setImg(document.getElementById(iId), document.getElementById(pId), url));
+  const imgEl = document.getElementById(iId);
+  const phEl  = document.getElementById(pId);
+  getPersonImg(tmdbId, sz, name).then(url => {
+    if(url && imgEl){
+      imgEl.onload = () => { imgEl.style.opacity='1'; if(phEl) phEl.style.display='none'; };
+      imgEl.onerror = () => showInitials(phEl, name);
+      imgEl.style.opacity='0';
+      imgEl.style.transition='opacity .6s';
+      imgEl.src = url;
+    } else {
+      showInitials(phEl, name);
+    }
+  }).catch(() => showInitials(phEl, name));
+}
+
+function showInitials(el, name) {
+  if(!el) return;
+  const initials = (name||'').split(' ').map(w=>w[0]||'').join('').substring(0,2).toUpperCase();
+  el.style.display='flex';
+  el.style.alignItems='center';
+  el.style.justifyContent='center';
+  el.style.background='linear-gradient(135deg,#1a1610,#0a0a0a)';
+  el.innerHTML = `<span style="font-family:var(--fd);font-size:3rem;letter-spacing:.1em;color:rgba(200,169,110,.3)">${initials}</span>`;
 }
 
 // ── RENDER SCENES ──
@@ -1539,14 +1577,15 @@ function showDirectorPage(dirId){
   content.innerHTML=`
     <button class="dd-back" onclick="nav('directors')">← Tutti i registi</button>
     <div class="dd-hero" id="ddh_${d.id}">
-      <img id="ddimg_${d.id}" src="" alt="${d.name}" class="dd-hero-img" style="display:none"
-        onload="this.style.display='block';document.getElementById('ddph_${d.id}').style.display='none'">
-      <div class="dd-hero-ph" id="ddph_${d.id}" style="position:absolute;inset:0;background:linear-gradient(135deg,#1a1a1a,#0a0a0a)"></div>
-      <div class="dd-hero-grad"></div>
       <div class="dd-hero-body">
         <div class="dd-hero-origin">${d.origin}</div>
         <div class="dd-hero-name">${d.name}</div>
         <div class="dd-hero-obs">${d.obs.map(o=>`<span class="dd-obs-pill">${o}</span>`).join('')}</div>
+      </div>
+      <div style="position:relative;overflow:hidden;min-height:420px;background:#111">
+        <img id="ddimg_${d.id}" src="" alt="${d.name}" class="dd-hero-img"
+          style="position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .7s"
+          onload="this.style.opacity='1'">
       </div>
     </div>
     <div class="dd-scenes-head">${scenes.length} scene in archivio</div>
@@ -1595,6 +1634,7 @@ function renderDirectors(){
       <div class="dir-body">
         <div class="dir-name">${d.name}</div>
         <div class="dir-origin">${d.origin}</div>
+        ${d.bio?`<div class="dir-bio">${d.bio}</div>`:''}
         ${d.obs.slice(0,3).map(o=>`<div class="dir-obs">${o}</div>`).join('')}
       </div>
     </div>`;
@@ -1695,7 +1735,7 @@ async function showScene(id, pushState=true){
   }, 100);
 
   document.getElementById('det').innerHTML=`
-    <button class="back-btn" onclick="history.back()">← Torna alle scene</button>
+    <button class="back-btn" onclick="nav('home')">← Torna alle scene</button>
     <div class="detail-grid">
       <div class="detail-frame">
         ${imgUrl?`<div class="detail-frame-bg" style="background-image:url(${imgUrl})"></div><img src="${imgUrl}" alt="${s.film}"><div class="detail-frame-overlay"></div>`:`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:320px"><span style="font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:.5px rgba(200,169,110,.1)">${String(s.id).padStart(2,'00')}</span></div>`}
@@ -1878,7 +1918,11 @@ function showView(view){
     v.style.display='none';
   });
   const t=document.getElementById('view-'+view);
-  if(t){t.style.display='block';t.classList.add('active');}
+  if(t){
+    t.style.display='block';
+    t.classList.add('active');
+    window.scrollTo({top:0,behavior:'instant'});
+  }
 }
 function fTag(tag,el){
   document.querySelectorAll('.filter-bar .ftag').forEach(t=>t.classList.remove('active'));
@@ -2711,7 +2755,7 @@ const _origNav = nav;
         <div class="compare-vs">VS</div>
         <div class="compare-header-title" id="cmp-title-b">—</div>
       </div>
-      <button class="back-btn" onclick="history.back()">← Torna alle scene</button>
+      <button class="back-btn" onclick="nav('home')">← Torna alle scene</button>
     </div>
     <div class="compare-grid" id="compare-grid"></div>
   </div>
@@ -3097,6 +3141,7 @@ function showVideoFallback(sceneId, film, scene, playerEl, searchEl, statusEl) {
 </footer>
 </body>
 </html>
+
 
 
 
