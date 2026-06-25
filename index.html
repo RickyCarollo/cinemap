@@ -1519,7 +1519,7 @@ function loadImg(iId, pId, type, tmdbId, sz, name) {
   const phEl  = document.getElementById(pId);
   getPersonImg(tmdbId, sz, name).then(url => {
     if(url && imgEl){
-      imgEl.onload = () => { imgEl.style.opacity='1'; if(phEl) phEl.style.display='none'; };
+      imgEl.onload = () => { imgEl.style.display='block'; imgEl.style.opacity='1'; if(phEl) phEl.style.display='none'; };
       imgEl.onerror = () => showInitials(phEl, name);
       imgEl.style.opacity='0';
       imgEl.style.transition='opacity .6s';
@@ -3141,6 +3141,7 @@ function showVideoFallback(sceneId, film, scene, playerEl, searchEl, statusEl) {
 </footer>
 </body>
 </html>
+
 
 
 
