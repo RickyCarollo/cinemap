@@ -173,6 +173,11 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 .video-play-triangle{width:0;height:0;border-top:11px solid transparent;border-bottom:11px solid transparent;border-left:19px solid var(--gold);margin-left:4px}
 .video-play-label{font-family:var(--fm);font-size:.52rem;letter-spacing:.28em;color:rgba(200,169,110,.8);text-transform:uppercase}
 .video-thumb-wrap:hover .video-play-label{color:var(--gold)}
+.video-source-tag{font-family:var(--fm);font-size:.48rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;border:.5px solid var(--border);padding:.25rem .7rem}
+.video-alt-row{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;padding:1rem 1.4rem;border-top:.5px solid var(--border);background:var(--bg2)}
+.video-alt-label{font-family:var(--fs);font-size:.78rem;color:var(--muted2);font-style:italic;margin-right:.3rem}
+.video-alt-link{font-family:var(--fm);font-size:.5rem;letter-spacing:.16em;color:var(--muted);text-decoration:none;text-transform:uppercase;border:.5px solid var(--border);padding:.3rem .75rem;transition:all .25s}
+.video-alt-link:hover{color:var(--gold);border-color:var(--gold);background:rgba(200,169,110,.06)}
 .video-scene-info{position:absolute;bottom:0;left:0;right:0;padding:1.4rem 1.8rem;background:linear-gradient(to top,rgba(8,8,8,.95) 0%,rgba(8,8,8,.6) 60%,transparent 100%);z-index:2}
 .video-scene-film{font-family:var(--fd);font-size:1.3rem;letter-spacing:.06em;color:var(--cream);line-height:1}
 .video-scene-name{font-family:var(--fs);font-size:.82rem;color:rgba(200,169,110,.7);font-style:italic;margin-top:.3rem}
@@ -1701,28 +1706,37 @@ async function showScene(id, pushState=true){
   const imgUrl=await searchMovieImg(s.film,s.year,'w780');
   const slinks=(STREAMING[s.id]||[]).map(n=>`<a class="stream-btn" href="${SU[n]||'#'}" target="_blank" rel="noopener">${n} ↗</a>`).join('');
   const kpills=(s.kw||[]).filter(k=>KW[k]).map(k=>`<span class="kw-pill" onclick="openGraphKw('${k}')"><span class="kw-pill-text">${KW[k].label}</span></span>`).join('');
-  // Per aggiungere un video embed: trova il video su YouTube, copia l'ID dall'URL
+  // Multi-fonte: YouTube diretto + ricerca alternativa su altre piattaforme
   const ytId = YT_SCENE_IDS[s.id] || null;
-  const ytSearch=`https://www.youtube.com/results?search_query=${encodeURIComponent(s.film+' '+s.scene+' clip')}`;
-  const ytUrl = ytId
-    ? `https://www.youtube.com/watch?v=${ytId}`
-    : ytSearch;
+  const sceneQuery = encodeURIComponent(s.film+' '+s.scene+' scena clip');
+  const filmQuery = encodeURIComponent(s.film+' '+s.year+' scene clip');
+  const ytDirectUrl = ytId ? `https://www.youtube.com/watch?v=${ytId}` : `https://www.youtube.com/results?search_query=${sceneQuery}`;
+  const ytSearchUrl = `https://www.youtube.com/results?search_query=${filmQuery}`;
+  const googleUrl = `https://www.google.com/search?q=${sceneQuery}&tbm=vid`;
+  const vimeoUrl = `https://vimeo.com/search?q=${filmQuery}`;
+
   const videoHtml = `<div class="video-section">
     <div class="video-head">
       <span class="video-label">▶ Guarda la scena</span>
-      <a href="${ytUrl}" target="_blank" rel="noopener" style="font-family:var(--fm);font-size:.5rem;letter-spacing:.2em;color:var(--muted2);text-transform:uppercase;text-decoration:none;border:.5px solid var(--border);padding:.28rem .8rem;transition:all .25s" onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='';this.style.borderColor=''">Apri su YouTube ↗</a>
+      <span class="video-source-tag">Link esterni</span>
     </div>
-    <a class="video-thumb-wrap" href="${ytUrl}" target="_blank" rel="noopener" id="vthumb_${s.id}">
+    <a class="video-thumb-wrap" href="${ytDirectUrl}" target="_blank" rel="noopener" id="vthumb_${s.id}">
       <img id="vthumb_img_${s.id}" src="" alt="${s.film}" style="opacity:0;transition:opacity .5s">
       <div class="video-play-btn">
         <div class="video-play-circle"><div class="video-play-triangle"></div></div>
-        <div class="video-play-label">Guarda su YouTube</div>
+        <div class="video-play-label">${ytId?'Guarda su YouTube':'Cerca su YouTube'}</div>
       </div>
       <div class="video-scene-info">
         <div class="video-scene-film">${s.film}</div>
         <div class="video-scene-name">${s.scene}</div>
       </div>
     </a>
+    <div class="video-alt-row">
+      <span class="video-alt-label">Non trovi il video? Provalo qui:</span>
+      <a class="video-alt-link" href="${ytSearchUrl}" target="_blank" rel="noopener">YouTube ↗</a>
+      <a class="video-alt-link" href="${googleUrl}" target="_blank" rel="noopener">Google Video ↗</a>
+      <a class="video-alt-link" href="${vimeoUrl}" target="_blank" rel="noopener">Vimeo ↗</a>
+    </div>
   </div>`;
   // Load thumbnail: use TMDB poster (already fetched) as background
   setTimeout(() => {
@@ -3141,6 +3155,7 @@ function showVideoFallback(sceneId, film, scene, playerEl, searchEl, statusEl) {
 </footer>
 </body>
 </html>
+
 
 
 
