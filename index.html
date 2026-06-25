@@ -1650,7 +1650,7 @@ function renderDirectors(){
 // ── SHOW SCENE DETAIL ──
 async function showScene(id, pushState=true){
   const s=SCENES.find(x=>x.id===id);if(!s)return;
-  if(pushState) history.pushState({scene:id}, '', '/scena/'+id+'-'+s.film.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
+  if(pushState){ try{ history.pushState({scene:id}, '', '/scena/'+id+'-'+s.film.toLowerCase().replace(/[^a-z0-9]+/g,'-')); }catch(e){} }
   // ── Meta tag dinamici per SEO e condivisione social ──
   const sceneSlug = id+'-'+s.film.toLowerCase().replace(/[^a-z0-9]+/g,'-');
   const sceneUrl  = 'https://thecinemap.it/scena/'+sceneSlug;
@@ -1706,25 +1706,24 @@ async function showScene(id, pushState=true){
   const imgUrl=await searchMovieImg(s.film,s.year,'w780');
   const slinks=(STREAMING[s.id]||[]).map(n=>`<a class="stream-btn" href="${SU[n]||'#'}" target="_blank" rel="noopener">${n} ↗</a>`).join('');
   const kpills=(s.kw||[]).filter(k=>KW[k]).map(k=>`<span class="kw-pill" onclick="openGraphKw('${k}')"><span class="kw-pill-text">${KW[k].label}</span></span>`).join('');
-  // Multi-fonte: YouTube diretto + ricerca alternativa su altre piattaforme
-  const ytId = YT_SCENE_IDS[s.id] || null;
+  // Sempre ricerca (mai ID diretto: gli ID specifici marciscono quando i video vengono rimossi)
   const sceneQuery = encodeURIComponent(s.film+' '+s.scene+' scena clip');
   const filmQuery = encodeURIComponent(s.film+' '+s.year+' scene clip');
-  const ytDirectUrl = ytId ? `https://www.youtube.com/watch?v=${ytId}` : `https://www.youtube.com/results?search_query=${sceneQuery}`;
-  const ytSearchUrl = `https://www.youtube.com/results?search_query=${filmQuery}`;
+  const ytSceneUrl = `https://www.youtube.com/results?search_query=${sceneQuery}`;
+  const ytFilmUrl = `https://www.youtube.com/results?search_query=${filmQuery}`;
   const googleUrl = `https://www.google.com/search?q=${sceneQuery}&tbm=vid`;
   const vimeoUrl = `https://vimeo.com/search?q=${filmQuery}`;
 
   const videoHtml = `<div class="video-section">
     <div class="video-head">
       <span class="video-label">▶ Guarda la scena</span>
-      <span class="video-source-tag">Link esterni</span>
+      <span class="video-source-tag">Ricerca esterna</span>
     </div>
-    <a class="video-thumb-wrap" href="${ytDirectUrl}" target="_blank" rel="noopener" id="vthumb_${s.id}">
+    <a class="video-thumb-wrap" href="${ytSceneUrl}" target="_blank" rel="noopener" id="vthumb_${s.id}">
       <img id="vthumb_img_${s.id}" src="" alt="${s.film}" style="opacity:0;transition:opacity .5s">
       <div class="video-play-btn">
         <div class="video-play-circle"><div class="video-play-triangle"></div></div>
-        <div class="video-play-label">${ytId?'Guarda su YouTube':'Cerca su YouTube'}</div>
+        <div class="video-play-label">Cerca su YouTube</div>
       </div>
       <div class="video-scene-info">
         <div class="video-scene-film">${s.film}</div>
@@ -1732,8 +1731,8 @@ async function showScene(id, pushState=true){
       </div>
     </a>
     <div class="video-alt-row">
-      <span class="video-alt-label">Non trovi il video? Provalo qui:</span>
-      <a class="video-alt-link" href="${ytSearchUrl}" target="_blank" rel="noopener">YouTube ↗</a>
+      <span class="video-alt-label">Altre fonti:</span>
+      <a class="video-alt-link" href="${ytFilmUrl}" target="_blank" rel="noopener">Tutto il film su YouTube ↗</a>
       <a class="video-alt-link" href="${googleUrl}" target="_blank" rel="noopener">Google Video ↗</a>
       <a class="video-alt-link" href="${vimeoUrl}" target="_blank" rel="noopener">Vimeo ↗</a>
     </div>
@@ -1922,7 +1921,7 @@ function nav(view, pushState=true){
   if(view==='percorsi')renderPercorsi();
   if(pushState){
     const url = view==='home' ? '/' : '/'+view;
-    history.pushState({view}, '', url);
+    try{ history.pushState({view}, '', url); }catch(e){}
   }
   if (typeof gtag === 'function') gtag('event','page_view',{page_title:view});
 }
@@ -2549,7 +2548,7 @@ async function openCompare(){
   if(!a||!b) return;
 
   // Update URL
-  history.pushState({compare:[idA,idB]}, '', '/confronto/'+idA+'-vs-'+idB);
+  try{ history.pushState({compare:[idA,idB]}, '', '/confronto/'+idA+'-vs-'+idB); }catch(e){}
 
   // Header titles
   document.getElementById('cmp-title-a').textContent = a.film;
