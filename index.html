@@ -91,7 +91,7 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 .view.active{display:block !important;animation:viewIn .6s var(--ease) forwards}
 @keyframes viewIn{to{opacity:1;transform:translateY(0)}}
 .hero{position:relative;overflow:hidden;padding:5.5rem 2.8rem 4.5rem;min-height:78vh;display:flex;flex-direction:column;justify-content:flex-end}
-.hero-bg{position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 70% 50%,rgba(139,26,26,.06),transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(200,169,110,.04),transparent 50%),#080808}
+.hero-bg{position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse at 70% 50%,rgba(139,26,26,.06),transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(200,169,110,.04),transparent 50%),#080808}
 .hero-grid{position:absolute;inset:0;opacity:.04;background-image:repeating-linear-gradient(0deg,var(--gold) 0,var(--gold) .5px,transparent .5px,transparent 60px),repeating-linear-gradient(90deg,var(--gold) 0,var(--gold) .5px,transparent .5px,transparent 60px)}
 .hero-ticker{position:absolute;bottom:0;left:0;right:0;height:2.2rem;overflow:hidden;z-index:1;mask-image:linear-gradient(to right,transparent,black 10%,black 90%,transparent)}
 .hero-ticker-inner{display:flex;gap:2.5rem;white-space:nowrap;animation:tickerScroll 35s linear infinite}
@@ -234,7 +234,7 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 .dir-ph-bg{position:absolute;inset:0}
 .dir-ph-letter{font-family:var(--fd);font-size:5rem;color:transparent;-webkit-text-stroke:.8px rgba(200,169,110,.4);line-height:1;position:relative;z-index:1}
 .dir-ph-nation{font-family:var(--fm);font-size:.5rem;letter-spacing:.25em;color:rgba(200,169,110,.35);text-transform:uppercase;position:relative;z-index:1}
-.dir-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:.6;transition:opacity .5s,transform .7s var(--ease);display:none}
+.dir-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 22%;opacity:.7;transition:opacity .5s,transform .7s var(--ease);display:none}
 .dir-card:hover .dir-img{opacity:.82;transform:scale(1.05)}
 .dir-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,.8),transparent 60%)}
 .dir-scene-count{position:absolute;top:1rem;right:1rem;font-family:var(--fm);font-size:.55rem;color:var(--gold);background:rgba(8,8,8,.88);padding:.22rem .65rem;border:.5px solid var(--border2);z-index:2}
@@ -1016,8 +1016,8 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0;
-  opacity: 0.5;
+  z-index: 2;
+  opacity: 0.65;
 }
 
 /* ── PARALLAX HERO ── */
@@ -1110,6 +1110,43 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
 }
 
 .dir-bio{font-family:var(--fs);font-size:.78rem;color:var(--muted);font-style:italic;line-height:1.55;margin:.3rem 0 .6rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* ── CONSIGLIO DELLA SETTIMANA ── */
+.weekly-section{padding:3.5rem 2.8rem;border-bottom:.5px solid var(--border);background:linear-gradient(180deg,rgba(200,169,110,.025) 0%,transparent 100%)}
+.weekly-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.8rem;flex-wrap:wrap;gap:.8rem}
+.weekly-label{font-family:var(--fm);font-size:.6rem;letter-spacing:.28em;color:var(--gold);text-transform:uppercase}
+.weekly-archive-link{font-family:var(--fm);font-size:.52rem;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;cursor:pointer;transition:color .25s;text-decoration:none}
+.weekly-archive-link:hover{color:var(--gold)}
+.weekly-inner{display:grid;grid-template-columns:1fr 1.3fr;gap:1px;background:var(--border);cursor:pointer;border:.5px solid var(--border)}
+.weekly-img-wrap{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--bg3)}
+.weekly-img-wrap img{width:100%;height:100%;object-fit:cover;filter:brightness(.75);transition:filter .5s,transform .8s cubic-bezier(.16,1,.3,1)}
+.weekly-inner:hover .weekly-img-wrap img{filter:brightness(.6);transform:scale(1.04)}
+.weekly-body{background:var(--bg2);padding:2.8rem;display:flex;flex-direction:column;justify-content:center;gap:1.2rem}
+.weekly-week-tag{font-family:var(--fm);font-size:.48rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.weekly-film{font-family:var(--fd);font-size:2.2rem;letter-spacing:.04em;color:var(--cream);line-height:1.05}
+.weekly-film span{font-size:1rem;color:var(--muted);font-family:var(--fm);font-weight:400}
+.weekly-scene-name{font-family:var(--fs);font-size:1rem;color:rgba(200,169,110,.75);font-style:italic}
+.weekly-editorial{font-family:var(--fs);font-size:.95rem;color:var(--muted2);line-height:1.85;font-style:italic;border-left:2px solid rgba(200,169,110,.3);padding-left:1.2rem}
+.weekly-cta{font-family:var(--fm);font-size:.52rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:.5rem;margin-top:.5rem}
+.weekly-cta::after{content:'→';transition:transform .3s}
+.weekly-inner:hover .weekly-cta::after{transform:translateX(5px)}
+
+/* ── ARCHIVIO CONSIGLI (pagina dedicata) ── */
+.weekly-archive-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:1px;background:var(--border);margin:0 2.8rem 4rem}
+.weekly-archive-card{background:var(--bg);cursor:pointer;overflow:hidden;transition:background .3s}
+.weekly-archive-card:hover{background:var(--bg2)}
+.wa-thumb{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--bg3)}
+.wa-thumb img{width:100%;height:100%;object-fit:cover;filter:brightness(.7);transition:filter .4s,transform .6s}
+.weekly-archive-card:hover .wa-thumb img{filter:brightness(.55);transform:scale(1.04)}
+.wa-week{position:absolute;top:.8rem;left:.8rem;font-family:var(--fm);font-size:.48rem;letter-spacing:.15em;color:var(--gold);background:rgba(8,8,8,.8);padding:.3rem .7rem;text-transform:uppercase}
+.wa-body{padding:1.4rem 1.6rem}
+.wa-film{font-family:var(--fd);font-size:1.3rem;color:var(--cream)}
+.wa-scene{font-family:var(--fs);font-size:.85rem;color:var(--muted2);font-style:italic;margin-top:.3rem}
+
+@media(max-width:768px){
+  .weekly-inner{grid-template-columns:1fr}
+  .weekly-img-wrap{aspect-ratio:16/9}
+}
 </style>
 </head>
 <body>
@@ -1128,6 +1165,7 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
     <li id="nl-map" onclick="nav('map')">Mappa</li>
     <li id="nl-percorsi" onclick="nav('percorsi')">Percorsi</li>
     <li id="nl-timeline" onclick="nav('timeline')">Timeline</li>
+    <li id="nl-weekly" onclick="nav('weekly')">Consigli</li>
   </ul>
   <div style="display:flex;align-items:center;gap:.8rem;flex-shrink:0">
     <button style="display:flex;align-items:center;gap:.5rem;font-family:var(--fm);font-size:.63rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted2);background:transparent;border:.5px solid var(--border);padding:.38rem .9rem;cursor:pointer;transition:all .3s" id="search-btn" onclick="openSearch()" title="Cerca (Cmd+K)">
@@ -1149,6 +1187,7 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
     <li id="mnl-map" onclick="nav('map');closeMobNav()">Mappa</li>
     <li id="mnl-percorsi" onclick="nav('percorsi');closeMobNav()">Percorsi di Visione</li>
     <li id="mnl-timeline" onclick="nav('timeline');closeMobNav()">Timeline</li>
+    <li id="mnl-weekly" onclick="nav('weekly');closeMobNav()">Consigli</li>
     <li onclick="openSearch();closeMobNav()" style="color:var(--gold)">Cerca</li>
   </ul>
 </div>
@@ -1173,6 +1212,16 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
       </div>
     </div>
   </div>
+
+  <!-- ── CONSIGLIO DELLA SETTIMANA ── -->
+  <div class="weekly-section">
+    <div class="weekly-head">
+      <span class="weekly-label">◆ Consiglio della settimana</span>
+      <a class="weekly-archive-link" onclick="nav('weekly')">Archivio consigli →</a>
+    </div>
+    <div class="weekly-inner" id="weekly-inner"></div>
+  </div>
+
   <div id="sa" class="sec-head"><span class="sec-label">Archivio scene</span><div class="sec-line"></div><span class="sec-count" id="fc">93 scene</span></div>
   <div id="combo-filters" style="display:flex;align-items:center;gap:.8rem;padding:.65rem 2.8rem;border-bottom:.5px solid var(--border);background:rgba(8,8,8,.98);flex-wrap:wrap">
     <select id="fdir" onchange="applyComboFilters()" style="font-family:var(--fm);font-size:.5rem;letter-spacing:.1em;background:var(--bg2);border:.5px solid var(--border);color:var(--cream);padding:.32rem 1.8rem .32rem .7rem;cursor:pointer;text-transform:uppercase;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23c8a96e'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .5rem center">
@@ -1467,6 +1516,29 @@ const STREAMING={
 const SU={'MUBI':'https://mubi.com','Prime Video':'https://primevideo.com','Apple TV+':'https://tv.apple.com','Netflix':'https://netflix.com','Criterion Channel':'https://criterionchannel.com'};
 
 const SCENES=JSON.parse(document.getElementById('sd').textContent);
+const WEEKLY_PICKS=[
+  {week:"2026-W04",sceneId:8,editorial:"Iniziamo da qui perché tutto il resto del cinema di fantascienza degli ultimi quarant'anni le deve qualcosa. Roy Batty che muore sotto la pioggia non è solo la scena più bella di Blade Runner — è il momento in cui il genere ha smesso di chiedersi 'cosa può fare la tecnologia' e ha iniziato a chiedersi 'cosa significa essere vivi'. Guardatela pensando a quanto tempo avete passato a scrollare oggi."},
+  {week:"2026-W05",sceneId:36,editorial:"Una moneta che gira su un bancone. Un cassiere che non sa di stare giocando la partita più importante della sua vita. I fratelli Coen non hanno bisogno di un'arma per creare la scena più tesa del decennio — gli basta una domanda filosofica travestita da chiacchiera. Provate a indovinare il risultato prima che la moneta cada."},
+  {week:"2026-W06",sceneId:21,editorial:"Bergman ha trovato il modo di filmare l'identità che si dissolve usando due negativi sovrapposti — niente CGI, niente trucco digitale, solo luce e chimica. Sessant'anni dopo nessuno ha ancora fatto qualcosa di altrettanto perturbante con un volto umano."},
+];
+
+function getCurrentWeekKey(){
+  const now=new Date();
+  const jan1=new Date(now.getFullYear(),0,1);
+  const days=Math.floor((now-jan1)/86400000);
+  const week=Math.ceil((days+jan1.getDay()+1)/7);
+  return `${now.getFullYear()}-W${String(week).padStart(2,'0')}`;
+}
+
+function getCurrentWeeklyPick(){
+  const currentKey=getCurrentWeekKey();
+  // Trova il pick più recente che sia <= alla settimana corrente, altrimenti l'ultimo disponibile
+  const sorted=[...WEEKLY_PICKS].sort((a,b)=>a.week.localeCompare(b.week));
+  let pick=sorted[sorted.length-1];
+  for(const p of sorted){ if(p.week<=currentKey) pick=p; }
+  return pick;
+}
+
 
 // ── IMAGE FETCH — ricerca per titolo+anno (sempre corretta) ──
 async function searchMovieImg(title, year, sz) {
@@ -1832,7 +1904,13 @@ let gBuilt=false;
 function buildGraph(){
   if(gBuilt)return;gBuilt=true;
   const cont=document.getElementById('graph-container');
-  const W=cont.clientWidth||900,H=640;
+  const W=cont.clientWidth||900,H=cont.clientHeight||640;
+  // Parametri responsivi: su schermi piccoli riduci distanze e forze proporzionalmente
+  const scaleFactor=Math.min(1, W/900);
+  const linkDist=Math.max(60, 150*scaleFactor);
+  const chargeStrength=Math.max(-140, -350*scaleFactor);
+  const dirRadius=Math.max(28, 54*scaleFactor);
+  const kwRadius=Math.max(22, 46*scaleFactor);
   const nodes=[],links=[];
   DIRS.forEach(d=>nodes.push({id:d.id,name:d.name,type:'director',origin:d.origin}));
   Object.entries(KW).forEach(([key,kw])=>{
@@ -1847,12 +1925,12 @@ function buildGraph(){
     const m=f.append('feMerge');m.append('feMergeNode').attr('in','b');m.append('feMergeNode').attr('in','SourceGraphic');
   });
   const sim=d3.forceSimulation(nodes)
-    .force('link',d3.forceLink(links).id(d=>d.id).distance(150).strength(.45))
-    .force('charge',d3.forceManyBody().strength(-350))
+    .force('link',d3.forceLink(links).id(d=>d.id).distance(linkDist).strength(.45))
+    .force('charge',d3.forceManyBody().strength(chargeStrength))
     .force('center',d3.forceCenter(W/2,H/2))
     .force('forceY',d3.forceY(H/2).strength(0.04))
     .force('forceX',d3.forceX(W/2).strength(0.01))
-    .force('collision',d3.forceCollide().radius(d=>d.type==='director'?54:46));
+    .force('collision',d3.forceCollide().radius(d=>d.type==='director'?dirRadius:kwRadius));
   const link=svg.append('g').selectAll('line').data(links).enter().append('line')
     .attr('stroke','rgba(200,169,110,.13)').attr('stroke-width',.8).attr('stroke-dasharray','3 3').attr('stroke-opacity',0);
   link.transition().duration(1600).delay((_,i)=>i*25).attr('stroke-opacity',1);
@@ -1864,14 +1942,14 @@ function buildGraph(){
       .on('drag',(e,d)=>{d.fx=e.x;d.fy=e.y;})
       .on('end',(e,d)=>{if(!e.active)sim.alphaTarget(0);d.fx=null;d.fy=null;}))
     .on('click',(e,d)=>{e.stopPropagation();openPanel(d.type==='keyword'?d.key:d.id,d.type);})
-    .on('mouseenter',(e,d)=>{showTip(e,d);d3.select(e.currentTarget).select('circle').transition().duration(180).attr('r',d.type==='director'?28:24).attr('fill',d.type==='director'?'rgba(200,169,110,.22)':'rgba(200,169,110,.1)').attr('stroke','rgba(200,169,110,.9)').attr('filter','url(#gf2)');})
+    .on('mouseenter',(e,d)=>{showTip(e,d);d3.select(e.currentTarget).select('circle').transition().duration(180).attr('r',(d.type==='director'?28:24)*scaleFactor).attr('fill',d.type==='director'?'rgba(200,169,110,.22)':'rgba(200,169,110,.1)').attr('stroke','rgba(200,169,110,.9)').attr('filter','url(#gf2)');})
     .on('mousemove',e=>moveTip(e))
-    .on('mouseleave',(e,d)=>{hideTip();d3.select(e.currentTarget).select('circle').transition().duration(180).attr('r',d.type==='director'?22:18).attr('fill',d.type==='director'?'rgba(200,169,110,.12)':'rgba(200,169,110,.04)').attr('stroke',d.type==='director'?'rgba(200,169,110,.55)':'rgba(200,169,110,.3)').attr('filter',d.type==='director'?'url(#gf)':null);});
-  node.filter(d=>d.type==='director').append('circle').attr('r',22).attr('fill','rgba(200,169,110,.12)').attr('stroke','rgba(200,169,110,.55)').attr('stroke-width',1).attr('filter','url(#gf)');
-  node.filter(d=>d.type==='director').append('text').attr('text-anchor','middle').attr('dy','.38em').attr('fill','#c8a96e').attr('font-family','Bebas Neue,sans-serif').attr('font-size','13').text(d=>d.name.split(' ').map(n=>n[0]).join('').substring(0,3));
-  node.filter(d=>d.type==='director').append('text').attr('text-anchor','middle').attr('dy','40px').attr('fill','rgba(240,232,216,.6)').attr('font-family','DM Mono,monospace').attr('font-size','7.5').text(d=>d.name.split(' ').pop());
-  node.filter(d=>d.type==='keyword').append('circle').attr('r',18).attr('fill','rgba(200,169,110,.04)').attr('stroke','rgba(200,169,110,.3)').attr('stroke-width',.8).attr('stroke-dasharray','4 2');
-  node.filter(d=>d.type==='keyword').append('text').attr('text-anchor','middle').attr('dy','.35em').attr('fill','rgba(200,169,110,.7)').attr('font-family','DM Mono,monospace').attr('font-size','6.5').text(d=>d.name.substring(0,9).toUpperCase());
+    .on('mouseleave',(e,d)=>{hideTip();d3.select(e.currentTarget).select('circle').transition().duration(180).attr('r',(d.type==='director'?22:18)*scaleFactor).attr('fill',d.type==='director'?'rgba(200,169,110,.12)':'rgba(200,169,110,.04)').attr('stroke',d.type==='director'?'rgba(200,169,110,.55)':'rgba(200,169,110,.3)').attr('filter',d.type==='director'?'url(#gf)':null);});
+  node.filter(d=>d.type==='director').append('circle').attr('r',22*scaleFactor).attr('fill','rgba(200,169,110,.12)').attr('stroke','rgba(200,169,110,.55)').attr('stroke-width',1).attr('filter','url(#gf)');
+  node.filter(d=>d.type==='director').append('text').attr('text-anchor','middle').attr('dy','.38em').attr('fill','#c8a96e').attr('font-family','Bebas Neue,sans-serif').attr('font-size',13*scaleFactor).text(d=>d.name.split(' ').map(n=>n[0]).join('').substring(0,3));
+  node.filter(d=>d.type==='director').append('text').attr('text-anchor','middle').attr('dy',(40*scaleFactor)+'px').attr('fill','rgba(240,232,216,.6)').attr('font-family','DM Mono,monospace').attr('font-size',7.5*scaleFactor).text(d=>d.name.split(' ').pop());
+  node.filter(d=>d.type==='keyword').append('circle').attr('r',18*scaleFactor).attr('fill','rgba(200,169,110,.04)').attr('stroke','rgba(200,169,110,.3)').attr('stroke-width',.8).attr('stroke-dasharray','4 2');
+  node.filter(d=>d.type==='keyword').append('text').attr('text-anchor','middle').attr('dy','.35em').attr('fill','rgba(200,169,110,.7)').attr('font-family','DM Mono,monospace').attr('font-size',Math.max(5.5,6.5*scaleFactor)).text(d=>d.name.substring(0,9).toUpperCase());
   node.attr('opacity',0).transition().duration(900).delay((_,i)=>i*50).attr('opacity',1);
   sim.on('tick',()=>{
     link.attr('x1',d=>d.source.x).attr('y1',d=>d.source.y).attr('x2',d=>d.target.x).attr('y2',d=>d.target.y);
@@ -1936,6 +2014,7 @@ function nav(view, pushState=true){
   if(view==='map')setTimeout(()=>buildGraph(),120);
   if(view==='timeline')setTimeout(()=>buildTimeline(),80);
   if(view==='percorsi')renderPercorsi();
+  if(view==='weekly')renderWeeklyArchive();
   if(pushState){
     const url = view==='home' ? '/' : '/'+view;
     try{ history.pushState({view}, '', url); }catch(e){}
@@ -2387,7 +2466,56 @@ function downloadIgCard(){
 }
 
 
-renderScenes();renderDirectors();populateDirDropdown();
+renderScenes();renderDirectors();populateDirDropdown();renderCurrentWeekly();
+
+function renderCurrentWeekly(){
+  const pick = getCurrentWeeklyPick();
+  const s = SCENES.find(x=>x.id===pick.sceneId);
+  const el = document.getElementById('weekly-inner');
+  if(!el || !s) return;
+  el.onclick = ()=>{ showScene(s.id); nav('scene', false); };
+  el.innerHTML = `
+    <div class="weekly-img-wrap" id="wph_${s.id}">
+      <img id="wimg_${s.id}" src="" alt="${s.film}" style="display:none">
+    </div>
+    <div class="weekly-body">
+      <div class="weekly-week-tag">${formatWeekLabel(pick.week)}</div>
+      <div class="weekly-film">${s.film} <span>(${s.year})</span></div>
+      <div class="weekly-scene-name">${s.scene}</div>
+      <div class="weekly-editorial">${pick.editorial}</div>
+      <div class="weekly-cta">Leggi l'analisi completa</div>
+    </div>`;
+  loadSceneImg(`wimg_${s.id}`, `wph_${s.id}`, s.film, s.year, 'w500');
+}
+
+function formatWeekLabel(weekKey){
+  const [year, w] = weekKey.split('-W');
+  return `Settimana ${parseInt(w)} · ${year}`;
+}
+
+function renderWeeklyArchive(){
+  const grid = document.getElementById('weekly-archive-grid');
+  if(!grid) return;
+  const sorted = [...WEEKLY_PICKS].sort((a,b)=>b.week.localeCompare(a.week));
+  grid.innerHTML = sorted.map(pick=>{
+    const s = SCENES.find(x=>x.id===pick.sceneId);
+    if(!s) return '';
+    return `<div class="weekly-archive-card" onclick="showScene(${s.id});nav('scene',false)">
+      <div class="wa-thumb" id="wap_${pick.week}_${s.id}">
+        <img id="wai_${pick.week}_${s.id}" src="" alt="${s.film}" style="display:none">
+        <div class="wa-week">${formatWeekLabel(pick.week)}</div>
+      </div>
+      <div class="wa-body">
+        <div class="wa-film">${s.film}</div>
+        <div class="wa-scene">${s.scene}</div>
+      </div>
+    </div>`;
+  }).join('');
+  sorted.forEach(pick=>{
+    const s = SCENES.find(x=>x.id===pick.sceneId);
+    if(s) loadSceneImg(`wai_${pick.week}_${s.id}`, `wap_${pick.week}_${s.id}`, s.film, s.year, 'w500');
+  });
+}
 // Hero ticker — titoli che scorrono
 (function(){
   const ticker=document.getElementById('hero-ticker');
@@ -2792,6 +2920,16 @@ const _origNav = nav;
 </div>
 
 <!-- ── TIMELINE VIEW ── -->
+<div id="view-weekly" class="view">
+  <div class="sec-head">
+    <div>
+      <div class="sec-label">Archivio</div>
+      <h2>CONSIGLI DELLA SETTIMANA</h2>
+    </div>
+  </div>
+  <p style="font-family:var(--fs);font-style:italic;color:var(--muted2);padding:0 2.8rem 2.5rem;max-width:640px;font-size:.95rem;line-height:1.7">Ogni settimana una scena scelta con cura, con un piccolo commento editoriale che la inquadra in un contesto più ampio.</p>
+  <div class="weekly-archive-grid" id="weekly-archive-grid"></div>
+</div>
 <div id="view-timeline" class="view">
   <div class="timeline-hero">
     <div class="tl-hero-label">Archivio cronologico</div>
@@ -3171,6 +3309,7 @@ function showVideoFallback(sceneId, film, scene, playerEl, searchEl, statusEl) {
 </footer>
 </body>
 </html>
+
 
 
 
