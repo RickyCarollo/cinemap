@@ -214,12 +214,12 @@ nav ul li.active::after,nav ul li:hover::after{width:100%}
 /* DIRECTORS */
 .directors-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--border);margin:0 2.8rem}
 .director-detail-wrap{padding:0 0 6rem}
-.dd-hero{position:relative;min-height:420px;overflow:hidden;background:var(--bg);display:grid;grid-template-columns:1fr 360px}
-.dd-hero-img{width:100%;height:100%;min-height:420px;object-fit:cover;object-position:center 20%;filter:brightness(.6) contrast(1.05);display:block}
+.dd-hero{position:relative;min-height:280px;overflow:hidden;background:var(--bg);display:grid;grid-template-columns:1fr 320px}
+.dd-hero-img{width:100%;height:100%;min-height:280px;object-fit:cover;object-position:center 18%;filter:brightness(.65) contrast(1.05);display:block}
 .dd-hero-grad{display:none}
-.dd-hero-body{padding:3rem 2.8rem;display:flex;flex-direction:column;justify-content:flex-end;background:var(--bg)}
+.dd-hero-body{padding:2.4rem 2.8rem;display:flex;flex-direction:column;justify-content:center;background:var(--bg)}
 .dd-hero-origin{font-family:var(--fm);font-size:.52rem;letter-spacing:.25em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem}
-.dd-hero-name{font-family:var(--fd);font-size:clamp(2.8rem,5vw,5rem);letter-spacing:.04em;color:var(--cream);line-height:.95;margin-bottom:1rem}
+.dd-hero-name{font-family:var(--fd);font-size:clamp(2.4rem,4.2vw,4rem);letter-spacing:.04em;color:var(--cream);line-height:.95;margin-bottom:.8rem}
 .dd-hero-obs{display:flex;gap:.5rem;flex-wrap:wrap}
 .dd-obs-pill{font-family:var(--fm);font-size:.48rem;letter-spacing:.18em;color:var(--muted);border:.5px solid var(--border);padding:.28rem .7rem;text-transform:uppercase}
 .dd-back{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--fm);font-size:.52rem;letter-spacing:.2em;color:var(--muted);cursor:pointer;padding:1.4rem 2.8rem;text-transform:uppercase;background:none;border:none;transition:color .2s}
@@ -1676,7 +1676,7 @@ function showDirectorPage(dirId){
         <div class="dd-hero-name">${d.name}</div>
         <div class="dd-hero-obs">${d.obs.map(o=>`<span class="dd-obs-pill">${o}</span>`).join('')}</div>
       </div>
-      <div style="position:relative;overflow:hidden;min-height:420px;background:#111">
+      <div style="position:relative;overflow:hidden;min-height:280px;background:#111">
         <img id="ddimg_${d.id}" src="" alt="${d.name}" class="dd-hero-img"
           style="position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .7s"
           onload="this.style.opacity='1'">
@@ -3309,6 +3309,7 @@ function showVideoFallback(sceneId, film, scene, playerEl, searchEl, statusEl) {
 </footer>
 </body>
 </html>
+
 
 
 
