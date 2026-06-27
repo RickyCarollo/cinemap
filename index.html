@@ -58,9 +58,11 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NBW918W4XV"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-NBW918W4XV');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Bebas+Neue&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Bebas+Neue&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Bebas+Neue&display=swap"></noscript>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -1152,6 +1154,13 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   .weekly-inner{grid-template-columns:1fr}
   .weekly-img-wrap{aspect-ratio:16/9}
 }
+
+/* ── 404 PAGE ── */
+.error-404-wrap{min-height:60vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4rem 2.8rem;gap:1.5rem}
+.error-404-num{font-family:var(--fd);font-size:clamp(5rem,15vw,9rem);color:transparent;-webkit-text-stroke:1.5px rgba(200,169,110,.35);line-height:1}
+.error-404-title{font-family:var(--fd);font-size:1.8rem;color:var(--cream);letter-spacing:.02em}
+.error-404-text{font-family:var(--fs);font-size:1rem;color:var(--muted2);font-style:italic;max-width:480px;line-height:1.7}
+.error-404-actions{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}
 </style>
 </head>
 <body>
@@ -1263,6 +1272,17 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
   <div class="scene-grid" id="scene-grid"></div>
 </div>
 <div class="view" id="view-scene"><div class="detail-wrap" id="det"></div></div>
+<div class="view" id="view-404">
+  <div class="error-404-wrap">
+    <div class="error-404-num">404</div>
+    <h2 class="error-404-title">Questa scena non esiste.</h2>
+    <p class="error-404-text">Il link che hai seguito potrebbe essere rotto, o la scena è stata rimossa. Ma il cinema d'autore è pieno di altre scene da scoprire.</p>
+    <div class="error-404-actions">
+      <button class="btn-gold" onclick="nav('home')">← Torna alle scene</button>
+      <button class="btn-outline" onclick="randomScene()">Scena casuale ⟳</button>
+    </div>
+  </div>
+</div>
 <div class="view" id="view-director-detail" style="display:none">
   <div class="director-detail-wrap" id="dir-detail-content"></div>
 </div>
@@ -1588,6 +1608,8 @@ async function getPersonImg(pid, sz, name) {
 function setImg(imgEl, phEl, url, title) {
   if (!imgEl) return;
   if (!url) { showPhTitle(phEl, title); return; }
+  imgEl.loading = 'lazy';
+  imgEl.decoding = 'async';
   imgEl.onerror = () => { imgEl.style.display = 'none'; showPhTitle(phEl, title); };
   imgEl.onload  = () => { if (phEl) phEl.style.display = 'none'; };
   imgEl.src = url;
@@ -1663,7 +1685,7 @@ function renderScenes(filter){
         <div class="sc-tags">${s.tl.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
       </div>
     </div>`).join('');
-  list.forEach(s=>loadSceneImg(`si_${s.id}`,`sph_${s.id}`,s.film,s.year,'w500'));
+  list.forEach(s=>loadSceneImg(`si_${s.id}`,`sph_${s.id}`,s.film,s.year,'w342'));
 }
 
 // ── RENDER DIRECTORS ──
@@ -1708,7 +1730,7 @@ function showDirectorPage(dirId){
   // Load director image
   loadImg(`ddimg_${d.id}`,`ddph_${d.id}`,'person',d.pid,'w500',d.name);
   // Load scene images
-  scenes.forEach(s=>loadSceneImg(`ddsi_${s.id}`,`ddsp_${s.id}`,s.film,s.year,'w500'));
+  scenes.forEach(s=>loadSceneImg(`ddsi_${s.id}`,`ddsp_${s.id}`,s.film,s.year,'w342'));
 
   showView('director-detail');
 }
@@ -2098,7 +2120,7 @@ function renderScenesFiltered(list){
         <div class="sc-tags">${s.tl.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
       </div>
     </div>`).join('');
-  list.forEach(s=>loadSceneImg(`si_${s.id}`,`sph_${s.id}`,s.film,s.year,'w500'));
+  list.forEach(s=>loadSceneImg(`si_${s.id}`,`sph_${s.id}`,s.film,s.year,'w342'));
 }
 function filterByDir(dirId){
   nav('home');
@@ -2121,7 +2143,7 @@ function filterByDir(dirId){
           <div class="sc-tags">${s.tl.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
         </div>
       </div>`).join('');
-    list.forEach(s=>loadSceneImg(`si2_${s.id}`,`sp2_${s.id}`,s.film,s.year,'w500'));
+    list.forEach(s=>loadSceneImg(`si2_${s.id}`,`sp2_${s.id}`,s.film,s.year,'w342'));
   },80);
 }
 
@@ -2518,7 +2540,7 @@ function renderWeeklyArchive(){
   }).join('');
   sorted.forEach(pick=>{
     const s = SCENES.find(x=>x.id===pick.sceneId);
-    if(s) loadSceneImg(`wai_${pick.week}_${s.id}`, `wap_${pick.week}_${s.id}`, s.film, s.year, 'w500');
+    if(s) loadSceneImg(`wai_${pick.week}_${s.id}`, `wap_${pick.week}_${s.id}`, s.film, s.year, 'w342');
   });
 }
 // Hero ticker — titoli che scorrono
@@ -2574,20 +2596,32 @@ document.addEventListener('click',function(e){
 });
 
 // ── URL ROUTING ──
+function show404(){
+  showView('404');
+  document.title = "Pagina non trovata | CineMap";
+}
+
 function routeFromURL(){
   const path = window.location.pathname;
   if(path.startsWith('/scena/')){
-    // Extract ID from /scena/13-existenz
     const match = path.match(/\/scena\/(\d+)/);
     if(match){
       const id = parseInt(match[1]);
       const s = SCENES.find(x=>x.id===id);
       if(s){ showScene(id, false); return; }
+      // ID nel formato corretto ma scena non esiste
+      show404(); return;
     }
+    // /scena/ senza ID valido
+    show404(); return;
   }
-  const views = ['directors','map','percorsi','timeline'];
+  const views = ['directors','map','percorsi','timeline','weekly'];
   for(const v of views){
     if(path === '/'+v || path.startsWith('/'+v+'/')){ nav(v, false); return; }
+  }
+  if(path !== '/' && path !== '/index.html' && path !== ''){
+    // Path non riconosciuto e non è la root: 404
+    show404(); return;
   }
   nav('home', false);
 }
