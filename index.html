@@ -1164,16 +1164,30 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
 .error-404-actions{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:1rem}
 
 /* ── DIRECTOR EXTENDED INFO ── */
-.dd-info-section{padding:3rem 2.8rem;border-bottom:.5px solid var(--border);background:var(--bg)}
-.dd-info-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:3.5rem}
-.dd-info-label{font-family:var(--fm);font-size:.5rem;letter-spacing:.25em;color:var(--gold);text-transform:uppercase;margin-bottom:.8rem}
-.dd-info-bio{font-family:var(--fs);font-size:1rem;color:var(--muted2);line-height:1.85}
-.dd-info-side{display:flex;flex-direction:column;gap:2rem}
+.dd-info-section{padding:0;border-bottom:.5px solid var(--border);background:var(--bg);position:relative}
+.dd-info-quote{padding:2.2rem 2.8rem 0;font-family:var(--fs);font-size:1.05rem;font-style:italic;color:rgba(200,169,110,.6);line-height:1.6;max-width:760px;position:relative}
+.dd-info-quote::before{content:'"';font-family:var(--fd);font-size:3rem;color:rgba(200,169,110,.25);position:absolute;left:0;top:-.6rem;line-height:1}
+.dd-info-quote-text{padding-left:2.2rem}
+.dd-info-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:0;margin-top:2.2rem}
+.dd-info-main{padding:2.6rem 2.8rem;border-right:.5px solid var(--border)}
+.dd-info-label{font-family:var(--fm);font-size:.5rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:1.2rem;display:flex;align-items:center;gap:.7rem}
+.dd-info-label::after{content:'';flex:1;height:.5px;background:linear-gradient(to right,rgba(200,169,110,.4),transparent)}
+.dd-info-bio{font-family:var(--fs);font-size:1.02rem;color:var(--muted2);line-height:1.9;max-width:620px}
+.dd-info-bio::first-letter{font-family:var(--fd);font-size:2.8rem;color:var(--gold);float:left;line-height:.85;margin:.05em .12em 0 0}
+.dd-info-side{padding:2.6rem 2.8rem;display:flex;flex-direction:column;gap:2.2rem;background:linear-gradient(180deg,rgba(200,169,110,.02),transparent)}
 .dd-info-block{display:flex;flex-direction:column}
-.dd-info-value{font-family:var(--fd);font-size:1.3rem;color:var(--cream)}
-.dd-filmography{list-style:none;display:flex;flex-direction:column;gap:.5rem}
-.dd-filmography li{font-family:var(--fs);font-size:.88rem;color:var(--muted2);font-style:italic;padding-left:1rem;border-left:1.5px solid rgba(200,169,110,.3)}
-.dd-info-trivia{font-family:var(--fs);font-size:.85rem;color:var(--muted);line-height:1.7;font-style:italic}
+.dd-years-display{display:flex;align-items:baseline;gap:.6rem;margin-top:.2rem}
+.dd-years-num{font-family:var(--fd);font-size:2.6rem;color:var(--cream);letter-spacing:.01em;line-height:1}
+.dd-years-sep{font-family:var(--fm);font-size:.8rem;color:rgba(200,169,110,.5)}
+.dd-filmography{list-style:none;display:flex;flex-direction:column;gap:0}
+.dd-filmography li{font-family:var(--fs);font-size:.92rem;color:var(--muted2);display:flex;align-items:baseline;justify-content:space-between;gap:1rem;padding:.6rem 0;border-bottom:.5px solid rgba(255,255,255,.05)}
+.dd-filmography li:first-child{padding-top:0}
+.dd-filmography li:last-child{border-bottom:none}
+.dd-film-title{font-style:italic;color:var(--cream)}
+.dd-film-year{font-family:var(--fm);font-size:.68rem;color:rgba(200,169,110,.55);flex-shrink:0;letter-spacing:.05em}
+.dd-trivia-box{margin-top:.4rem;padding:1.4rem 1.6rem;border:.5px solid rgba(200,169,110,.25);background:rgba(200,169,110,.03);position:relative}
+.dd-trivia-icon{position:absolute;top:-.7rem;left:1.2rem;background:var(--bg);padding:0 .6rem;font-family:var(--fm);font-size:.48rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+.dd-info-trivia{font-family:var(--fs);font-size:.86rem;color:var(--muted2);line-height:1.75;font-style:italic;margin-top:.3rem}
 
 @media(max-width:768px){
   .dd-info-grid{grid-template-columns:1fr;gap:2rem}
@@ -1714,8 +1728,19 @@ function showDirectorPage(dirId){
   const content=document.getElementById('dir-detail-content');
   if(!content)return;
 
+  // Separa titolo e anno da stringhe tipo "Alien (1979)"
+  const parseFilm = (f) => {
+    const m = f.match(/^(.+?)\s*\((\d{4}.*?)\)\s*$/);
+    return m ? {title:m[1].trim(), year:m[2].trim()} : {title:f, year:''};
+  };
+  const filmsParsed = info ? info.films.map(parseFilm) : [];
+  const yearsParts = info ? info.years.split('—').map(y=>y.trim()) : [];
+
   const infoSection = info ? `
     <div class="dd-info-section">
+      <div class="dd-info-quote">
+        <div class="dd-info-quote-text">${d.obs[0]||''} — la prima ossessione di un cinema che ${d.obs.length>1?('si riconosce anche in '+d.obs.slice(1).join(', ').toLowerCase()):'attraversa tutta la sua filmografia'}.</div>
+      </div>
       <div class="dd-info-grid">
         <div class="dd-info-main">
           <div class="dd-info-label">Profilo</div>
@@ -1724,15 +1749,20 @@ function showDirectorPage(dirId){
         <div class="dd-info-side">
           <div class="dd-info-block">
             <div class="dd-info-label">Anni di attività</div>
-            <div class="dd-info-value">${info.years}</div>
+            <div class="dd-years-display">
+              <span class="dd-years-num">${yearsParts[0]||''}</span>
+              ${yearsParts[1]?`<span class="dd-years-sep">— ${yearsParts[1]}</span>`:''}
+            </div>
           </div>
           <div class="dd-info-block">
             <div class="dd-info-label">Filmografia selezionata</div>
-            <ul class="dd-filmography">${info.films.map(f=>`<li>${f}</li>`).join('')}</ul>
+            <ul class="dd-filmography">${filmsParsed.map(f=>`<li><span class="dd-film-title">${f.title}</span><span class="dd-film-year">${f.year}</span></li>`).join('')}</ul>
           </div>
           <div class="dd-info-block">
-            <div class="dd-info-label">Curiosità</div>
-            <p class="dd-info-trivia">${info.trivia}</p>
+            <div class="dd-trivia-box">
+              <span class="dd-trivia-icon">◆ Curiosità</span>
+              <p class="dd-info-trivia">${info.trivia}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -3392,6 +3422,7 @@ function showVideoFallback(sceneId, film, scene, playerEl, searchEl, statusEl) {
 </footer>
 </body>
 </html>
+
 
 
 
