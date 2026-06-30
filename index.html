@@ -1127,7 +1127,7 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
 .weekly-archive-link:hover{color:var(--gold)}
 .weekly-inner{display:grid;grid-template-columns:1fr 1.3fr;gap:1px;background:var(--border);cursor:pointer;border:.5px solid var(--border)}
 .weekly-img-wrap{position:relative;aspect-ratio:4/5;overflow:hidden;background:linear-gradient(135deg,#1a1610 0%,#0a0a0a 100%);display:flex;align-items:center;justify-content:center;padding:1.5rem;text-align:center}
-.weekly-img-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.75);transition:filter .5s,transform .8s cubic-bezier(.16,1,.3,1)}
+.weekly-img-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.85);transition:filter .5s,transform .8s cubic-bezier(.16,1,.3,1)}
 .weekly-inner:hover .weekly-img-wrap img{filter:brightness(.6);transform:scale(1.04)}
 .weekly-body{background:var(--bg2);padding:2.8rem;display:flex;flex-direction:column;justify-content:center;gap:1.2rem}
 .weekly-week-tag{font-family:var(--fm);font-size:.48rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
@@ -1172,7 +1172,7 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
 .dd-info-main{padding:2.6rem 2.8rem;border-right:.5px solid var(--border)}
 .dd-info-label{font-family:var(--fm);font-size:.5rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:1.2rem;display:flex;align-items:center;gap:.7rem}
 .dd-info-label::after{content:'';flex:1;height:.5px;background:linear-gradient(to right,rgba(200,169,110,.4),transparent)}
-.dd-info-bio{font-family:var(--fs);font-size:1.02rem;color:var(--muted2);line-height:1.9;max-width:620px}
+.dd-info-bio{font-family:var(--fs);font-size:1.08rem;color:var(--muted2);line-height:1.95;max-width:none}
 .dd-info-bio::first-letter{font-family:var(--fd);font-size:2.8rem;color:var(--gold);float:left;line-height:.85;margin:.05em .12em 0 0}
 .dd-info-side{padding:2.6rem 2.8rem;display:flex;flex-direction:column;gap:2.2rem;background:linear-gradient(180deg,rgba(200,169,110,.02),transparent)}
 .dd-info-block{display:flex;flex-direction:column}
@@ -1598,8 +1598,8 @@ function getCurrentWeeklyPick(){
 
 
 // ── IMAGE FETCH — ricerca per titolo+anno (sempre corretta) ──
-async function searchMovieImg(title, year, sz) {
-  const k = `movie_${title}_${year}`;
+async function searchMovieImg(title, year, sz, posterOnly) {
+  const k = `movie_${title}_${year}${posterOnly?'_p':''}`;
   if (IC[k] !== undefined) return IC[k];
   try {
     const q = encodeURIComponent(title);
@@ -1607,14 +1607,14 @@ async function searchMovieImg(title, year, sz) {
     const d = await r.json();
     if (d.results && d.results.length > 0) {
       const m = d.results[0];
-      const p = m.poster_path || m.backdrop_path;
-      return IC[k] = p ? `${IB}${sz}${p}` : null;
+      const p = posterOnly ? m.poster_path : (m.poster_path || m.backdrop_path);
+      if (p) return IC[k] = `${IB}${sz}${p}`;
     }
     // Prova senza anno se non trova nulla
     const r2 = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${TK}&query=${q}&language=it`);
     const d2 = await r2.json();
     const m2 = d2.results && d2.results[0];
-    const p2 = m2 ? (m2.poster_path || m2.backdrop_path) : null;
+    const p2 = m2 ? (posterOnly ? m2.poster_path : (m2.poster_path || m2.backdrop_path)) : null;
     return IC[k] = p2 ? `${IB}${sz}${p2}` : null;
   } catch { return IC[k] = null; }
 }
@@ -1663,8 +1663,8 @@ function showPhTitle(phEl, title) {
   titleEl.style.display = 'block';
 }
 
-function loadSceneImg(imgId, phId, film, year, sz) {
-  searchMovieImg(film, year, sz).then(url => setImg(document.getElementById(imgId), document.getElementById(phId), url, film));
+function loadSceneImg(imgId, phId, film, year, sz, posterOnly) {
+  searchMovieImg(film, year, sz, posterOnly).then(url => setImg(document.getElementById(imgId), document.getElementById(phId), url, film));
 }
 
 function loadImg(iId, pId, type, tmdbId, sz, name) {
@@ -2586,7 +2586,7 @@ function renderCurrentWeekly(){
       <div class="weekly-editorial">${pick.editorial}</div>
       <div class="weekly-cta">Leggi l'analisi completa</div>
     </div>`;
-  loadSceneImg(`wimg_${s.id}`, `wph_${s.id}`, s.film, s.year, 'w500');
+  loadSceneImg(`wimg_${s.id}`, `wph_${s.id}`, s.film, s.year, 'w500', true);
 }
 
 function formatWeekLabel(weekKey){
@@ -3422,6 +3422,7 @@ function showVideoFallback(sceneId, film, scene, playerEl, searchEl, statusEl) {
 </footer>
 </body>
 </html>
+
 
 
 
