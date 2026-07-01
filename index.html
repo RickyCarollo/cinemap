@@ -1127,7 +1127,7 @@ footer p{font-family:var(--fm);font-size:.55rem;letter-spacing:.18em;color:var(-
 .weekly-archive-link:hover{color:var(--gold)}
 .weekly-inner{display:grid;grid-template-columns:1fr 1.3fr;gap:1px;background:var(--border);cursor:pointer;border:.5px solid var(--border)}
 .weekly-img-wrap{position:relative;aspect-ratio:4/5;overflow:hidden;background:linear-gradient(135deg,#1a1610 0%,#0a0a0a 100%);display:flex;align-items:center;justify-content:center;padding:1.5rem;text-align:center}
-.weekly-img-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.85);transition:filter .5s,transform .8s cubic-bezier(.16,1,.3,1)}
+.weekly-img-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(1) saturate(1.1);transition:filter .5s,transform .8s cubic-bezier(.16,1,.3,1)}
 .weekly-inner:hover .weekly-img-wrap img{filter:brightness(.6);transform:scale(1.04)}
 .weekly-body{background:var(--bg2);padding:2.8rem;display:flex;flex-direction:column;justify-content:center;gap:1.2rem}
 .weekly-week-tag{font-family:var(--fm);font-size:.48rem;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
@@ -1640,12 +1640,35 @@ async function getPersonImg(pid, sz, name) {
 function setImg(imgEl, phEl, url, title) {
   if (!imgEl) return;
   if (!url) { showPhTitle(phEl, title); return; }
+  let settled = false;
   imgEl.loading = 'lazy';
   imgEl.decoding = 'async';
-  imgEl.onerror = () => { imgEl.style.display = 'none'; showPhTitle(phEl, title); };
-  imgEl.onload  = () => { if (phEl) phEl.style.display = 'none'; };
+  imgEl.onerror = () => {
+    if (settled) return; settled = true;
+    imgEl.style.display = 'none';
+    showPhTitle(phEl, title);
+  };
+  imgEl.onload  = () => {
+    if (settled) return;
+    if (imgEl.naturalWidth === 0 || imgEl.naturalHeight === 0) {
+      settled = true;
+      imgEl.style.display = 'none';
+      showPhTitle(phEl, title);
+      return;
+    }
+    settled = true;
+    if (phEl) phEl.style.display = 'none';
+  };
   imgEl.src = url;
   imgEl.style.display = 'block';
+  // Timeout di sicurezza: se dopo 5s non è ancora arrivata risposta, mostra fallback
+  setTimeout(() => {
+    if (!settled) {
+      settled = true;
+      imgEl.style.display = 'none';
+      showPhTitle(phEl, title);
+    }
+  }, 5000);
 }
 
 function showPhTitle(phEl, title) {
